@@ -9,8 +9,12 @@ void DenseConnections::linear_function(data_t* activations,
 	parameter_t* weights, size_t* weights_starts, parameter_t* biases, size_t layer_length)
 {
 	cud_dense_linear_function<<<layer_length, previous_layer_length>>>(
-		weights_starts, weights, biases,
+		weights_starts, weights,
 		previous_layer_activations_start, activations,
+		execution_values_layer_start, layer_execution_values_per_neuron, execution_values
+	);
+	cud_add_biases<<<1, layer_length>>>(
+		biases,
 		execution_values_layer_start, layer_execution_values_per_neuron, execution_values
 	);
 }

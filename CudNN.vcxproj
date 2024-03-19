@@ -88,6 +88,7 @@
     <ClInclude Include="DenseConnections.h" />
     <ClInclude Include="IConnections.h" />
     <ClInclude Include="ILayer.h" />
+    <ClInclude Include="kernel_macros.h" />
     <ClInclude Include="NN.h" />
   </ItemGroup>
   <ItemGroup>

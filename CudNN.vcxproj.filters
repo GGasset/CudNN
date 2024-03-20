@@ -26,12 +26,11 @@
     <ClCompile Include="NeuronLayer.cpp">
       <Filter>Layers\Blocks</Filter>
     </ClCompile>
-    <ClCompile Include="DenseNeuronLayer.cpp" />
+    <ClCompile Include="DenseNeuronLayer.cpp">
+      <Filter>Layers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DenseConnections.h">
-      <Filter>Connections</Filter>
-    </ClInclude>
     <ClInclude Include="IConnections.h">
       <Filter>Connections</Filter>
     </ClInclude>
@@ -53,7 +52,12 @@
     <ClInclude Include="NeuronLayer.h">
       <Filter>Layers\Blocks</Filter>
     </ClInclude>
-    <ClInclude Include="DenseNeuronLayer.h" />
+    <ClInclude Include="DenseNeuronLayer.h">
+      <Filter>Layers</Filter>
+    </ClInclude>
+    <ClInclude Include="DenseConnections.h">
+      <Filter>Connections</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Connections">

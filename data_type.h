@@ -1,3 +1,3 @@
 
-typedef double parameter_t;
-typedef double data_t;
+typedef float parameter_t;
+typedef float data_t;

@@ -14,7 +14,7 @@ __global__ void sigmoid_activation(
 	size_t neuron_execution_values_read, size_t neuron_execution_values_write, short write_execution_values
 )
 {
-	size_t neuron_execution_values_start = neuron_execution_values_start + execution_values_layer_start + execution_values_per_neuron * threadIdx.x;
+	size_t neuron_execution_values_start = execution_values_start + execution_values_layer_start + execution_values_per_neuron * threadIdx.x;
 	data_t activation = 1 / (1 + exp(-execution_values[neuron_execution_values_start + neuron_execution_values_read]));
 	if (write_activation)
 	{

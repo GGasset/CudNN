@@ -77,6 +77,7 @@
     </CudaCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <CudaCompile Include="activations.cu" />
     <CudaCompile Include="connections.cu">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </CudaCompile>
@@ -89,11 +90,15 @@
     <ClInclude Include="IConnections.h" />
     <ClInclude Include="ILayer.h" />
     <ClInclude Include="kernel_macros.h" />
+    <ClInclude Include="LSMTLayer.h" />
+    <ClInclude Include="NeuronLayer.h" />
     <ClInclude Include="NN.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="IConnections.cpp" />
     <ClCompile Include="ILayer.cpp" />
+    <ClCompile Include="LSMTLayer.cpp" />
+    <ClCompile Include="NeuronLayer.cpp" />
     <ClCompile Include="NN.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

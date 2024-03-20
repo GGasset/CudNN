@@ -4,6 +4,6 @@
 #pragma once
 class DenseNeuronLayer
 {
-	//SDenseNeuronLayer();
+	DenseNeuronLayer(size_t neuron_count, size_t previous_layer_length, ActivationFunctions activation);
 };
 

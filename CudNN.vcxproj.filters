@@ -26,6 +26,7 @@
     <ClCompile Include="NeuronLayer.cpp">
       <Filter>Layers\Blocks</Filter>
     </ClCompile>
+    <ClCompile Include="DenseNeuronLayer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DenseConnections.h">
@@ -52,6 +53,7 @@
     <ClInclude Include="NeuronLayer.h">
       <Filter>Layers\Blocks</Filter>
     </ClInclude>
+    <ClInclude Include="DenseNeuronLayer.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Connections">

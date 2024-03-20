@@ -89,6 +89,7 @@
   <ItemGroup>
     <ClInclude Include="data_type.h" />
     <ClInclude Include="DenseConnections.h" />
+    <ClInclude Include="DenseNeuronLayer.h" />
     <ClInclude Include="IConnections.h" />
     <ClInclude Include="ILayer.h" />
     <ClInclude Include="kernel_macros.h" />
@@ -97,6 +98,7 @@
     <ClInclude Include="NN.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DenseNeuronLayer.cpp" />
     <ClCompile Include="IConnections.cpp" />
     <ClCompile Include="ILayer.cpp" />
     <ClCompile Include="LSMTLayer.cpp" />

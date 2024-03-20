@@ -11,3 +11,27 @@ void ILayer::add_neuron(size_t neurons_to_add, size_t connection_count_per_neuro
 	connection_count += neurons_to_add * connection_count_per_neuron;
 	neuron_count += neurons_to_add;
 }
+
+void ILayer::generate_random_weights(size_t connection_count, size_t start_i = 0)
+{
+	curandGenerator_t generator;
+	curandCreateGenerator(&generator, CURAND_RNG_PSEUDO_XORWOW);
+	curandGenerateUniform(generator, weights + start_i, connection_count);
+}
+
+
+void ILayer::Initialize_fields(size_t connection_count, size_t neuron_count)
+{
+	cudaMalloc(&weights, sizeof(parameter_t) * connection_count);
+	generate_random_weights(connection_count);
+	cudaMalloc(&biases, sizeof(parameter_t) * neuron_count);
+	cudaMemset(biases, 1, sizeof(parameter_t) * neuron_count);
+}
+
+void ILayer::deallocate()
+{
+	cudaFree(weights);
+	cudaFree(biases);
+	connections->deallocate();
+	free(connections);
+}

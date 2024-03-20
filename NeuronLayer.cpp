@@ -12,7 +12,7 @@ void NeuronLayer::execute(
 	switch (activation)
 	{
 	case sigmoid:
-		sigmoid_activation(
+		sigmoid_activation kernel(1, neuron_count) (
 			activations, activations_start, layer_activations_start, true,
 			execution_values, execution_values_start, execution_values_layer_start, execution_values_per_neuron, 0, 0, 0
 		);

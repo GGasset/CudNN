@@ -12,6 +12,7 @@ public:
 	IConnections* connections = 0;
 	parameter_t* weights = 0;
 	parameter_t* biases = 0;
+	size_t layer_activations_start = 0;
 	size_t execution_values_layer_start = 0;
 	size_t execution_values_per_neuron = 0;
 

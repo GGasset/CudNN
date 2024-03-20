@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CudaCompile Include="kernel.cu" />
+    <CudaCompile Include="activations.cu">
+      <Filter>Cuda\Inference</Filter>
+    </CudaCompile>
+    <CudaCompile Include="connections.cu">
+      <Filter>Cuda\Inference</Filter>
+    </CudaCompile>
+    <CudaCompile Include="DenseConnections.cpp">
+      <Filter>Connections</Filter>
+    </CudaCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="NN.cpp" />
+    <ClCompile Include="IConnections.cpp">
+      <Filter>Connections</Filter>
+    </ClCompile>
+    <ClCompile Include="ILayer.cpp">
+      <Filter>Layers\Blocks</Filter>
+    </ClCompile>
+    <ClCompile Include="LSMTLayer.cpp">
+      <Filter>Layers\Blocks</Filter>
+    </ClCompile>
+    <ClCompile Include="NeuronLayer.cpp">
+      <Filter>Layers\Blocks</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="DenseConnections.h">
+      <Filter>Connections</Filter>
+    </ClInclude>
+    <ClInclude Include="IConnections.h">
+      <Filter>Connections</Filter>
+    </ClInclude>
+    <ClInclude Include="data_type.h">
+      <Filter>Static</Filter>
+    </ClInclude>
+    <ClInclude Include="kernel_macros.h">
+      <Filter>Static</Filter>
+    </ClInclude>
+    <ClInclude Include="NN.h">
+      <Filter>Layers\Blocks</Filter>
+    </ClInclude>
+    <ClInclude Include="ILayer.h">
+      <Filter>Layers\Blocks</Filter>
+    </ClInclude>
+    <ClInclude Include="LSMTLayer.h">
+      <Filter>Layers\Blocks</Filter>
+    </ClInclude>
+    <ClInclude Include="NeuronLayer.h">
+      <Filter>Layers\Blocks</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Connections">
+      <UniqueIdentifier>{41e94927-f285-4d65-9648-5565179c354c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Layers">
+      <UniqueIdentifier>{01ffbe7e-86c8-47cb-ac17-28d0272a3230}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Layers\Blocks">
+      <UniqueIdentifier>{1ff2b711-c907-49dc-9d0b-5c682007c95f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Cuda">
+      <UniqueIdentifier>{d0224a40-8c9c-4ffe-a103-8e223d2a7292}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Cuda\Inference">
+      <UniqueIdentifier>{44e122ff-c845-40b3-86f3-5a7d2c901bfd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Cuda\Training">
+      <UniqueIdentifier>{a51d150b-7f9b-4348-8a70-feb0c466ad19}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Static">
+      <UniqueIdentifier>{00817461-6bec-43a2-a2ba-feb330e9d067}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

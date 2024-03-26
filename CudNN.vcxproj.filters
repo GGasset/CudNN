@@ -40,9 +40,6 @@
     <ClInclude Include="kernel_macros.h">
       <Filter>Static</Filter>
     </ClInclude>
-    <ClInclude Include="NN.h">
-      <Filter>Layers\Blocks</Filter>
-    </ClInclude>
     <ClInclude Include="ILayer.h">
       <Filter>Layers\Blocks</Filter>
     </ClInclude>
@@ -58,6 +55,7 @@
     <ClInclude Include="DenseConnections.h">
       <Filter>Connections</Filter>
     </ClInclude>
+    <ClInclude Include="NN.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Connections">

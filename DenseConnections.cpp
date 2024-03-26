@@ -4,6 +4,12 @@
 #include "DenseConnections.h"
 #include "connections.cu"
 
+DenseConnections::DenseConnections(size_t previous_layer_activations_start, size_t previous_layer_length)
+{
+	this->previous_layer_activations_start = previous_layer_activations_start;
+	this->previous_layer_length = previous_layer_length;
+}
+
 void DenseConnections::linear_function(size_t activations_start, data_t* activations,
 	data_t* execution_values, size_t execution_values_start, size_t execution_values_layer_start, size_t layer_execution_values_per_neuron,
 	parameter_t* weights, parameter_t* biases, size_t layer_length)

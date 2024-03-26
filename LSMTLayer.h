@@ -4,7 +4,7 @@
 class LSMTLayer
 {
 private:
-	parameter_t last_hidden_derivative = 0;
-	parameter_t last_cell_derivative = 0;
+	parameter_t* derivatives_until_memory_deletion = 0;
+	size_t trained_steps_since_memory_deletion = 0;
 };
 

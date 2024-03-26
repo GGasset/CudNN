@@ -1,10 +1,10 @@
 #include "ILayer.h"
 
 #pragma once
-class NeuronLayer : ILayer
+class NeuronLayer : public ILayer
 {
-private:
-	ActivationFunctions activation;
+protected:
+	ActivationFunctions activation = ActivationFunctions::sigmoid;
 
 public:
 	void execute(

@@ -12,7 +12,7 @@ public:
 		data_t* execution_values, size_t execution_values_start, size_t execution_values_layer_start, size_t layer_execution_values_per_neuron,
 		parameter_t* weights, parameter_t* biases, size_t layer_length) = 0;
 
-	virtual void add_neuron(size_t neurons_to_add, size_t connections_per_neuron)
+	virtual void add_neuron(size_t neurons_to_add, size_t connections_per_neuron, size_t layer_i, size_t layer_i_prev_length, float connection_probability = 1)
 	{
 
 	}

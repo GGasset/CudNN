@@ -15,7 +15,6 @@ void NN::set_fields()
 		layer->execution_values_layer_start = execution_value_count;
 		execution_value_count += layer->execution_values_per_neuron * layer->neuron_count;
 
-		layer->gradients_start = gradient_count;
 		gradient_count += layer->layer_gradient_count;
 	}
 	this->neuron_count = neuron_count;

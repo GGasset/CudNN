@@ -7,6 +7,18 @@ DenseNeuronLayer::DenseNeuronLayer(size_t neuron_count, size_t previous_layer_ne
 	this->neuron_count = neuron_count;
 	this->connection_count = neuron_count * previous_layer_length;
 	execution_values_per_neuron = 1;
+	
+	size_t neuron_gradient_i = 0;
+	size_t* neuron_gradients_starts = new size_t[neuron_count];
+	for (size_t i = 0; i < neuron_count; i++)
+	{
+		neuron_gradients_starts[i] = neuron_gradient_i;
+		neuron_gradient_i += previous_layer_length + 1;
+	}
+	cudaMalloc(&this->neuron_gradients_starts, neuron_count * sizeof(size_t));
+	cudaMemcpy(this->neuron_gradients_starts, neuron_gradients_starts, neuron_count * sizeof(size_t));
+	delete[] neuron_gradients_starts;
+
 	layer_gradient_count = connection_count + neuron_count;
 	initialize_fields(previous_layer_length * neuron_count, neuron_count);
 }

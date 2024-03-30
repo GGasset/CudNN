@@ -80,4 +80,7 @@
       <UniqueIdentifier>{00817461-6bec-43a2-a2ba-feb330e9d067}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Todo.md" />
+  </ItemGroup>
 </Project>

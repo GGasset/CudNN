@@ -34,5 +34,5 @@ void ILayer::deallocate()
 	cudaFree(weights);
 	cudaFree(biases);
 	connections->deallocate();
-	free(connections);
+	delete connections;
 }

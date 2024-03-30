@@ -21,7 +21,7 @@ void ILayer::generate_random_weights(size_t connection_count, size_t start_i = 0
 }
 
 
-void ILayer::Initialize_fields(size_t connection_count, size_t neuron_count)
+void ILayer::initialize_fields(size_t connection_count, size_t neuron_count)
 {
 	cudaMalloc(&weights, sizeof(parameter_t) * connection_count);
 	generate_random_weights(connection_count);

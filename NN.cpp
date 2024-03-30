@@ -1,5 +1,15 @@
 #include "NN.h"
 
+NN::NN(ILayer** layers, size_t layer_count, size_t max_layer_count = 0)
+{
+	// set max layer count to layer count if max_layer_count is lesser than layer count
+	max_layer_count += (layer_count - max_layer_count) * (max_layer_count < layer_count);
+	
+	this->layers = layers;
+	this->layer_count = layer_count;
+	this->max_layer_count = layer_count;
+}
+
 void NN::set_fields()
 {
 	input_length = layers[0]->neuron_count;

@@ -14,6 +14,7 @@ private:
 	size_t execution_value_count = 0;
 	size_t gradient_value_count = 0;
 
+protected:
 	void set_fields();
 
 public:

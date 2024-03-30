@@ -2,6 +2,9 @@
 
 void NN::set_fields()
 {
+	input_length = layers[0]->neuron_count;
+	output_length = layers[layer_count - 1]->neuron_count;
+
 	size_t neuron_count = 0;
 	size_t execution_value_count = 0;
 	size_t gradient_count = 0;

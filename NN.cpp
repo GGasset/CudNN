@@ -35,7 +35,7 @@ void NN::set_fields()
 	output_activations_start = &(layers[layer_count - 1]->layer_activations_start);
 }
 
-void NN::Execute(data_t* input, data_t* execution_values, data_t *activations, size_t t, data_t* output_start_pointer, short copy_output_to_host = true)
+void NN::execute(data_t* input, data_t* execution_values, data_t *activations, size_t t, data_t* output_start_pointer, short copy_output_to_host = true)
 {
 	cudaMemcpy(activations + t * (input_length + neuron_count), input + input_length * t, input_length, cudaMemcpyHostToDevice);
 	for (size_t i = 0; i < layer_count; i++)
@@ -48,7 +48,7 @@ void NN::Execute(data_t* input, data_t* execution_values, data_t *activations, s
 	}
 }
 
-data_t* NN::Execute(data_t* input, size_t t_count)
+data_t* NN::execute(data_t* input, size_t t_count)
 {
 	data_t* execution_values = 0;
 	data_t* activations = 0;
@@ -57,14 +57,14 @@ data_t* NN::Execute(data_t* input, size_t t_count)
 
 	data_t* outputs = new data_t[output_length * t_count];
 	for (size_t i = 0; i < t_count; i++)
-		Execute(input, execution_values, activations, i, outputs + output_length * i, 1);
+		execute(input, execution_values, activations, i, outputs + output_length * i, 1);
 
 	cudaFree(execution_values);
 	cudaFree(activations);
 	return outputs;
 }
 
-data_t* NN::Execute(data_t* input)
+data_t* NN::execute(data_t* input)
 {
-	return Execute(input, 1);
+	return execute(input, 1);
 }

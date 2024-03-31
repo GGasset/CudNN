@@ -23,7 +23,7 @@ public:
 
 	void generate_random_weights(size_t connection_count, size_t start_i = 0);
 
-	virtual void add_neuron(size_t neurons_to_add, size_t connection_count_per_neuron, size_t layer_i, size_t layer_i_prev_length, float connection_probability = 1) = 0;
+	virtual void add_neuron(size_t neurons_to_add, size_t connection_count_per_neuron, size_t layer_i, size_t layer_i_prev_length, float connection_probability = 1);
 
 	virtual void deallocate();
 

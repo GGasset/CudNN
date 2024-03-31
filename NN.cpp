@@ -8,6 +8,7 @@ NN::NN(ILayer** layers, size_t layer_count, size_t max_layer_count = 0)
 	this->layers = layers;
 	this->layer_count = layer_count;
 	this->max_layer_count = layer_count;
+	set_fields();
 }
 
 void NN::set_fields()

@@ -68,3 +68,13 @@ data_t* NN::execute(data_t* input)
 {
 	return execute(input, 1);
 }
+
+void NN::deallocate()
+{
+	for (size_t i = 0; i < layer_count; i++)
+	{
+		layers[i]->deallocate();
+		delete layers[i];
+	}
+	delete[] layers;
+}

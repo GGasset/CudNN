@@ -22,5 +22,7 @@ public:
 	void execute(data_t* input, data_t* execution_values, data_t *activations, size_t t, data_t* output_start_pointer, short copy_output_to_host = true);
 	data_t* execute(data_t* input, size_t t_count);
 	data_t* execute(data_t* input);
+
+	void deallocate();
 };
 

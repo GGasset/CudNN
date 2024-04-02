@@ -18,7 +18,7 @@ protected:
 	void set_fields();
 
 public:
-	NN(ILayer** layers, size_t layer_count, size_t max_layer_count);
+	NN(ILayer** layers, size_t layer_count, size_t max_layer_count = 0);
 	void execute(data_t* input, data_t* execution_values, data_t *activations, size_t t, data_t* output_start_pointer, short copy_output_to_host);
 	data_t* execute(data_t* input, size_t t_count);
 	data_t* execute(data_t* input);

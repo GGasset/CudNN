@@ -3,7 +3,7 @@
 
 #include "NN.h"
 
-NN::NN(ILayer** layers, size_t layer_count, size_t max_layer_count = 0)
+NN::NN(ILayer** layers, size_t layer_count, size_t max_layer_count)
 {
 	// set max layer count to layer count if max_layer_count is lesser than layer count
 	max_layer_count += (layer_count - max_layer_count) * (max_layer_count < layer_count);

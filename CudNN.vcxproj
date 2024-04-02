@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|x64">
@@ -51,7 +51,7 @@
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
-      <AdditionalDependencies>cudart_static.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>curand.lib;cudart_static.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <CudaCompile>
       <TargetMachinePlatform>64</TargetMachinePlatform>
@@ -78,21 +78,23 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <CudaCompile Include="activations.cu">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </CudaCompile>
-    <CudaCompile Include="connections.cu">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    <CudaCompile Include="linear_functions.cu">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </CudaCompile>
     <CudaCompile Include="DenseConnections.cpp" />
     <CudaCompile Include="kernel.cu" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="activations.cu.h" />
     <ClInclude Include="data_type.h" />
     <ClInclude Include="DenseConnections.h" />
     <ClInclude Include="DenseNeuronLayer.h" />
     <ClInclude Include="IConnections.h" />
     <ClInclude Include="ILayer.h" />
     <ClInclude Include="kernel_macros.h" />
+    <ClInclude Include="linear_functions.cu.h" />
     <ClInclude Include="LSMTLayer.h" />
     <ClInclude Include="NeuronLayer.h" />
     <ClInclude Include="NN.h" />
@@ -102,7 +104,7 @@
     <ClCompile Include="IConnections.cpp" />
     <ClCompile Include="ILayer.cpp" />
     <ClCompile Include="LSMTLayer.cpp" />
-    <ClCompile Include="NeuronLayer.cpp" />
+    <CudaCompile Include="NeuronLayer.cpp" />
     <ClCompile Include="NN.cpp" />
   </ItemGroup>
   <ItemGroup>

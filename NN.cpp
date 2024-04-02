@@ -1,3 +1,6 @@
+#ifndef NN_DEFINITIONS
+#define NN_DEFINITIONS
+
 #include "NN.h"
 
 NN::NN(ILayer** layers, size_t layer_count, size_t max_layer_count = 0)
@@ -78,3 +81,5 @@ void NN::deallocate()
 	}
 	delete[] layers;
 }
+
+#endif

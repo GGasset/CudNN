@@ -1,8 +1,11 @@
+#ifndef DENSE_CONNECTIONS
+#define DENSE_CONNETIONS
+
 #include "cuda_runtime.h"
 #include "device_launch_parameters.h"
 
 #include "DenseConnections.h"
-#include "connections.cu"
+#include "linear_functions.cu.h"
 
 DenseConnections::DenseConnections(size_t previous_layer_activations_start, size_t previous_layer_length)
 {
@@ -24,3 +27,4 @@ void DenseConnections::linear_function(size_t activations_start, data_t* activat
 		execution_values_start, execution_values_layer_start, layer_execution_values_per_neuron, execution_values
 	);
 }
+#endif

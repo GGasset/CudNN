@@ -5,11 +5,14 @@
     <CudaCompile Include="activations.cu">
       <Filter>Cuda\Inference</Filter>
     </CudaCompile>
-    <CudaCompile Include="connections.cu">
-      <Filter>Cuda\Inference</Filter>
-    </CudaCompile>
     <CudaCompile Include="DenseConnections.cpp">
       <Filter>Connections</Filter>
+    </CudaCompile>
+    <CudaCompile Include="linear_functions.cu">
+      <Filter>Cuda\Inference</Filter>
+    </CudaCompile>
+    <CudaCompile Include="NeuronLayer.cpp">
+      <Filter>Layers\Blocks</Filter>
     </CudaCompile>
   </ItemGroup>
   <ItemGroup>
@@ -21,9 +24,6 @@
       <Filter>Layers\Blocks</Filter>
     </ClCompile>
     <ClCompile Include="LSMTLayer.cpp">
-      <Filter>Layers\Blocks</Filter>
-    </ClCompile>
-    <ClCompile Include="NeuronLayer.cpp">
       <Filter>Layers\Blocks</Filter>
     </ClCompile>
     <ClCompile Include="DenseNeuronLayer.cpp">
@@ -56,6 +56,12 @@
       <Filter>Connections</Filter>
     </ClInclude>
     <ClInclude Include="NN.h" />
+    <ClInclude Include="activations.cu.h">
+      <Filter>Cuda\Inference</Filter>
+    </ClInclude>
+    <ClInclude Include="linear_functions.cu.h">
+      <Filter>Cuda\Inference</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Connections">

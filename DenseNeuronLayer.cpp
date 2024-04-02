@@ -1,3 +1,6 @@
+#ifndef DENSE_NEURON_CONSTRUCTOR
+#define DENSE_NEURON_CONSTRUCTOR
+
 #include "DenseNeuronLayer.h"
 
 DenseNeuronLayer::DenseNeuronLayer(size_t layer_gradients_start, size_t neuron_count, size_t previous_layer_neuron_i_start, size_t previous_layer_length, ActivationFunctions activation)
@@ -22,3 +25,5 @@ DenseNeuronLayer::DenseNeuronLayer(size_t layer_gradients_start, size_t neuron_c
 	layer_gradient_count = connection_count + neuron_count;
 	initialize_fields(previous_layer_length * neuron_count, neuron_count);
 }
+
+#endif

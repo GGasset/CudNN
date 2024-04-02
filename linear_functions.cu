@@ -1,9 +1,12 @@
+#ifndef CUDA_LINEAR_FUNCTIONS
+#define CUDA_LINEAR_FUNCTIONS
+
 #include "cuda_runtime.h"
 #include "device_launch_parameters.h"
 
-#include "data_type.h"
+#include "linear_functions.cu.h"
 
-#pragma once
+#include "data_type.h"
 
 __global__ void cud_dense_linear_function(
 	size_t previous_layer_length, parameter_t* weights,
@@ -24,3 +27,5 @@ __global__ void cud_add_biases(
 	size_t execution_values_i = execution_values_start + execution_values_layer_start + layer_execution_values_per_neuron * threadIdx.x;
 	execution_values[execution_values_i] += biases[threadIdx.x];
 }
+
+#endif

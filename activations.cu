@@ -1,12 +1,12 @@
+#ifndef CUDA_ACTIVATIONS
+#define CUDA_ACTIVATIONS
+
 #include "cuda_runtime.h"
 #include "device_launch_parameters.h"
+#include "activations.cu.h"
 
 #include <cmath>
 
-enum ActivationFunctions
-{
-	sigmoid
-};
 
 __global__ void sigmoid_activation(
 	data_t *activations, size_t activations_start, size_t layer_activation_start, short write_activation,
@@ -27,3 +27,4 @@ __global__ void sigmoid_activation(
 		activations[execution_values_i] = activation;
 	}
 }
+#endif

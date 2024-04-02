@@ -2,7 +2,7 @@
 #include "curand.h"
 
 #include "IConnections.h"
-#include "activations.cu"
+#include "activations.cu.h"
 
 #pragma once
 class ILayer

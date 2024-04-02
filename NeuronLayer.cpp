@@ -1,3 +1,6 @@
+#ifndef NEURONLAYER_DEFINITIONS
+#define NEURONLAYER_DEFINITIONS
+
 #include "NeuronLayer.h"
 
 void NeuronLayer::execute(
@@ -21,3 +24,5 @@ void NeuronLayer::execute(
 		break;
 	}
 }
+
+#endif

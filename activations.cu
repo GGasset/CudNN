@@ -24,7 +24,7 @@ __global__ void sigmoid_activation(
 	if (write_execution_values)
 	{
 		size_t execution_values_i = execution_values_start + execution_values_layer_start + execution_values_per_neuron * threadIdx.x + neuron_execution_values_write;
-		activations[execution_values_i] = activation;
+		execution_values[execution_values_i] = activation;
 	}
 }
 #endif

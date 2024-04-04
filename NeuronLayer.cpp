@@ -12,7 +12,6 @@ void NeuronLayer::execute(
 		execution_values, execution_values_start, execution_values_layer_start, execution_values_per_neuron,
 		weights, biases,
 		neuron_count);
-	cudaDeviceSynchronize();
 	switch (activation)
 	{
 	case sigmoid:

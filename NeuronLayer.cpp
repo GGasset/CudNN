@@ -21,6 +21,12 @@ void NeuronLayer::execute(
 			execution_values, execution_values_start, execution_values_layer_start, execution_values_per_neuron, 0, 0, 0
 		);
 		break;
+	case tanh:
+		tanh_activation kernel(1, neuron_count) (
+			activations, activations_start, layer_activations_start, true,
+			execution_values, execution_values_start, execution_values_layer_start, execution_values_per_neuron, 0, 0, 0
+		);
+		break;
 	default:
 		break;
 	}

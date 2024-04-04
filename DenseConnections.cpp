@@ -27,4 +27,9 @@ void DenseConnections::linear_function(size_t activations_start, data_t* activat
 		execution_values_start, execution_values_layer_start, layer_execution_values_per_neuron, execution_values
 	);
 }
+
+void DenseConnections::add_neuron(size_t neurons_to_add, size_t connections_per_neuron, size_t layer_i, size_t layer_i_prev_length, float connection_probability = 1)
+{
+
+}
 #endif

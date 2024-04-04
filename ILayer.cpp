@@ -5,9 +5,9 @@
 
 void ILayer::add_neuron(size_t neurons_to_add, size_t connection_count_per_neuron, size_t layer_i, size_t layer_i_prev_length, float connection_probability = 1)
 {
-	parameter_t* tmp;
+	field_t* tmp;
 	tmp = weights;
-	size_t new_weight_count = connection_count + sizeof(parameter_t) * neurons_to_add * connection_count_per_neuron;
+	size_t new_weight_count = connection_count + sizeof(field_t) * neurons_to_add * connection_count_per_neuron;
 	cudaMalloc(&weights, new_weight_count);
 	cudaMemcpy(weights, tmp, new_weight_count, cudaMemcpyDeviceToDevice);
 	cudaFree(tmp);
@@ -26,10 +26,10 @@ void ILayer::generate_random_weights(size_t connection_count, size_t start_i = 0
 
 void ILayer::initialize_fields(size_t connection_count, size_t neuron_count)
 {
-	cudaMalloc(&weights, sizeof(parameter_t) * connection_count);
+	cudaMalloc(&weights, sizeof(field_t) * connection_count);
 	generate_random_weights(connection_count);
-	cudaMalloc(&biases, sizeof(parameter_t) * neuron_count);
-	cudaMemset(biases, 1, sizeof(parameter_t) * neuron_count);
+	cudaMalloc(&biases, sizeof(field_t) * neuron_count);
+	cudaMemset(biases, 1, sizeof(field_t) * neuron_count);
 }
 
 void ILayer::deallocate()

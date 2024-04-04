@@ -2,7 +2,7 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <CudaCompile Include="kernel.cu" />
-    <CudaCompile Include="activations.cu">
+    <CudaCompile Include="neuron_operations.cu">
       <Filter>Cuda\Inference</Filter>
     </CudaCompile>
     <CudaCompile Include="DenseConnections.cpp">
@@ -56,10 +56,10 @@
       <Filter>Connections</Filter>
     </ClInclude>
     <ClInclude Include="NN.h" />
-    <ClInclude Include="activations.cu.h">
+    <ClInclude Include="neuron_operations.cuh">
       <Filter>Cuda\Inference</Filter>
     </ClInclude>
-    <ClInclude Include="linear_functions.cu.h">
+    <ClInclude Include="linear_functions.cuh">
       <Filter>Cuda\Inference</Filter>
     </ClInclude>
   </ItemGroup>

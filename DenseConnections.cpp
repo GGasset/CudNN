@@ -5,7 +5,6 @@
 #include "device_launch_parameters.h"
 
 #include "DenseConnections.h"
-#include "linear_functions.cu.h"
 
 DenseConnections::DenseConnections(size_t previous_layer_activations_start, size_t previous_layer_length)
 {

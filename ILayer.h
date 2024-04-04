@@ -2,7 +2,7 @@
 #include "curand.h"
 
 #include "IConnections.h"
-#include "activations.cu.h"
+#include "neuron_operations.cuh"
 
 #pragma once
 class ILayer

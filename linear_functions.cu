@@ -4,7 +4,7 @@
 #include "cuda_runtime.h"
 #include "device_launch_parameters.h"
 
-#include "linear_functions.cu.h"
+#include "linear_functions.cuh"
 
 #include "data_type.h"
 

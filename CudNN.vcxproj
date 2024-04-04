@@ -77,7 +77,7 @@
     </CudaCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <CudaCompile Include="activations.cu">
+    <CudaCompile Include="neuron_operations.cu">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </CudaCompile>
     <CudaCompile Include="linear_functions.cu">
@@ -87,14 +87,14 @@
     <CudaCompile Include="kernel.cu" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="activations.cu.h" />
+    <ClInclude Include="neuron_operations.cuh" />
     <ClInclude Include="data_type.h" />
     <ClInclude Include="DenseConnections.h" />
     <ClInclude Include="DenseNeuronLayer.h" />
     <ClInclude Include="IConnections.h" />
     <ClInclude Include="ILayer.h" />
     <ClInclude Include="kernel_macros.h" />
-    <ClInclude Include="linear_functions.cu.h" />
+    <ClInclude Include="linear_functions.cuh" />
     <ClInclude Include="LSMTLayer.h" />
     <ClInclude Include="NeuronLayer.h" />
     <ClInclude Include="NN.h" />

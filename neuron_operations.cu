@@ -3,7 +3,7 @@
 
 #include "cuda_runtime.h"
 #include "device_launch_parameters.h"
-#include "activations.cu.h"
+#include "neuron_operations.cuh"
 
 #include <cmath>
 

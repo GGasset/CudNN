@@ -3,6 +3,7 @@
 
 #include "kernel_macros.h"
 #include "data_type.h"
+#include "linear_functions.cuh"
 
 #pragma once
 class IConnections

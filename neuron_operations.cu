@@ -8,9 +8,9 @@
 #include <cmath>
 
 
-__global__ void sigmoid_activation(
-	data_t *activations, size_t activations_start, size_t layer_activation_start, short write_activation,
-	data_t *execution_values, size_t execution_values_start, size_t execution_values_layer_start, size_t execution_values_per_neuron,
+__device__ void device_sigmoid_activation(
+	data_t* activations, size_t activations_start, size_t layer_activation_start, short write_activation,
+	data_t* execution_values, size_t execution_values_start, size_t execution_values_layer_start, size_t execution_values_per_neuron,
 	size_t neuron_execution_values_read, size_t neuron_execution_values_write, short write_execution_values
 )
 {
@@ -28,7 +28,21 @@ __global__ void sigmoid_activation(
 	}
 }
 
-__global__ void tanh_activation(
+__global__ void sigmoid_activation(
+	data_t *activations, size_t activations_start, size_t layer_activation_start, short write_activation,
+	data_t *execution_values, size_t execution_values_start, size_t execution_values_layer_start, size_t execution_values_per_neuron,
+	size_t neuron_execution_values_read, size_t neuron_execution_values_write, short write_execution_values
+)
+{
+	device_sigmoid_activation(
+		activations, activations_start,
+		layer_activation_start, write_activation,
+		execution_values, execution_values_start, execution_values_layer_start, execution_values_per_neuron,
+		neuron_execution_values_read, neuron_execution_values_write, write_execution_values
+	);
+}
+
+__device__ void device_tanh_activation(
 	data_t* activations, size_t activations_start, size_t layer_activation_start, short write_activation,
 	data_t* execution_values, size_t execution_values_start, size_t execution_values_layer_start, size_t execution_values_per_neuron,
 	size_t neuron_execution_values_read, size_t neuron_execution_values_write, short write_execution_values
@@ -47,6 +61,20 @@ __global__ void tanh_activation(
 		size_t execution_values_i = execution_values_start + execution_values_layer_start + execution_values_per_neuron * threadIdx.x + neuron_execution_values_write;
 		execution_values[execution_values_i] = activation;
 	}
+}
+
+
+__global__ void tanh_activation(
+	data_t* activations, size_t activations_start, size_t layer_activation_start, short write_activation,
+	data_t* execution_values, size_t execution_values_start, size_t execution_values_layer_start, size_t execution_values_per_neuron,
+	size_t neuron_execution_values_read, size_t neuron_execution_values_write, short write_execution_values
+)
+{
+	device_tanh_activation(
+		activations, activations_start, layer_activation_start, write_activation,
+		execution_values, execution_values_start, execution_values_layer_start, execution_values_per_neuron,
+		neuron_execution_values_read, neuron_execution_values_write, write_execution_values
+	);
 }
 
 #endif

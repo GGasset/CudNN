@@ -14,13 +14,13 @@ void NeuronLayer::execute(
 		neuron_count);
 	switch (activation)
 	{
-	case sigmoid:
+	case ActivationFunctions::sigmoid:
 		sigmoid_activation kernel(1, neuron_count) (
 			activations, activations_start, layer_activations_start, true,
 			execution_values, execution_values_start, execution_values_layer_start, execution_values_per_neuron, 0, 0, 0
 		);
 		break;
-	case tanh:
+	case ActivationFunctions::_tanh:
 		tanh_activation kernel(1, neuron_count) (
 			activations, activations_start, layer_activations_start, true,
 			execution_values, execution_values_start, execution_values_layer_start, execution_values_per_neuron, 0, 0, 0

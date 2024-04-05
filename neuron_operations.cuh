@@ -1,11 +1,12 @@
-#pragma once
+#ifndef NEURON_OPERATIONS_H
+#define NEURON_OPERATIONS_H
 
 #include "data_type.h"
 
 enum ActivationFunctions
 {
 	sigmoid,
-	tanh
+	_tanh
 };
 
 __global__ void sigmoid_activation(
@@ -19,3 +20,5 @@ __global__ void tanh_activation(
 	data_t* execution_values, size_t execution_values_start, size_t execution_values_layer_start, size_t execution_values_per_neuron,
 	size_t neuron_execution_values_read, size_t neuron_execution_values_write, short write_execution_values
 );
+
+#endif

@@ -87,7 +87,9 @@
     <CudaCompile Include="kernel.cu" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="neuron_operations.cuh" />
+    <ClInclude Include="neuron_operations.cuh">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="data_type.h" />
     <ClInclude Include="DenseConnections.h" />
     <ClInclude Include="DenseNeuronLayer.h" />

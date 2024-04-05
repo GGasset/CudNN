@@ -77,4 +77,13 @@ __global__ void tanh_activation(
 	);
 }
 
+__global__ void LSTM_execution(
+	data_t* activations, size_t activations_start, size_t layer_activations_start,
+	data_t* execution_values, size_t execution_values_start, size_t execution_values_layer_start, size_t execution_values_per_neuron,
+	field_t* neuron_weights
+)
+{
+
+}
+
 #endif

@@ -8,7 +8,7 @@
 #include <cmath>
 
 
-__device__ void device_sigmoid_activation(
+__device__ data_t device_sigmoid_activation(
 	data_t* activations, size_t activations_start, size_t layer_activation_start, short write_activation,
 	data_t* execution_values, size_t execution_values_start, size_t execution_values_layer_start, size_t execution_values_per_neuron,
 	size_t neuron_execution_values_read, size_t neuron_execution_values_write, short write_execution_values
@@ -26,6 +26,7 @@ __device__ void device_sigmoid_activation(
 		size_t execution_values_i = execution_values_start + execution_values_layer_start + execution_values_per_neuron * threadIdx.x + neuron_execution_values_write;
 		execution_values[execution_values_i] = activation;
 	}
+	return activation;
 }
 
 __global__ void sigmoid_activation(
@@ -42,7 +43,7 @@ __global__ void sigmoid_activation(
 	);
 }
 
-__device__ void device_tanh_activation(
+__device__ data_t device_tanh_activation(
 	data_t* activations, size_t activations_start, size_t layer_activation_start, short write_activation,
 	data_t* execution_values, size_t execution_values_start, size_t execution_values_layer_start, size_t execution_values_per_neuron,
 	size_t neuron_execution_values_read, size_t neuron_execution_values_write, short write_execution_values
@@ -61,6 +62,7 @@ __device__ void device_tanh_activation(
 		size_t execution_values_i = execution_values_start + execution_values_layer_start + execution_values_per_neuron * threadIdx.x + neuron_execution_values_write;
 		execution_values[execution_values_i] = activation;
 	}
+	return activation;
 }
 
 
@@ -80,10 +82,48 @@ __global__ void tanh_activation(
 __global__ void LSTM_execution(
 	data_t* activations, size_t activations_start, size_t layer_activations_start,
 	data_t* execution_values, size_t execution_values_start, size_t execution_values_layer_start, size_t execution_values_per_neuron,
-	field_t* neuron_weights
+	field_t* neuron_weights, data_t* state
 )
 {
+	size_t neuron_weights_start = static_cast<size_t>(4) * threadIdx.x;
+	size_t neuron_state_start = static_cast<size_t>(2) * threadIdx.x;
+	data_t cell_state = state[neuron_state_start];
 
+	size_t neuron_execution_values_start = execution_values_start + execution_values_layer_start + execution_values_per_neuron * threadIdx.x;
+
+	execution_values[neuron_execution_values_start] += state[neuron_state_start + 1];
+
+	data_t linear_sigmoid = device_sigmoid_activation(
+		0, 0, 0, 0,
+		execution_values, execution_values_start, execution_values_layer_start, execution_values_per_neuron,
+		0, 1, 1
+	);
+
+	// Forget Gate
+	data_t forget_gate_output = execution_values[neuron_execution_values_start + 2] = neuron_weights[neuron_weights_start] * linear_sigmoid;
+	cell_state *= forget_gate_output;
+	execution_values[neuron_execution_values_start + 3] = cell_state;
+
+	// Store Gate
+	data_t store_gate_sigmoid_weight_multiplication = execution_values[neuron_execution_values_start + 4] = linear_sigmoid * neuron_weights[neuron_weights_start + 1];
+	data_t linear_tanh = device_tanh_activation(
+		0,0,0,0,
+		execution_values, execution_values_start, execution_values_layer_start, execution_values_per_neuron,
+		0, 5, 1
+	);
+	data_t store_gate_tanh_weight_multiplication = execution_values[neuron_execution_values_start + 6] = linear_tanh * neuron_weights[neuron_weights_start + 2];
+	state[neuron_state_start] = execution_values[neuron_execution_values_start + 7] = cell_state += store_gate_sigmoid_weight_multiplication * store_gate_tanh_weight_multiplication;
+	
+	// Output Gate
+	data_t cell_state_tanh = device_tanh_activation(
+		0, 0, 0, false,
+		execution_values, execution_values_start, execution_values_layer_start, execution_values_per_neuron,
+		7, 8, true
+	);
+	data_t output_gate_sigmoid_weight_multiplication = execution_values[neuron_execution_values_start + 9] = linear_sigmoid * neuron_weights[neuron_weights_start + 3];
+	
+	data_t output = output_gate_sigmoid_weight_multiplication * cell_state_tanh;
+	state[neuron_state_start + 1] = activations[activations_start + layer_activations_start] = output;
 }
 
 #endif

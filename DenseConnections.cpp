@@ -28,6 +28,19 @@ void DenseConnections::linear_function(size_t activations_start, data_t* activat
 	cudaDeviceSynchronize();
 }
 
+void DenseConnections::calculate_derivative(
+	size_t activations_start, data_t* activations,
+	size_t derivatives_start, size_t derivatives_layer_start, size_t derivatives_per_neuron, data_t* derivatives,
+	field_t* weights, size_t layer_length
+)
+{
+	cud_dense_linear_function_derivative kernel(layer_length, previous_layer_length) (
+		activations_start, previous_layer_activations_start, previous_layer_length, activations,
+		derivatives_start, derivatives_layer_start, derivatives_per_neuron, derivatives,
+		weights
+	);
+}
+
 void DenseConnections::add_neuron(size_t neurons_to_add, size_t connections_per_neuron, size_t layer_i, size_t layer_i_prev_length, float connection_probability = 1)
 {
 

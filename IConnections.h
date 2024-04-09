@@ -9,7 +9,8 @@
 class IConnections
 {
 public:
-	virtual void linear_function(size_t activations_start, data_t* activations,
+	virtual void linear_function(
+		size_t activations_start, data_t* activations,
 		data_t* execution_values, size_t execution_values_start, size_t execution_values_layer_start, size_t layer_execution_values_per_neuron,
 		field_t* weights, field_t* biases, size_t layer_length) = 0;
 

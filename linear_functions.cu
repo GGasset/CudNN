@@ -28,4 +28,18 @@ __global__ void cud_add_biases(
 	execution_values[execution_values_i] += biases[threadIdx.x];
 }
 
+__global__ void cud_dense_linear_function_derivative(
+	size_t activations_start, size_t previous_layer_activations_start, size_t previous_layer_length, data_t* activations,
+	size_t derivatives_start, size_t derivatives_layer_start, size_t derivatives_per_neuron, data_t* derivatives,
+	field_t* weights
+)
+{
+	size_t activation_i = activations_start + previous_layer_activations_start + threadIdx.x;
+	size_t weight_i = previous_layer_length * blockIdx.x + threadIdx.x;
+	size_t connection_derivative = activations[activation_i] + weights[weight_i];
+
+	size_t write_i = derivatives_start + derivatives_layer_start + derivatives_per_neuron * blockIdx.x;
+	derivatives[write_i] += connection_derivative;
+}
+
 #endif

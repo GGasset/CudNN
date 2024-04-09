@@ -42,4 +42,11 @@ __global__ void cud_dense_linear_function_derivative(
 	derivatives[write_i] += connection_derivative;
 }
 
+__global__ void cud_add_bias_derivative(
+	size_t derivatives_start, size_t derivatives_layer_start, size_t derivatives_per_neuron, data_t* derivatives
+)
+{
+	derivatives[derivatives_start + derivatives_layer_start + derivatives_per_neuron * threadIdx.x] += 1;
+}
+
 #endif

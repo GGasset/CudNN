@@ -91,6 +91,8 @@ __global__ void LSTM_execution(
 
 	size_t neuron_execution_values_start = execution_values_start + execution_values_layer_start + execution_values_per_neuron * threadIdx.x;
 
+	execution_values[neuron_execution_values_start + 10] = cell_state;
+
 	execution_values[neuron_execution_values_start] += state[neuron_state_start + 1];
 
 	data_t linear_sigmoid = device_sigmoid_activation(
@@ -123,7 +125,7 @@ __global__ void LSTM_execution(
 	data_t output_gate_sigmoid_weight_multiplication = execution_values[neuron_execution_values_start + 9] = linear_sigmoid * neuron_weights[neuron_weights_start + 3];
 	
 	data_t output = output_gate_sigmoid_weight_multiplication * cell_state_tanh;
-	state[neuron_state_start + 1] = activations[activations_start + layer_activations_start] = output;
+	state[neuron_state_start + 1] = activations[activations_start + layer_activations_start + threadIdx.x] = output;
 }
 
 #endif

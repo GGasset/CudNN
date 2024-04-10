@@ -13,9 +13,12 @@ public:
 	IConnections* connections = 0;
 	field_t* weights = 0;
 	field_t* biases = 0;
+
 	size_t layer_activations_start = 0;
+
 	size_t execution_values_layer_start = 0;
 	size_t execution_values_per_neuron = 0;
+	
 	size_t* neuron_gradients_starts = 0;
 	size_t layer_gradient_count = 0;
 

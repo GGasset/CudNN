@@ -19,7 +19,6 @@ public:
 	size_t execution_values_layer_start = 0;
 	size_t execution_values_per_neuron = 0;
 	
-	size_t* neuron_gradients_starts = 0;
 	size_t layer_gradient_count = 0;
 
 	void initialize_fields(size_t connection_count, size_t neuron_count);

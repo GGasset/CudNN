@@ -1,7 +1,4 @@
-#include "cuda_runtime.h"
-#include "device_launch_parameters.h"
-
-#include "neuron_operations.cuh"
+#include "derivatives.cuh"
 
 #include <cmath>
 

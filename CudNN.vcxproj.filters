@@ -14,6 +14,9 @@
     <CudaCompile Include="NeuronLayer.cpp">
       <Filter>Layers\Blocks</Filter>
     </CudaCompile>
+    <CudaCompile Include="derivatives.cu">
+      <Filter>Cuda\Training</Filter>
+    </CudaCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="NN.cpp" />
@@ -62,6 +65,9 @@
     <ClInclude Include="linear_functions.cuh">
       <Filter>Cuda\Inference</Filter>
     </ClInclude>
+    <ClInclude Include="derivatives.cuh">
+      <Filter>Cuda\Training</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Connections">
@@ -84,6 +90,9 @@
     </Filter>
     <Filter Include="Static">
       <UniqueIdentifier>{00817461-6bec-43a2-a2ba-feb330e9d067}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Cuda\Training\Connections">
+      <UniqueIdentifier>{67b03a07-b722-4ef7-9de5-e3bbbf32d79b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

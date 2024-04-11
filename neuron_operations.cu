@@ -94,7 +94,7 @@ __global__ void LSTM_execution(
 
 	size_t neuron_execution_values_start = execution_values_start + execution_values_layer_start + execution_values_per_neuron * threadIdx.x;
 
-	execution_values[neuron_execution_values_start + 10] = cell_state;
+	execution_values[neuron_execution_values_start + 3] = cell_state;
 
 	execution_values[neuron_execution_values_start] += state[neuron_state_start + 1];
 
@@ -107,7 +107,6 @@ __global__ void LSTM_execution(
 	// Forget Gate
 	data_t forget_gate_output = execution_values[neuron_execution_values_start + 2] = neuron_weights[neuron_weights_start] * linear_sigmoid;
 	cell_state *= forget_gate_output;
-	execution_values[neuron_execution_values_start + 3] = cell_state;
 
 	// Store Gate
 	data_t store_gate_sigmoid_weight_multiplication = execution_values[neuron_execution_values_start + 4] = linear_sigmoid * neuron_weights[neuron_weights_start + 1];

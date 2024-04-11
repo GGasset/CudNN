@@ -27,6 +27,10 @@ __global__ void LSMT_derivative_calculation(
 	field_t* neuron_weights
 )
 {
+	size_t neuron_execution_values_start = execution_values_start + execution_values_layer_start + execution_values_per_neuron * threadIdx.x;
+
+	size_t neuron_weights_start = static_cast<size_t>(4) * threadIdx.x;
+
 	size_t neuron_derivatives_start = derivatives_start + derivatives_per_neuron * threadIdx.x;
 	size_t previous_neuron_derivatives_start = derivatives_start - derivatives_per_neuron * neuron_count + derivatives_per_neuron * threadIdx.x;
 
@@ -40,9 +44,69 @@ __global__ void LSMT_derivative_calculation(
 		previous_cell_derivative = derivatives[previous_neuron_derivatives_start + 690420];
 	}
 	
-	data_t linear_hidden_derivative = linear_function_derivative + previous_hidden_derivative;
+	derivatives[neuron_derivatives_start] = linear_function_derivative + previous_hidden_derivative;
 
-	data_t linear_hidden_sigmoid_derivative = device_sigmoid_derivative(linear_hidden_derivative);
+	data_t linear_hidden = execution_values[neuron_execution_values_start];
+	
+	data_t linear_hidden_sigmoid_derivative = derivatives[neuron_derivatives_start + 1] = device_sigmoid_derivative(linear_hidden);
+	data_t linear_hidden_tanh_derivative = derivatives[neuron_derivatives_start + 2] = device_tanh_derivative(linear_hidden);
 
+	data_t linear_hidden_sigmoid = execution_values[neuron_execution_values_start + 1];
+	data_t linear_hidden_tanh = execution_values[neuron_execution_values_start + 5];
+
+	// Forget gate
+	data_t forget_weight = neuron_weights[neuron_weights_start];
+	data_t forget_weight_derivative = derivatives[neuron_derivatives_start + 3] = 
+		forget_weight * linear_hidden_sigmoid_derivative;
+
+	data_t forget_weight_multiplication_derivative = derivatives[neuron_derivatives_start + 4] =
+		linear_hidden_sigmoid + forget_weight_derivative;
+
+	data_t initial_cell_state = execution_values[neuron_execution_values_start + 3];
+	data_t forget_gate_weight_multiplication = execution_values[neuron_execution_values_start + 2];
+	data_t cell_state_multiplication_derivative = derivatives[neuron_derivatives_start + 5] = 
+		previous_cell_derivative * forget_gate_weight_multiplication + forget_weight_multiplication_derivative * initial_cell_state;
+
+	// Store gate
+	data_t store_sigmoid_weight = neuron_weights[neuron_weights_start + 1];
+	data_t store_tanh_weight = neuron_weights[neuron_weights_start + 2];
+	
+	data_t store_gate_sigmoid_weight_derivative = derivatives[neuron_derivatives_start + 6] =
+		store_sigmoid_weight * linear_hidden_sigmoid_derivative;
+
+	data_t store_gate_sigmoid_weight_multiplication_derivative = derivatives[neuron_derivatives_start + 7] =
+		linear_hidden_sigmoid + store_gate_sigmoid_weight_derivative;
+
+	data_t store_gate_tanh_weight_derivative = derivatives[neuron_derivatives_start + 8] =
+		store_tanh_weight * linear_hidden_tanh_derivative;
+
+	data_t store_gate_tanh_weight_multiplication_derivative = derivatives[neuron_derivatives_start + 9] =
+		linear_hidden_tanh + store_gate_tanh_weight_derivative;
+
+	data_t store_gate_sigmoid_weight_multiplication = execution_values[neuron_execution_values_start + 4];
+	data_t store_gate_tanh_weight_multiplication = execution_values[neuron_execution_values_start + 6];
+
+	data_t store_gate_multiplication_derivative = derivatives[neuron_derivatives_start + 10] =
+		store_gate_sigmoid_weight_multiplication_derivative * store_gate_tanh_weight_multiplication + store_gate_sigmoid_weight_multiplication * store_gate_tanh_weight_multiplication_derivative;
+
+	data_t cell_state_addition_derivative = derivatives[neuron_derivatives_start + 11] =
+		store_gate_multiplication_derivative + cell_state_multiplication_derivative;
+
+	// Output gate
+	data_t cell_state_tanh = execution_values[neuron_execution_values_start + 8];
+	data_t output_weight = neuron_weights[neuron_weights_start + 3];
+	data_t output_weight_multiplication = execution_values[neuron_execution_values_start + 9];
+
+	data_t cell_state_tanh_derivative = derivatives[neuron_derivatives_start + 12] = 
+		device_tanh_derivative(execution_values[neuron_execution_values_start + 7]);
+
+	data_t output_gate_weight_derivative = derivatives[neuron_derivatives_start + 13] =
+		output_weight * linear_hidden_sigmoid_derivative;
+
+	data_t output_gate_weight_multiplication_derivative = derivatives[neuron_derivatives_start + 14] =
+		linear_hidden_sigmoid + output_gate_weight_derivative;
+
+	data_t output_derivative = derivatives[neuron_derivatives_start + 15] =
+		cell_state_tanh_derivative * output_weight_multiplication + cell_state_tanh * output_gate_weight_multiplication_derivative;
 }
 

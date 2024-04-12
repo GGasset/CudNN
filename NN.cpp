@@ -15,12 +15,18 @@ NN::NN(ILayer** layers, size_t input_length, size_t layer_count, size_t max_laye
 	set_fields();
 }
 
+NN::~NN()
+{
+	deallocate();
+}
+
 void NN::set_fields()
 {
 	output_length = layers[layer_count - 1]->neuron_count;
 
 	size_t neuron_count = input_length;
 	size_t execution_value_count = 0;
+	size_t derivative_count = 0;
 	size_t gradient_count = 0;
 	for (size_t i = 0; i < layer_count; i++)
 	{
@@ -32,11 +38,17 @@ void NN::set_fields()
 		layer->execution_values_layer_start = execution_value_count;
 		execution_value_count += layer->execution_values_per_neuron * layer->neuron_count;
 
+		layer->layer_derivatives_start = derivative_count;
+		derivative_count += layer->layer_derivatives_start;
+
+		layer->layer_gradients_start = gradient_count;
 		gradient_count += layer->layer_gradient_count;
 	}
 	this->neuron_count = neuron_count;
 	output_activations_start = &(layers[layer_count - 1]->layer_activations_start);
 	this->execution_value_count = execution_value_count;
+	this->derivative_count = derivative_count;
+	this->gradient_count = gradient_count;
 }
 
 void NN::execute(data_t* input, data_t* execution_values, data_t *activations, size_t t, data_t* output_start_pointer, short copy_output_to_host = true)

@@ -29,7 +29,7 @@ __global__ void LSMT_derivative_calculation(
 	size_t neuron_weights_start = static_cast<size_t>(4) * threadIdx.x;
 
 	size_t neuron_derivatives_start = derivatives_start + derivatives_per_neuron * threadIdx.x;
-	size_t previous_neuron_derivatives_start = derivatives_start - derivatives_per_neuron * neuron_count + derivatives_per_neuron * threadIdx.x;
+	size_t previous_neuron_derivatives_start = neuron_derivatives_start - derivatives_per_neuron * neuron_count;
 
 	data_t linear_function_derivative = derivatives[neuron_derivatives_start];
 

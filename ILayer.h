@@ -3,6 +3,8 @@
 
 #include "IConnections.h"
 #include "neuron_operations.cuh"
+#include "derivatives.cuh"
+#include "gradients.cuh"
 
 #pragma once
 class ILayer

@@ -19,7 +19,7 @@ __device__ data_t device_tanh_derivative(
 }
 
 __global__ void LSMT_derivative_calculation(
-	data_t* derivatives, size_t derivatives_start, size_t derivatives_per_neuron, size_t neuron_count,
+	data_t* derivatives, size_t previous_derivatives_start, size_t derivatives_start, size_t derivatives_layer_start, size_t derivatives_per_neuron,
 	data_t* execution_values, size_t execution_values_start, size_t execution_values_layer_start, size_t execution_values_per_neuron,
 	field_t* neuron_weights
 )
@@ -28,8 +28,8 @@ __global__ void LSMT_derivative_calculation(
 
 	size_t neuron_weights_start = static_cast<size_t>(4) * threadIdx.x;
 
-	size_t neuron_derivatives_start = derivatives_start + derivatives_per_neuron * threadIdx.x;
-	size_t previous_neuron_derivatives_start = neuron_derivatives_start - derivatives_per_neuron * neuron_count;
+	size_t neuron_derivatives_start = derivatives_start + derivatives_layer_start + derivatives_per_neuron * threadIdx.x;
+	size_t previous_neuron_derivatives_start = previous_derivatives_start + derivatives_layer_start + derivatives_per_neuron * threadIdx.x;
 
 	data_t linear_function_derivative = derivatives[neuron_derivatives_start];
 

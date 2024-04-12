@@ -17,6 +17,9 @@
     <CudaCompile Include="derivatives.cu">
       <Filter>Cuda\Training</Filter>
     </CudaCompile>
+    <CudaCompile Include="gradients.cu">
+      <Filter>Cuda\Training</Filter>
+    </CudaCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="NN.cpp" />
@@ -66,6 +69,9 @@
       <Filter>Cuda\Inference</Filter>
     </ClInclude>
     <ClInclude Include="derivatives.cuh">
+      <Filter>Cuda\Training</Filter>
+    </ClInclude>
+    <ClInclude Include="gradients.cuh">
       <Filter>Cuda\Training</Filter>
     </ClInclude>
   </ItemGroup>

@@ -2,12 +2,13 @@
 
 __global__ void LSTM_gradient_calculation(
 	data_t* derivatives, size_t derivatives_start, size_t derivatives_layer_start, size_t derivatives_per_neuron,
-	data_t* gradients, size_t gradients_start, size_t next_t_gradients_start, size_t layer_gradients_start, size_t* neuron_gradients_starts,
+	data_t* gradients, size_t gradients_start, size_t next_t_gradients_start, size_t layer_gradients_start, size_t* neuron_gradients_starts, size_t* connection_associated_gradient_counts,
 	data_t* costs, size_t costs_start, size_t layer_costs_start
 )
 {
 	size_t neuron_derivatives_start = derivatives_start + derivatives_layer_start + derivatives_per_neuron * threadIdx.x;
-	size_t neuron_gradients_start = gradients_start + layer_gradients_start + neuron_gradients_starts[threadIdx.x];
+	size_t connections_gradients_start = gradients_start + layer_gradients_start + neuron_gradients_starts[threadIdx.x];
+	size_t neuron_gradients_start = connections_gradients_start + connection_associated_gradient_counts[threadIdx.x];
 	size_t next_neuron_gradients_start = next_t_gradients_start + layer_gradients_start + neuron_gradients_starts[threadIdx.x];
 
 	data_t current_gradient = costs[costs_start + layer_costs_start + threadIdx.x];
@@ -50,5 +51,5 @@ __global__ void LSTM_gradient_calculation(
 
 	current_gradient = linear_hidden_gradient += current_gradient * derivatives[neuron_derivatives_start + 4] * derivatives[neuron_derivatives_start + 1];
 	current_gradient *= derivatives[neuron_derivatives_start];
-	gradients[neuron_gradients_start] = current_gradient; // Linear Function gradient | Initial Hidden State gradient
+	gradients[connections_gradients_start] = current_gradient; // Linear Function gradient | Initial Hidden State gradient
 }

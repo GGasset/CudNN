@@ -28,6 +28,7 @@ public:
 	size_t layer_gradient_count = 0;
 	size_t layer_gradients_start = 0;
 	size_t* neuron_gradients_starts = 0;
+	size_t* connection_associated_gradient_counts = 0;
 
 	void initialize_fields(size_t connection_count, size_t neuron_count);
 

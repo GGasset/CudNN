@@ -77,6 +77,7 @@
     </CudaCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <CudaCompile Include="connection_gradients.cu" />
     <CudaCompile Include="derivatives.cu" />
     <CudaCompile Include="gradients.cu" />
     <CudaCompile Include="neuron_operations.cu">
@@ -89,6 +90,7 @@
     <CudaCompile Include="kernel.cu" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="connection_gradients.cuh" />
     <ClInclude Include="derivatives.cuh" />
     <ClInclude Include="gradients.cuh" />
     <ClInclude Include="neuron_operations.cuh">

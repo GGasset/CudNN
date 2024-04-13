@@ -44,6 +44,21 @@ void DenseConnections::calculate_derivative(
 	);
 }
 
+void DenseConnections::calculate_gradients(
+	data_t* activations, size_t activations_start, 
+	data_t* gradients, size_t gradients_start, size_t layer_gradients_start, size_t* neuron_gradients_starts, 
+	data_t* costs, size_t costs_start,
+	field_t* weights
+)
+{
+	cud_dense_gradient_calculation(
+		activations, activations_start,
+		gradients, gradients_start, layer_gradients_start, neuron_gradients_starts,
+		costs, costs_start,
+		previous_layer_activations_start, weights
+	);
+}
+
 void DenseConnections::add_neuron(size_t neurons_to_add, size_t connections_per_neuron, size_t layer_i, size_t layer_i_prev_length, float connection_probability = 1)
 {
 

@@ -22,6 +22,13 @@ public:
 		field_t* weights, size_t layer_length
 	) override;
 
+	void calculate_gradients(
+		data_t* activations, size_t activations_start,
+		data_t* gradients, size_t gradients_start, size_t layer_gradients_start, size_t* neuron_gradients_start,
+		data_t* costs, size_t costs_start,
+		field_t* weights
+	) override;
+
 	void add_neuron(size_t neurons_to_add, size_t connections_per_neuron, size_t layer_i, size_t layer_i_prev_length, float connection_probability) override;
 };
 

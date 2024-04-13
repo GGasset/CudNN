@@ -19,6 +19,7 @@ DenseNeuronLayer::DenseNeuronLayer(size_t layer_gradients_start, size_t neuron_c
 		neuron_gradient_i += previous_layer_length + 1;
 	}
 	cudaMalloc(&this->neuron_gradients_starts, neuron_count * sizeof(size_t));
+	cudaDeviceSynchronize();
 	cudaMemcpy(this->neuron_gradients_starts, neuron_gradients_starts, neuron_count * sizeof(size_t), cudaMemcpyHostToDevice);
 	delete[] neuron_gradients_starts;
 

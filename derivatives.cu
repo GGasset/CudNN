@@ -54,10 +54,10 @@ __global__ void LSTM_derivative_calculation(
 	// Forget gate
 	data_t forget_weight = neuron_weights[neuron_weights_start];
 	data_t forget_weight_derivative = derivatives[neuron_derivatives_start + 3] = 
-		forget_weight * linear_hidden_sigmoid_derivative;
+		linear_hidden_sigmoid;
 
 	data_t forget_weight_multiplication_derivative = derivatives[neuron_derivatives_start + 4] =
-		linear_hidden_sigmoid + forget_weight_derivative;
+		linear_hidden_sigmoid + forget_weight * linear_hidden_sigmoid_derivative;
 
 	data_t initial_cell_state = execution_values[neuron_execution_values_start + 3];
 	data_t forget_gate_weight_multiplication = execution_values[neuron_execution_values_start + 2];
@@ -69,16 +69,16 @@ __global__ void LSTM_derivative_calculation(
 	data_t store_tanh_weight = neuron_weights[neuron_weights_start + 2];
 	
 	data_t store_gate_sigmoid_weight_derivative = derivatives[neuron_derivatives_start + 6] =
-		store_sigmoid_weight * linear_hidden_sigmoid_derivative;
+		linear_hidden_sigmoid;
 
 	data_t store_gate_sigmoid_weight_multiplication_derivative = derivatives[neuron_derivatives_start + 7] =
-		linear_hidden_sigmoid + store_gate_sigmoid_weight_derivative;
+		linear_hidden_sigmoid + store_sigmoid_weight * linear_hidden_sigmoid_derivative;
 
 	data_t store_gate_tanh_weight_derivative = derivatives[neuron_derivatives_start + 8] =
-		store_tanh_weight * linear_hidden_tanh_derivative;
+		linear_hidden_tanh;
 
 	data_t store_gate_tanh_weight_multiplication_derivative = derivatives[neuron_derivatives_start + 9] =
-		linear_hidden_tanh + store_gate_tanh_weight_derivative;
+		linear_hidden_tanh + store_tanh_weight * linear_hidden_tanh_derivative;
 
 	data_t store_gate_sigmoid_weight_multiplication = execution_values[neuron_execution_values_start + 4];
 	data_t store_gate_tanh_weight_multiplication = execution_values[neuron_execution_values_start + 6];
@@ -98,10 +98,10 @@ __global__ void LSTM_derivative_calculation(
 		device_tanh_derivative(execution_values[neuron_execution_values_start + 7]);
 
 	data_t output_gate_weight_derivative = derivatives[neuron_derivatives_start + 13] =
-		output_weight * linear_hidden_sigmoid_derivative;
+		linear_hidden_sigmoid;
 
 	data_t output_gate_weight_multiplication_derivative = derivatives[neuron_derivatives_start + 14] =
-		linear_hidden_sigmoid + output_gate_weight_derivative;
+		linear_hidden_sigmoid + output_weight * linear_hidden_sigmoid_derivative;
 
 	data_t output_derivative = derivatives[neuron_derivatives_start + 15] =
 		cell_state_tanh_derivative * output_weight_multiplication + cell_state_tanh * output_gate_weight_multiplication_derivative;

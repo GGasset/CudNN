@@ -30,20 +30,24 @@ void LSMTLayer::calculate_gradients(
 			activations_start, activations,  derivatives_start, layer_derivatives_start, derivatives_per_neuron, derivatives,
 			weights, neuron_count
 		);
+		cudaDeviceSynchronize();
 		LSTM_derivative_calculation kernel(1, neuron_count) (
 			derivatives, previous_derivatives_start, derivatives_start, layer_derivatives_start, derivatives_per_neuron,
 			execution_values, execution_values_start, execution_values_layer_start, execution_values_per_neuron,
 			neuron_weights
 		);
+		cudaDeviceSynchronize();
 	}
 	LSTM_gradient_calculation kernel(1, neuron_count) (
 		derivatives, derivatives_start, layer_derivatives_start, derivatives_per_neuron,
 		gradients, gradients_start, next_gradients_start, layer_gradients_start, neuron_gradients_starts, connection_associated_gradient_counts,
 		costs, costs_start, layer_activations_start
 	);
+	cudaDeviceSynchronize();
 	connections->calculate_gradients(
 		activations, activations_start,
 		gradients, gradients_start, layer_gradients_start, neuron_gradients_starts,
 		costs, costs_start
 	);
+	cudaDeviceSynchronize();
 }

@@ -2,6 +2,7 @@
 #include "device_launch_parameters.h"
 
 #include "data_type.h"
+#include "derivatives.cuh"
 
 
 __global__ void LSTM_gradient_calculation(

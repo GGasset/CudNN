@@ -53,3 +53,28 @@ __global__ void LSTM_gradient_calculation(
 	current_gradient *= derivatives[neuron_derivatives_start];
 	gradients[connections_gradients_start] = current_gradient; // Linear Function gradient | Initial Hidden State gradient
 }
+
+__global__ void neuron_gradient_calculation(
+	data_t* execution_values, size_t execution_values_start, size_t execution_values_layer_start, 
+	data_t* gradients, size_t gradients_start, size_t layer_gradients_start, size_t* neuron_gradients_starts, 
+	data_t* costs, size_t costs_start, size_t layer_costs_start,
+	ActivationFunctions activation
+)
+{
+	data_t input_gradient = costs[costs_start + layer_costs_start + threadIdx.x];
+	data_t activation_input = execution_values[execution_values_start + execution_values_layer_start + threadIdx.x];
+	data_t bias_gradient = input_gradient;
+	switch (activation)
+	{
+	case sigmoid:
+		bias_gradient *= device_sigmoid_derivative(activation_input);
+		break;
+	case _tanh:
+		bias_gradient *= device_tanh_derivative(activation_input);
+		break;
+	default:
+		break;
+	}
+	size_t gradient_write_i = gradients_start + layer_gradients_start + neuron_gradients_starts[threadIdx.x];
+	gradients[gradient_write_i] = bias_gradient;
+}

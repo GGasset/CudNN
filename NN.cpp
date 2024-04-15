@@ -110,6 +110,27 @@ data_t* NN::execute(data_t* input)
 	return execute(input, 1);
 }
 
+void NN::calculate_gradients(
+	data_t* activations, size_t activations_start,
+	data_t* execution_values, size_t execution_values_start,
+	data_t* costs, size_t costs_start, 
+	data_t* gradients, size_t gradients_start, size_t next_gradients_start, 
+	data_t* derivatives, size_t derivatives_start, size_t previous_derivatives_start, short calculate_derivatives
+)
+{
+	for (int i = layer_count - 1; i >= 0; i--)
+	{
+		layers[i]->calculate_gradients(
+			activations, activations_start,
+			execution_values, execution_values_start,
+			derivatives, previous_derivatives_start, derivatives_start, calculate_derivatives,
+			gradients, next_gradients_start, gradients_start,
+			costs, costs_start
+		);
+		cudaDeviceSynchronize();
+	}
+}
+
 void NN::deallocate()
 {
 	for (size_t i = 0; i < layer_count; i++)

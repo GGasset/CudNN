@@ -13,10 +13,15 @@ private:
 	size_t* output_activations_start = 0;
 	size_t execution_value_count = 0;
 	size_t derivative_count = 0;
-	data_t* derivatives_since_memory_deletion = 0;
-	size_t derivatives_since_memory_deletion_t_count = 0;
 	short contains_recurrent_layers = 0;
 	size_t gradient_count = 0;
+
+	data_t* activations_since_memory_deletion = 0;
+	size_t activations_since_memory_deletion_t_count = 0;
+	data_t* execution_values_since_memory_deletion = 0;
+	size_t execution_values_since_memory_deletion_t_count = 0;
+	data_t* derivatives_since_memory_deletion = 0;
+	size_t derivatives_since_memory_deletion_t_count = 0;
 
 protected:
 	void set_fields();

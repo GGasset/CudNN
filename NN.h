@@ -17,11 +17,9 @@ private:
 	size_t gradient_count = 0;
 
 	data_t* activations_since_memory_deletion = 0;
-	size_t activations_since_memory_deletion_t_count = 0;
 	data_t* execution_values_since_memory_deletion = 0;
-	size_t execution_values_since_memory_deletion_t_count = 0;
 	data_t* derivatives_since_memory_deletion = 0;
-	size_t derivatives_since_memory_deletion_t_count = 0;
+	size_t since_memory_deletion_t_count = 0;
 
 protected:
 	void set_fields();

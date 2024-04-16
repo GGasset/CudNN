@@ -1,4 +1,5 @@
 #include "ILayer.h"
+#include "costs.cuh"
 
 #pragma once
 class NN
@@ -31,6 +32,13 @@ public:
 	void execute(data_t* input, data_t* execution_values, data_t *activations, size_t t, data_t* output_start_pointer, short copy_output_to_host);
 	data_t* execute(data_t* input, size_t t_count);
 	data_t* execute(data_t* input);
+
+	void calculate_derivatives(
+		data_t* activations, size_t activations_start,
+		data_t* derivatives, size_t previous_derivatives_start, size_t derivatives_start
+	);
+
+	//void calculate_output_costs
 
 	void calculate_gradients(
 		data_t* activations, size_t activations_start,

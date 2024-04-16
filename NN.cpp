@@ -113,6 +113,22 @@ data_t* NN::execute(data_t* input)
 	return execute(input, 1);
 }
 
+void NN::calculate_derivatives(
+	data_t* activations, size_t activations_start,
+	data_t* derivatives, size_t previous_derivatives_start, size_t derivatives_start
+)
+{
+	// Todo: make layer gradient calculation async
+	for (size_t i = 0; i < layer_count; i++)
+	{
+		layers[i]->calculate_derivatives(
+			activations, activations_start,
+			derivatives, previous_derivatives_start, derivatives_start
+		);
+		cudaDeviceSynchronize();
+	}
+}
+
 void NN::calculate_gradients(
 	data_t* activations, size_t activations_start,
 	data_t* execution_values, size_t execution_values_start,
@@ -126,7 +142,7 @@ void NN::calculate_gradients(
 		layers[i]->calculate_gradients(
 			activations, activations_start,
 			execution_values, execution_values_start,
-			derivatives, previous_derivatives_start, derivatives_start, calculate_derivatives,
+			derivatives, derivatives_start,
 			gradients, next_gradients_start, gradients_start,
 			costs, costs_start
 		);

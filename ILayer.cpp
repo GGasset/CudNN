@@ -27,9 +27,11 @@ void ILayer::generate_random_weights(size_t connection_count, size_t start_i = 0
 void ILayer::initialize_fields(size_t connection_count, size_t neuron_count)
 {
 	cudaMalloc(&weights, sizeof(field_t) * connection_count);
-	generate_random_weights(connection_count);
 	cudaMalloc(&biases, sizeof(field_t) * neuron_count);
+	cudaDeviceSynchronize();
+	generate_random_weights(connection_count);
 	cudaMemset(biases, 1, sizeof(field_t) * neuron_count);
+	cudaDeviceSynchronize();
 }
 
 void ILayer::deallocate()

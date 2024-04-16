@@ -96,7 +96,10 @@ data_t* NN::execute(data_t* input, size_t t_count)
 		outputs[i] = 0;
 	}
 	for (size_t i = 0; i < t_count; i++)
+	{
 		execute(input, execution_values, activations, i, outputs + output_length * i, 1);
+		cudaDeviceSynchronize();
+	}
 
 
 	cudaFree(execution_values);

@@ -23,6 +23,9 @@
     <CudaCompile Include="connection_gradients.cu">
       <Filter>Cuda\Training\Connections</Filter>
     </CudaCompile>
+    <CudaCompile Include="costs.cu">
+      <Filter>Cuda\Training</Filter>
+    </CudaCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="NN.cpp" />
@@ -79,6 +82,9 @@
     </ClInclude>
     <ClInclude Include="connection_gradients.cuh">
       <Filter>Cuda\Training\Connections</Filter>
+    </ClInclude>
+    <ClInclude Include="costs.cuh">
+      <Filter>Cuda\Training</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -57,5 +57,6 @@ void LSTMLayer::calculate_derivatives(
 
 void LSTMLayer::layer_specific_deallocate()
 {
-
+	cudaFree(neuron_weights);
+	cudaFree(state);
 }

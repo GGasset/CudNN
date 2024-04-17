@@ -39,9 +39,9 @@ void ILayer::deallocate()
 	cudaFree(weights);
 	cudaFree(biases);
 	connections->deallocate();
+	layer_specific_deallocate();
 	cudaDeviceSynchronize();
 	delete connections;
-	layer_specific_deallocate();
 }
 
 void ILayer::layer_specific_deallocate()

@@ -9,7 +9,7 @@ enum CostFunctions
 };
 
 __global__ void MSE_derivative(
-	data_t* activations, size_t activations_start, size_t last_layer_activations_start,
+	data_t* activations, size_t neuron_count, size_t activations_start, size_t last_layer_activations_start,
 	data_t* costs, size_t costs_start,
-	data_t* Y_hat, size_t Y_hat_start
+	data_t* Y_hat, size_t output_length
 );

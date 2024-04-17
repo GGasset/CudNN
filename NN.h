@@ -33,12 +33,18 @@ public:
 	data_t* execute(data_t* input, size_t t_count);
 	data_t* execute(data_t* input);
 
+	void calculate_supervised_output_costs(
+		CostFunctions cost_function,
+		size_t t_count,
+		data_t* Y_hat,
+		data_t* activations, size_t activations_start,
+		data_t* costs, size_t costs_start
+	);
+
 	void calculate_derivatives(
 		data_t* activations, size_t activations_start,
 		data_t* derivatives, size_t previous_derivatives_start, size_t derivatives_start
 	);
-
-	//void calculate_output_costs
 
 	void calculate_gradients(
 		data_t* activations, size_t activations_start,

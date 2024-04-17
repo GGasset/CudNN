@@ -67,8 +67,6 @@ void NN::execute(data_t* input, data_t* execution_values, data_t *activations, s
 	}
 }
 
-#include <stdio.h>
-
 data_t* NN::execute(data_t* input, size_t t_count)
 {
 	data_t* execution_values = 0;
@@ -78,6 +76,7 @@ data_t* NN::execute(data_t* input, size_t t_count)
 	cudaDeviceSynchronize();
 	cudaMemset(execution_values, 0, sizeof(data_t) * execution_value_count * t_count);
 	cudaMemset(activations, 0, sizeof(data_t) * neuron_count * t_count);
+	cudaDeviceSynchronize();
 	cudaDeviceSynchronize();
 
 	//data_t* host_activations = new data_t[neuron_count];
@@ -111,6 +110,28 @@ data_t* NN::execute(data_t* input, size_t t_count)
 data_t* NN::execute(data_t* input)
 {
 	return execute(input, 1);
+}
+
+void NN::calculate_supervised_output_costs(
+	CostFunctions cost_function,
+	size_t t_count,
+	data_t* Y_hat,
+	data_t* activations, size_t activations_start,
+	data_t* costs, size_t costs_start
+)
+{
+	switch (cost_function)
+	{
+	case MSE:
+		MSE_derivative kernel(t_count, output_length) (
+			activations, neuron_count, activations_start, *output_activations_start,
+			costs, costs_start,
+			Y_hat, output_length
+		);
+		break;
+	default:
+		break;
+	}
 }
 
 void NN::calculate_derivatives(

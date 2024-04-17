@@ -41,6 +41,12 @@ void ILayer::deallocate()
 	connections->deallocate();
 	cudaDeviceSynchronize();
 	delete connections;
+	layer_specific_deallocate();
+}
+
+void ILayer::layer_specific_deallocate()
+{
+
 }
 
 #endif

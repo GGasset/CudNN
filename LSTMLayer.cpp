@@ -1,6 +1,6 @@
-#include "LSMTLayer.h"
+#include "LSTMLayer.h"
 
-void LSMTLayer::execute(data_t* activations, size_t activations_start, data_t* execution_values, size_t execution_values_start)
+void LSTMLayer::execute(data_t* activations, size_t activations_start, data_t* execution_values, size_t execution_values_start)
 {
 	// neuron execution values 0
 	connections->linear_function(
@@ -16,7 +16,7 @@ void LSMTLayer::execute(data_t* activations, size_t activations_start, data_t* e
 	);
 }
 
-void LSMTLayer::calculate_gradients(
+void LSTMLayer::calculate_gradients(
 	data_t* activations, size_t activations_start,
 	data_t* execution_values, size_t execution_values_start,
 	data_t* derivatives, size_t derivatives_start,
@@ -38,7 +38,7 @@ void LSMTLayer::calculate_gradients(
 	cudaDeviceSynchronize();
 }
 
-void LSMTLayer::calculate_derivatives(
+void LSTMLayer::calculate_derivatives(
 	data_t* activations, size_t activations_start, 
 	data_t* derivatives, size_t previous_derivatives_start, size_t derivatives_start
 )
@@ -53,4 +53,9 @@ void LSMTLayer::calculate_derivatives(
 		execution_values, execution_values_start, execution_values_layer_start, execution_values_per_neuron,
 		neuron_weights
 	);
+}
+
+void LSTMLayer::layer_specific_deallocate()
+{
+
 }

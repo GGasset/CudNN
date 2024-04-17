@@ -35,7 +35,7 @@
     <ClCompile Include="ILayer.cpp">
       <Filter>Layers\Blocks</Filter>
     </ClCompile>
-    <ClCompile Include="LSMTLayer.cpp">
+    <ClCompile Include="LSTMLayer.cpp">
       <Filter>Layers\Blocks</Filter>
     </ClCompile>
     <ClCompile Include="DenseNeuronLayer.cpp">
@@ -55,7 +55,7 @@
     <ClInclude Include="ILayer.h">
       <Filter>Layers\Blocks</Filter>
     </ClInclude>
-    <ClInclude Include="LSMTLayer.h">
+    <ClInclude Include="LSTMLayer.h">
       <Filter>Layers\Blocks</Filter>
     </ClInclude>
     <ClInclude Include="NeuronLayer.h">

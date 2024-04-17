@@ -105,7 +105,7 @@
     <ClInclude Include="ILayer.h" />
     <ClInclude Include="kernel_macros.h" />
     <ClInclude Include="linear_functions.cuh" />
-    <ClInclude Include="LSMTLayer.h" />
+    <ClInclude Include="LSTMLayer.h" />
     <ClInclude Include="NeuronLayer.h" />
     <ClInclude Include="NN.h" />
   </ItemGroup>
@@ -113,7 +113,7 @@
     <ClCompile Include="DenseNeuronLayer.cpp" />
     <ClCompile Include="IConnections.cpp" />
     <ClCompile Include="ILayer.cpp" />
-    <ClCompile Include="LSMTLayer.cpp" />
+    <ClCompile Include="LSTMLayer.cpp" />
     <CudaCompile Include="NeuronLayer.cpp" />
     <ClCompile Include="NN.cpp" />
   </ItemGroup>

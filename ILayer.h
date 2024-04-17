@@ -36,7 +36,9 @@ public:
 
 	virtual void add_neuron(size_t neurons_to_add, size_t connection_count_per_neuron, size_t layer_i, size_t layer_i_prev_length, float connection_probability = 1);
 
-	virtual void deallocate();
+	void deallocate();
+
+	virtual void layer_specific_deallocate();
 
 	virtual void execute(
 		data_t *activations, size_t activations_start,

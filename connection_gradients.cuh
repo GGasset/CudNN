@@ -10,3 +10,13 @@ __global__ void cud_dense_gradient_calculation(
 	size_t previous_layer_activations_start,
 	field_t* weights
 );
+
+__global__ void bias_gradient_subtraction(
+	data_t* gradients, size_t gradients_start, size_t layer_gradients_start, size_t* neuron_gradients_starts,
+	field_t* biases
+);
+
+__global__ void cud_dense_gradient_subtraction(
+	data_t* gradients, size_t gradients_start, size_t layer_gradients_start, size_t* neuron_gradients_starts,
+	field_t* weights, size_t previous_layer_length
+)

@@ -54,6 +54,20 @@ __global__ void LSTM_gradient_calculation(
 	gradients[connections_gradients_start] = current_gradient; // Linear Function gradient | Initial Hidden State gradient
 }
 
+__global__ void LSTM_gradient_subtraction(
+	data_t* gradients, size_t gradients_start, size_t layer_gradients_start, size_t* neuron_gradients_starts, size_t* connection_associated_gradient_counts,
+	field_t* neuron_weights
+)
+{
+	size_t neuron_gradients_start = gradients_start + layer_gradients_start + neuron_gradients_starts[threadIdx.x] + connection_associated_gradient_counts[threadIdx.x];
+	size_t neuron_weights_start = static_cast<size_t>(4) * threadIdx.x;
+
+	neuron_weights[neuron_weights_start] -= gradients[neuron_gradients_start + 6]; // Forget weight
+	neuron_weights[neuron_weights_start + 1] -= gradients[neuron_gradients_start + 3]; // Store sigmoid weight
+	neuron_weights[neuron_weights_start + 2] -= gradients[neuron_gradients_start + 2]; // Store Tanh weight
+	neuron_weights[neuron_weights_start + 3] -= gradients[neuron_gradients_start + 1]; // Output_weight
+}
+
 __global__ void neuron_gradient_calculation(
 	data_t* execution_values, size_t execution_values_start, size_t execution_values_layer_start, 
 	data_t* gradients, size_t gradients_start, size_t layer_gradients_start, size_t* neuron_gradients_starts, 

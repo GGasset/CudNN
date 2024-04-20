@@ -7,6 +7,8 @@ public:
 	field_t* neuron_weights = 0;
 	data_t* state = 0;
 
+	void layer_specific_initialize_fields(size_t connection_count, size_t neuron_count) override;
+
 	void execute(
 		data_t* activations, size_t activations_start,
 		data_t* execution_values, size_t execution_values_start

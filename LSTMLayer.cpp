@@ -1,5 +1,15 @@
 #include "LSTMLayer.h"
 
+void LSTMLayer::layer_specific_initialize_fields(size_t connection_count, size_t neuron_count)
+{
+	cudaMalloc(&state, sizeof(data_t) * neuron_count * 2);
+	cudaMalloc(&neuron_weights, sizeof(field_t) * neuron_count * 4);
+	cudaDeviceSynchronize();
+	cudaMemset(state, 0, sizeof(data_t) * neuron_count * 2);
+	generate_random_values(&neuron_weights, connection_count);
+	cudaDeviceSynchronize();
+}
+
 void LSTMLayer::execute(data_t* activations, size_t activations_start, data_t* execution_values, size_t execution_values_start)
 {
 	// neuron execution values 0

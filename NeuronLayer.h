@@ -20,6 +20,10 @@ public:
 		data_t* costs, size_t costs_start
 	) override;
 
+	void subtract_gradients(
+		data_t* gradients, size_t gradients_start
+	) override;
+
 	void calculate_derivatives(
 		data_t* activations, size_t activations_start,
 		data_t* derivatives, size_t previous_derivatives_start, size_t derivatives_start

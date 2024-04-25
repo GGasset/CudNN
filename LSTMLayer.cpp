@@ -48,6 +48,18 @@ void LSTMLayer::calculate_gradients(
 	cudaDeviceSynchronize();
 }
 
+void LSTMLayer::subtract_gradients(data_t* gradients, size_t gradients_start)
+{
+	connections->subtract_gradients(
+		gradients, gradients_start, layer_gradients_start, neuron_gradients_starts,
+		weights, biases, neuron_count
+	);
+	LSTM_gradient_subtraction(
+		gradients, gradients_start, layer_gradients_start, neuron_gradients_starts, connection_associated_gradient_counts,
+		neuron_weights
+	);
+}
+
 void LSTMLayer::calculate_derivatives(
 	data_t* activations, size_t activations_start, 
 	data_t* derivatives, size_t previous_derivatives_start, size_t derivatives_start

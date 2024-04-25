@@ -59,7 +59,6 @@ public:
 		data_t* gradients, size_t gradients_start
 	);
 
-private:
 	void deallocate();
 };
 

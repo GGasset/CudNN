@@ -55,6 +55,10 @@ public:
 		short calculate_derivatives
 	);
 
+	void subtract_gradients(
+		data_t* gradients, size_t gradients_start
+	);
+
 private:
 	void deallocate();
 };

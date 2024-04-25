@@ -171,6 +171,15 @@ void NN::calculate_gradients(
 	}
 }
 
+void NN::subtract_gradients(data_t* gradients, size_t gradients_start)
+{
+	for (size_t i = 0; i < layer_count; i++)
+	{
+		layers[i]->subtract_gradients(gradients, gradients_start);
+	}
+	cudaDeviceSynchronize();
+}
+
 void NN::deallocate()
 {
 	for (size_t i = 0; i < layer_count; i++)

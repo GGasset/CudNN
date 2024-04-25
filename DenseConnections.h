@@ -29,6 +29,11 @@ public:
 		field_t* weights
 	) override;
 
+	void subtract_gradients(
+		data_t* gradients, size_t gradients_start, size_t layer_gradients_start, size_t* neuron_gradients_starts,
+		field_t* weights, field_t* biases, size_t neuron_count
+	) override;
+
 	void add_neuron(size_t neurons_to_add, size_t connections_per_neuron, size_t layer_i, size_t layer_i_prev_length, float connection_probability) override;
 };
 

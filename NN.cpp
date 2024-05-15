@@ -141,6 +141,9 @@ void NN::train(bool stateful, size_t t_count, data_t* costs, data_t* gradients, 
 
 void NN::alloc_training_variables(size_t t_count, data_t** costs, data_t** gradients, data_t** derivatives)
 {
+	cudaMalloc(costs, sizeof(data_t) * t_count * neuron_count);
+	cudaMalloc(gradients, sizeof(data_t) * t_count * gradient_count);
+	cudaMalloc(derivatives, sizeof(data_t) * t_count * derivative_count);
 }
 
 void NN::calculate_derivatives(

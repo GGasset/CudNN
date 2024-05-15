@@ -52,6 +52,13 @@ public:
 		data_t* execution_values
 	);
 
+	void alloc_training_variables(
+		size_t t_count,
+		data_t** costs,
+		data_t** gradients,
+		data_t** derivatives
+	);
+
 	void calculate_derivatives(
 		data_t* activations, size_t activations_start,
 		data_t* derivatives, size_t previous_derivatives_start, size_t derivatives_start

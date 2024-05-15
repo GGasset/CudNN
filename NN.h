@@ -17,10 +17,11 @@ private:
 	short contains_recurrent_layers = 0;
 	size_t gradient_count = 0;
 
-	data_t* activations_since_memory_deletion = 0;
-	data_t* execution_values_since_memory_deletion = 0;
-	data_t* derivatives_since_memory_deletion = 0;
-	size_t since_memory_deletion_t_count = 0;
+	// Now state derivatives are 1 (variable) by default so no need to save derivatives
+	//data_t* activations_since_memory_deletion = 0;
+	//data_t* execution_values_since_memory_deletion = 0;
+	//data_t* derivatives_since_memory_deletion = 0;
+	//size_t since_memory_deletion_t_count = 0;
 
 protected:
 	void set_fields();
@@ -39,6 +40,16 @@ public:
 		data_t* Y_hat,
 		data_t* activations, size_t activations_start,
 		data_t* costs, size_t costs_start
+	);
+
+	void train(
+		bool stateful,
+		size_t t_count,
+		data_t* costs,
+		data_t* gradients,
+		data_t* derivatives,
+		data_t* activations,
+		data_t* execution_values
 	);
 
 	void calculate_derivatives(

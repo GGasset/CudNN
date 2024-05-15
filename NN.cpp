@@ -134,6 +134,15 @@ void NN::calculate_supervised_output_costs(
 	}
 }
 
+void NN::train(bool stateful, size_t t_count, data_t* costs, data_t* gradients, data_t* derivatives, data_t* activations, data_t* execution_values)
+{
+
+}
+
+void NN::alloc_training_variables(size_t t_count, data_t** costs, data_t** gradients, data_t** derivatives)
+{
+}
+
 void NN::calculate_derivatives(
 	data_t* activations, size_t activations_start,
 	data_t* derivatives, size_t previous_derivatives_start, size_t derivatives_start

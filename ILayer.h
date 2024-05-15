@@ -62,5 +62,7 @@ public:
 		data_t* activations, size_t activations_start,
 		data_t* derivatives, size_t previous_derivatives_start, size_t derivatives_start
 	) = 0;
+
+	virtual void delete_memory();
 };
 

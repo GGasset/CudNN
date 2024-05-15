@@ -54,4 +54,8 @@ void ILayer::layer_specific_deallocate()
 
 }
 
+void ILayer::delete_memory()
+{
+}
+
 #endif

@@ -8,6 +8,7 @@ public:
 	data_t* state = 0;
 
 	void layer_specific_initialize_fields(size_t connection_count, size_t neuron_count) override;
+	void layer_specific_deallocate() override;
 
 	void execute(
 		data_t* activations, size_t activations_start,
@@ -31,6 +32,6 @@ public:
 		data_t* derivatives, size_t previous_derivatives_start, size_t derivatives_start
 	) override;
 
-	void layer_specific_deallocate() override;
+	void delete_memory() override;
 };
 

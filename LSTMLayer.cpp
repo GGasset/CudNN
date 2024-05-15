@@ -77,6 +77,12 @@ void LSTMLayer::calculate_derivatives(
 	);
 }
 
+void LSTMLayer::delete_memory()
+{
+	cudaMemset(state, 0, sizeof(data_t) * 2 * neuron_count);
+	cudaDeviceSynchronize();
+}
+
 void LSTMLayer::layer_specific_deallocate()
 {
 	cudaFree(neuron_weights);

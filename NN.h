@@ -27,6 +27,8 @@ protected:
 	void set_fields();
 
 public:
+	bool stateful = false;
+
 	~NN();
 	NN(short contains_recurrent_layers, ILayer** layers, size_t input_length, size_t layer_count, size_t max_layer_count = 0);
 	

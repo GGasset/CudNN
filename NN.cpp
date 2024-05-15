@@ -189,6 +189,12 @@ void NN::subtract_gradients(data_t* gradients, size_t gradients_start)
 	cudaDeviceSynchronize();
 }
 
+void NN::delete_memory()
+{
+	for (size_t i = 0; i < layer_count; i++)
+		layers[i]->delete_memory();
+}
+
 void NN::deallocate()
 {
 	for (size_t i = 0; i < layer_count; i++)

@@ -77,6 +77,8 @@ public:
 		data_t* gradients, size_t gradients_start
 	);
 
+	void delete_memory();
+
 	void deallocate();
 };
 

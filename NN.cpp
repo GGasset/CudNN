@@ -167,7 +167,7 @@ void NN::calculate_gradients(
 	data_t* execution_values, size_t execution_values_start,
 	data_t* costs, size_t costs_start, 
 	data_t* gradients, size_t gradients_start, size_t next_gradients_start, 
-	data_t* derivatives, size_t derivatives_start, size_t previous_derivatives_start, short calculate_derivatives
+	data_t* derivatives, size_t derivatives_start, size_t previous_derivatives_start
 )
 {
 	for (int i = layer_count - 1; i >= 0; i--)

@@ -50,7 +50,7 @@ void NeuronLayer::calculate_gradients(
 	connections->calculate_gradients(
 		activations, activations_start, gradients, gradients_start, layer_gradients_start, neuron_gradients_starts,
 		costs, costs_start,
-		weights
+		weights, neuron_count
 	);
 	cudaDeviceSynchronize();
 }

@@ -48,10 +48,10 @@ void DenseConnections::calculate_gradients(
 	data_t* activations, size_t activations_start, 
 	data_t* gradients, size_t gradients_start, size_t layer_gradients_start, size_t* neuron_gradients_starts, 
 	data_t* costs, size_t costs_start,
-	field_t* weights
+	field_t* weights, size_t layer_length
 )
 {
-	cud_dense_gradient_calculation(
+	cud_dense_gradient_calculation kernel(layer_length, previous_layer_length) (
 		activations, activations_start,
 		gradients, gradients_start, layer_gradients_start, neuron_gradients_starts,
 		costs, costs_start,

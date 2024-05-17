@@ -32,7 +32,7 @@ __global__ void cud_dense_gradient_subtraction(
 	field_t* weights, size_t previous_layer_length
 )
 {
-	size_t gradient_i = gradients_start + layer_gradients_start + neuron_gradients_starts[blockIdx.x] + threadIdx + 1;
+	size_t gradient_i = gradients_start + layer_gradients_start + neuron_gradients_starts[blockIdx.x] + threadIdx.x + 1;
 	size_t weight_i = previous_layer_length * blockIdx.x + threadIdx.x;
 	weights[weight_i] -= gradients[gradient_i];
 }

@@ -1,3 +1,5 @@
+#pragma once
+
 #include "gradients.cuh"
 
 __global__ void LSTM_gradient_calculation(
@@ -69,8 +71,8 @@ __global__ void LSTM_gradient_subtraction(
 }
 
 __global__ void neuron_gradient_calculation(
-	data_t* execution_values, size_t execution_values_start, size_t execution_values_layer_start, 
-	data_t* gradients, size_t gradients_start, size_t layer_gradients_start, size_t* neuron_gradients_starts, 
+	data_t* execution_values, size_t execution_values_start, size_t execution_values_layer_start,
+	data_t* gradients, size_t gradients_start, size_t layer_gradients_start, size_t* neuron_gradients_starts,
 	data_t* costs, size_t costs_start, size_t layer_costs_start,
 	ActivationFunctions activation
 )

@@ -134,21 +134,62 @@ void NN::calculate_supervised_output_costs(
 	}
 }
 
-void NN::train(size_t t_count, data_t* costs, data_t* gradients, data_t* derivatives, data_t* activations, data_t* execution_values)
+void NN::train(
+	size_t t_count, 
+	data_t* costs,
+	data_t* activations, 
+	data_t* execution_values
+)
 {
+	data_t* gradients = 0;
+	data_t* derivatives = 0;
+	cudaMalloc(&gradients, sizeof(data_t) * t_count * gradient_count);
+	if (derivative_count)
+		cudaMalloc(&derivatives, sizeof(data_t) * t_count * derivative_count);
 
-}
+	size_t activations_start = 0;
+	size_t execution_values_start = 0;
+	size_t derivatives_start = 0;
+	size_t gradients_start = 0;
+	for (size_t t = 0; t < t_count; t++)
+	{
+		activations_start = neuron_count * t;
+		derivatives_start = derivative_count * t;
+		execution_values_start = execution_value_count * t;
+		calculate_derivatives(
+			activations, activations_start, 
+			derivatives, derivatives_start - derivative_count, derivatives_start,
+			execution_values, execution_values_start
+		);
+	}
+	for (int t = t_count - 1; t >= 0; t--)
+	{
+		gradients_start = gradient_count * t;
+		size_t next_gradient_start = gradients_start + gradient_count;
+		next_gradient_start -= next_gradient_start * (t == t_count - 1);
 
-void NN::alloc_training_variables(size_t t_count, data_t** costs, data_t** gradients, data_t** derivatives) const
-{
-	cudaMalloc(costs, sizeof(data_t) * t_count * neuron_count);
-	cudaMalloc(gradients, sizeof(data_t) * t_count * gradient_count);
-	cudaMalloc(derivatives, sizeof(data_t) * t_count * derivative_count);
+		derivatives_start = derivative_count * t;
+		activations_start = neuron_count * t;
+
+		calculate_gradients(
+			activations, activations_start,
+			execution_values, execution_values_start,
+			costs, activations_start,
+			gradients, gradients_start, next_gradient_start,
+			derivatives, derivatives_start, derivatives_start - derivative_count
+		);
+	}
+
+
+
+	if (!stateful && contains_recurrent_layers)
+		delete_memory();
 }
 
 void NN::calculate_derivatives(
 	data_t* activations, size_t activations_start,
-	data_t* derivatives, size_t previous_derivatives_start, size_t derivatives_start
+	data_t* derivatives, size_t previous_derivatives_start, size_t derivatives_start,
+	data_t* execution_values, size_t execution_values_start
 )
 {
 	// Todo: make layer gradient calculation async
@@ -156,7 +197,8 @@ void NN::calculate_derivatives(
 	{
 		layers[i]->calculate_derivatives(
 			activations, activations_start,
-			derivatives, previous_derivatives_start, derivatives_start
+			derivatives, previous_derivatives_start, derivatives_start,
+			execution_values, execution_values_start
 		);
 		cudaDeviceSynchronize();
 	}

@@ -22,7 +22,7 @@ void LSTMLayer::execute(data_t* activations, size_t activations_start, data_t* e
 	LSTM_execution kernel(1, neuron_count) (
 		activations, activations_start, layer_activations_start,
 		execution_values, execution_values_start, execution_values_layer_start, execution_values_per_neuron,
-		neuron_weights, state;
+		neuron_weights, state
 	);
 }
 
@@ -43,7 +43,8 @@ void LSTMLayer::calculate_gradients(
 	connections->calculate_gradients(
 		activations, activations_start,
 		gradients, gradients_start, layer_gradients_start, neuron_gradients_starts,
-		costs, costs_start
+		costs, costs_start,
+		weights, neuron_count
 	);
 	cudaDeviceSynchronize();
 }
@@ -54,15 +55,16 @@ void LSTMLayer::subtract_gradients(data_t* gradients, size_t gradients_start)
 		gradients, gradients_start, layer_gradients_start, neuron_gradients_starts,
 		weights, biases, neuron_count
 	);
-	LSTM_gradient_subtraction(
+	LSTM_gradient_subtraction kernel(1, neuron_count) (
 		gradients, gradients_start, layer_gradients_start, neuron_gradients_starts, connection_associated_gradient_counts,
 		neuron_weights
 	);
 }
 
 void LSTMLayer::calculate_derivatives(
-	data_t* activations, size_t activations_start, 
-	data_t* derivatives, size_t previous_derivatives_start, size_t derivatives_start
+	data_t* activations, size_t activations_start,
+	data_t* derivatives, size_t previous_derivatives_start, size_t derivatives_start,
+	data_t* execution_values, size_t execution_values_start
 )
 {
 	connections->calculate_derivative(

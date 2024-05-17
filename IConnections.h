@@ -25,7 +25,7 @@ public:
 		data_t* activations, size_t activations_start,
 		data_t* gradients, size_t gradients_start, size_t layer_gradients_start, size_t* neuron_gradients_starts,
 		data_t* costs, size_t costs_start,
-		field_t* weights
+		field_t* weights, size_t layer_length
 	) = 0;
 
 	virtual void subtract_gradients(

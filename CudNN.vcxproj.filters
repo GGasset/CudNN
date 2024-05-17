@@ -26,16 +26,19 @@
     <CudaCompile Include="costs.cu">
       <Filter>Cuda\Training</Filter>
     </CudaCompile>
+    <CudaCompile Include="LSTMLayer.cpp">
+      <Filter>Layers\Blocks</Filter>
+    </CudaCompile>
+    <CudaCompile Include="NN.cpp" />
+    <CudaCompile Include="ILayer.h">
+      <Filter>Layers\Blocks</Filter>
+    </CudaCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="NN.cpp" />
     <ClCompile Include="IConnections.cpp">
       <Filter>Connections</Filter>
     </ClCompile>
     <ClCompile Include="ILayer.cpp">
-      <Filter>Layers\Blocks</Filter>
-    </ClCompile>
-    <ClCompile Include="LSTMLayer.cpp">
       <Filter>Layers\Blocks</Filter>
     </ClCompile>
     <ClCompile Include="DenseNeuronLayer.cpp">
@@ -51,9 +54,6 @@
     </ClInclude>
     <ClInclude Include="kernel_macros.h">
       <Filter>Static</Filter>
-    </ClInclude>
-    <ClInclude Include="ILayer.h">
-      <Filter>Layers\Blocks</Filter>
     </ClInclude>
     <ClInclude Include="LSTMLayer.h">
       <Filter>Layers\Blocks</Filter>

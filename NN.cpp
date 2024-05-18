@@ -136,6 +136,7 @@ void NN::calculate_supervised_output_costs_gradients(
 	default:
 		break;
 	}
+	cudaDeviceSynchronize();
 }
 
 void NN::backpropagate(

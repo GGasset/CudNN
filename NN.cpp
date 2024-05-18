@@ -59,6 +59,7 @@ void NN::execute(data_t* input, data_t* execution_values, data_t *activations, s
 	for (size_t i = 0; i < layer_count; i++)
 	{
 		layers[i]->execute(activations, neuron_count * t, execution_values, execution_value_count * t);
+		cudaDeviceSynchronize();
 	}
 	if (copy_output_to_host)
 	{
@@ -101,7 +102,6 @@ data_t* NN::execute(data_t* input, size_t t_count)
 	for (size_t i = 0; i < t_count; i++)
 	{
 		execute(input, execution_values, activations, i, outputs + output_length * i, 1);
-		cudaDeviceSynchronize();
 	}
 
 

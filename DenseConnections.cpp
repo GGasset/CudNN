@@ -21,6 +21,7 @@ void DenseConnections::linear_function(size_t activations_start, data_t* activat
 		activations_start, previous_layer_activations_start, activations,
 		execution_values_start, execution_values_layer_start, layer_execution_values_per_neuron, execution_values
 	);
+	cudaDeviceSynchronize();
 	cud_add_biases kernel(1, layer_length) (
 		biases,
 		execution_values_start, execution_values_layer_start, layer_execution_values_per_neuron, execution_values

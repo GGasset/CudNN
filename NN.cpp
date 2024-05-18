@@ -67,17 +67,21 @@ void NN::execute(data_t* input, data_t* execution_values, data_t *activations, s
 	}
 }
 
-data_t* NN::execute(data_t* input, size_t t_count)
+void NN::set_up_execution_arrays(data_t** execution_values, data_t** activations, size_t t_count)
 {
-	data_t* execution_values = 0;
-	data_t* activations = 0;
 	cudaMalloc(&execution_values, sizeof(data_t) * execution_value_count * t_count);
 	cudaMalloc(&activations, sizeof(data_t) * neuron_count * t_count);
 	cudaDeviceSynchronize();
 	cudaMemset(execution_values, 0, sizeof(data_t) * execution_value_count * t_count);
 	cudaMemset(activations, 0, sizeof(data_t) * neuron_count * t_count);
 	cudaDeviceSynchronize();
-	cudaDeviceSynchronize();
+}
+
+data_t* NN::execute(data_t* input, size_t t_count)
+{
+	data_t* execution_values = 0;
+	data_t* activations = 0;
+	set_up_execution_arrays(&execution_values, &activations, t_count);
 
 	//data_t* host_activations = new data_t[neuron_count];
 	//cudaMemcpy(host_activations, activations, sizeof(data_t) * neuron_count, cudaMemcpyDeviceToHost);

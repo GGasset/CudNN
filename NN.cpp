@@ -112,7 +112,7 @@ data_t* NN::execute(data_t* input)
 	return execute(input, 1);
 }
 
-void NN::calculate_supervised_output_costs(
+void NN::calculate_supervised_output_costs_gradients(
 	CostFunctions cost_function,
 	size_t t_count,
 	data_t* Y_hat,

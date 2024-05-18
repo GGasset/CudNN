@@ -15,7 +15,8 @@ __global__ void cud_dense_gradient_calculation(
 	field_t weight = weights[threadIdx.x];
 	data_t activation = activations[activations_start + previous_layer_activations_start + threadIdx.x];
 	gradients[weight_gradient_i] = input_gradient * activation;
-	costs[costs_start + previous_layer_activations_start + threadIdx.x] -= input_gradient * weight;
+	atomicAdd(costs + costs_start + previous_layer_activations_start + threadIdx.x, -input_gradient * weight);
+	//costs[costs_start + previous_layer_activations_start + threadIdx.x] -= input_gradient * weight;
 }
 
 __global__ void bias_gradient_subtraction(

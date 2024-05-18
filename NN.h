@@ -44,12 +44,13 @@ public:
 		data_t* costs, size_t costs_start
 	);
 
+	/// <param name="gradients">- pointer to cero and else is valid</param>
 	void backpropagate(
 		size_t t_count,
 		data_t* costs,
 		data_t* activations,
 		data_t* execution_values,
-		data_t** gradients = 0
+		data_t** gradients
 	);
 
 	void calculate_derivatives(

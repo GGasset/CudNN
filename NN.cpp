@@ -139,11 +139,11 @@ void NN::backpropagate(
 	data_t* costs,
 	data_t* activations, 
 	data_t* execution_values,
-	data_t** gradients = 0
+	data_t** gradients
 )
 {
 	data_t* derivatives = 0;
-	if (!gradients)
+	if (!*gradients)
 		cudaMalloc(gradients, sizeof(data_t) * t_count * gradient_count);
 	if (derivative_count)
 		cudaMalloc(&derivatives, sizeof(data_t) * t_count * derivative_count);

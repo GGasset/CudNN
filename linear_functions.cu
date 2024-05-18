@@ -40,7 +40,7 @@ __global__ void cud_dense_linear_function_derivative(
 	size_t connection_derivative = activations[activation_i] + weights[weight_i];
 
 	size_t write_i = derivatives_start + derivatives_layer_start + derivatives_per_neuron * blockIdx.x;
-	derivatives[write_i] += connection_derivative;
+	atomicAdd(derivatives + write_i, connection_derivative);
 }
 
 __global__ void cud_add_bias_derivative(

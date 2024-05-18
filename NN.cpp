@@ -136,7 +136,44 @@ void NN::calculate_supervised_output_costs_gradients(
 	default:
 		break;
 	}
+}
+
+double NN::supervised_train(
+	size_t t_count,
+	data_t* X,
+	data_t* Y_hat,
+	data_t* Y,
+	bool copy_Y_to_host,
+	CostFunctions cost_function
+)
+{
+	data_t* execution_values = 0;
+	data_t* activations = 0;
+	set_up_execution_arrays(&execution_values, &activations, t_count);
+
+	data_t* costs = 0;
+	cudaMalloc(&costs, sizeof(data_t) * neuron_count * t_count);
 	cudaDeviceSynchronize();
+
+	cudaMemset(costs, 0, sizeof(data_t) * neuron_count * t_count);
+	cudaDeviceSynchronize();
+
+	for (size_t t = 0; t < t_count; t++)
+	{
+		execute(X, execution_values, activations, t, Y, copy_Y_to_host);
+	}
+	calculate_supervised_output_costs_gradients(cost_function, t_count, Y_hat, activations, 0, costs, 0);
+	cudaDeviceSynchronize();
+
+	data_t* gradients = 0;
+	backpropagate(
+		t_count, costs, activations, execution_values, &gradients
+	);
+
+	for (size_t t = 0; t < t_count; t++)
+	{
+		subtract_gradients(gradients, gradient_count * t);
+	}
 }
 
 void NN::backpropagate(

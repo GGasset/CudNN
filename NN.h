@@ -45,7 +45,16 @@ public:
 		data_t* costs, size_t costs_start
 	);
 
-	/// <param name="gradients">- pointer to cero and else is valid</param>
+	double supervised_train(
+		size_t t_count, 
+		data_t* X, 
+		data_t* Y_hat, 
+		data_t* Y, 
+		bool copy_Y_to_host,
+		CostFunctions cost_function
+	);
+
+	/// <param name="gradients">- pointer to cero and to a valid array are valid</param>
 	void backpropagate(
 		size_t t_count,
 		data_t* costs,

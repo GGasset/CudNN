@@ -44,11 +44,12 @@ public:
 		data_t* costs, size_t costs_start
 	);
 
-	void train(
+	void backpropagate(
 		size_t t_count,
 		data_t* costs,
 		data_t* activations,
-		data_t* execution_values
+		data_t* execution_values,
+		data_t** gradients = 0
 	);
 
 	void calculate_derivatives(

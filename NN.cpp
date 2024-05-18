@@ -134,16 +134,17 @@ void NN::calculate_supervised_output_costs(
 	}
 }
 
-void NN::train(
+void NN::backpropagate(
 	size_t t_count, 
 	data_t* costs,
 	data_t* activations, 
-	data_t* execution_values
+	data_t* execution_values,
+	data_t** gradients = 0
 )
 {
-	data_t* gradients = 0;
 	data_t* derivatives = 0;
-	cudaMalloc(&gradients, sizeof(data_t) * t_count * gradient_count);
+	if (!gradients)
+		cudaMalloc(gradients, sizeof(data_t) * t_count * gradient_count);
 	if (derivative_count)
 		cudaMalloc(&derivatives, sizeof(data_t) * t_count * derivative_count);
 
@@ -175,12 +176,10 @@ void NN::train(
 			activations, activations_start,
 			execution_values, execution_values_start,
 			costs, activations_start,
-			gradients, gradients_start, next_gradient_start,
+			*gradients, gradients_start, next_gradient_start,
 			derivatives, derivatives_start, derivatives_start - derivative_count
 		);
 	}
-
-
 
 	if (!stateful && contains_recurrent_layers)
 		delete_memory();

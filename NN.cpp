@@ -150,10 +150,7 @@ double NN::supervised_train(
 
 	if (copy_Y_to_host)
 	{
-		cudaMalloc(Y, sizeof(data_t) * output_length * t_count);
-		cudaDeviceSynchronize();
-		cudaMemset(*Y, 0, sizeof(data_t) * output_length * t_count);
-		cudaDeviceSynchronize();
+		*Y = new data_t[output_length * t_count];
 	}
 
 	for (size_t t = 0; t < t_count; t++)

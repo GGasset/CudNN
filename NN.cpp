@@ -1,4 +1,4 @@
-#ifndef NN_DEFINITIONS
+﻿#ifndef NN_DEFINITIONS
 #define NN_DEFINITIONS
 
 #include "NN.h"
@@ -84,16 +84,6 @@ data_t* NN::execute(data_t* input, size_t t_count)
 	data_t* activations = 0;
 	set_up_execution_arrays(&execution_values, &activations, t_count);
 
-	//data_t* host_activations = new data_t[neuron_count];
-	//cudaMemcpy(host_activations, activations, sizeof(data_t) * neuron_count, cudaMemcpyDeviceToHost);
-	//cudaDeviceSynchronize();
-
-	//for (size_t i = 0; i < neuron_count; i++)
-	//{
-	//	printf("%f ", host_activations[i]);
-	//}
-	//printf("\n\n");
-
 	data_t* outputs = new data_t[output_length * t_count];
 	for (size_t i = 0; i < output_length * t_count; i++)
 	{
@@ -142,9 +132,9 @@ double NN::supervised_train(
 	size_t t_count,
 	data_t* X,
 	data_t* Y_hat,
-	data_t* Y,
-	bool copy_Y_to_host,
-	CostFunctions cost_function
+	CostFunctions cost_function,
+	data_t** Y,
+	bool copy_Y_to_host
 )
 {
 	data_t* execution_values = 0;
@@ -158,9 +148,17 @@ double NN::supervised_train(
 	cudaMemset(costs, 0, sizeof(data_t) * neuron_count * t_count);
 	cudaDeviceSynchronize();
 
+	if (copy_Y_to_host)
+	{
+		cudaMalloc(Y, sizeof(data_t) * output_length * t_count);
+		cudaDeviceSynchronize();
+		cudaMemset(*Y, 0, sizeof(data_t) * output_length * t_count);
+		cudaDeviceSynchronize();
+	}
+
 	for (size_t t = 0; t < t_count; t++)
 	{
-		execute(X, execution_values, activations, t, Y, copy_Y_to_host);
+		execute(X, execution_values, activations, t, *Y, copy_Y_to_host);
 	}
 	calculate_supervised_output_costs_gradients(cost_function, t_count, Y_hat, activations, 0, costs, 0);
 	cudaDeviceSynchronize();

@@ -49,9 +49,9 @@ public:
 		size_t t_count, 
 		data_t* X, 
 		data_t* Y_hat, 
-		data_t* Y, 
-		bool copy_Y_to_host,
-		CostFunctions cost_function
+		CostFunctions cost_function,
+		data_t** Y, 
+		bool copy_Y_to_host
 	);
 
 	/// <param name="gradients">- pointer to cero and to a valid array are valid</param>

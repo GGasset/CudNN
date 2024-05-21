@@ -31,7 +31,7 @@ void ILayer::initialize_fields(size_t connection_count, size_t neuron_count)
 	cudaMalloc(&biases, sizeof(field_t) * neuron_count);
 	cudaDeviceSynchronize();
 	generate_random_values(&weights, connection_count);
-	generate_random_values(&biases, connection_count);
+	generate_random_values(&biases, neuron_count);
 	layer_specific_initialize_fields(connection_count, neuron_count);
 	cudaDeviceSynchronize();
 }

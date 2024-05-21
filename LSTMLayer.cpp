@@ -6,7 +6,7 @@ void LSTMLayer::layer_specific_initialize_fields(size_t connection_count, size_t
 	cudaMalloc(&neuron_weights, sizeof(field_t) * neuron_count * 4);
 	cudaDeviceSynchronize();
 	cudaMemset(state, 0, sizeof(data_t) * neuron_count * 2);
-	generate_random_values(&neuron_weights, connection_count);
+	generate_random_values(&neuron_weights, neuron_count * 4);
 	cudaDeviceSynchronize();
 }
 

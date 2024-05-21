@@ -16,12 +16,12 @@ void ILayer::add_neuron(size_t neurons_to_add, size_t connection_count_per_neuro
 	neuron_count += neurons_to_add;
 }
 
-void ILayer::generate_random_values(float** pointer, size_t connection_count, size_t start_i)
+void ILayer::generate_random_values(float** pointer, size_t float_count, size_t start_i)
 {
 	curandGenerator_t generator;
 	curandCreateGenerator(&generator, CURAND_RNG_PSEUDO_XORWOW);
 	//curandSetPseudoRandomGeneratorSeed(generator, 15);
-	curandGenerateUniform(generator, weights + start_i, connection_count);
+	curandGenerateUniform(generator, *pointer + start_i, float_count);
 }
 
 

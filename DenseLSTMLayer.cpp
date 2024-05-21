@@ -1,0 +1,26 @@
+#include "DenseLSTMLayer.h"
+
+DenseLSTMLayer::DenseLSTMLayer(size_t layer_gradients_start, size_t neuron_count, size_t previous_layer_neuron_i_start, size_t previous_layer_length)
+{
+	connections = new DenseConnections(previous_layer_neuron_i_start, previous_layer_length);
+	this->neuron_count = neuron_count;
+	this->connection_count = neuron_count * previous_layer_length;
+	execution_values_per_neuron = 10;
+
+	size_t neuron_gradient_i = layer_gradients_start;
+	size_t* neuron_gradients_starts = new size_t[neuron_count];
+	for (size_t i = 0; i < neuron_count; i++)
+	{
+		neuron_gradients_starts[i] = neuron_gradient_i;
+		neuron_gradient_i += previous_layer_length + 7;
+	}
+	cudaMalloc(&this->neuron_gradients_starts, neuron_count * sizeof(size_t));
+	cudaDeviceSynchronize();
+	cudaMemcpy(this->neuron_gradients_starts, neuron_gradients_starts, neuron_count * sizeof(size_t), cudaMemcpyHostToDevice);
+	delete[] neuron_gradients_starts;
+
+	derivatives_per_neuron = 16;
+	layer_derivative_count = derivatives_per_neuron * neuron_count;
+	layer_gradient_count = connection_count + 7 * neuron_count;
+	initialize_fields(previous_layer_length * neuron_count, neuron_count);
+}

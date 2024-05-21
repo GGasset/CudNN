@@ -134,6 +134,7 @@
   <ItemGroup>
     <ClInclude Include="connection_gradients.cuh" />
     <ClInclude Include="costs.cuh" />
+    <ClInclude Include="DenseLSTMLayer.h" />
     <ClInclude Include="derivatives.cuh" />
     <ClInclude Include="gradients.cuh" />
     <ClInclude Include="neuron_operations.cuh">
@@ -152,6 +153,7 @@
     <ClInclude Include="NN.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DenseLSTMLayer.cpp" />
     <ClCompile Include="DenseNeuronLayer.cpp" />
     <ClCompile Include="IConnections.cpp" />
     <ClCompile Include="ILayer.cpp" />

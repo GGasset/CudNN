@@ -44,6 +44,9 @@
     <ClCompile Include="DenseNeuronLayer.cpp">
       <Filter>Layers</Filter>
     </ClCompile>
+    <ClCompile Include="DenseLSTMLayer.cpp">
+      <Filter>Layers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IConnections.h">
@@ -85,6 +88,9 @@
     </ClInclude>
     <ClInclude Include="costs.cuh">
       <Filter>Cuda\Training</Filter>
+    </ClInclude>
+    <ClInclude Include="DenseLSTMLayer.h">
+      <Filter>Layers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

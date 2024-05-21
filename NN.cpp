@@ -40,7 +40,7 @@ void NN::set_fields()
 		execution_value_count += layer->execution_values_per_neuron * layer->neuron_count;
 
 		layer->layer_derivatives_start = derivative_count;
-		derivative_count += layer->layer_derivatives_start;
+		derivative_count += layer->layer_derivative_count;
 
 		layer->layer_gradients_start = gradient_count;
 		gradient_count += layer->layer_gradient_count;

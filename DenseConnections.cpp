@@ -72,7 +72,7 @@ void DenseConnections::subtract_gradients(
 	);
 	bias_gradient_subtraction kernel(1, neuron_count) (
 		gradients, gradients_start, layer_gradients_start, neuron_gradients_starts,
-		biases
+		biases, learning_rate
 	);
 }
 

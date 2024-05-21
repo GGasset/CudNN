@@ -91,7 +91,7 @@ data_t* NN::execute(data_t* input, size_t t_count)
 	}
 	for (size_t i = 0; i < t_count; i++)
 	{
-		execute(input, execution_values, activations, i, outputs + output_length * i, 1);
+		execute(input, execution_values, activations, i, outputs, 1);
 	}
 
 
@@ -133,6 +133,7 @@ double NN::supervised_train(
 	size_t t_count,
 	data_t* X,
 	data_t* Y_hat,
+	bool is_Y_hat_on_host_memory,
 	CostFunctions cost_function,
 	data_t** Y,
 	bool copy_Y_to_host
@@ -152,11 +153,22 @@ double NN::supervised_train(
 	if (copy_Y_to_host)
 	{
 		*Y = new data_t[output_length * t_count];
+		for (size_t i = 0; i < output_length * t_count; i++)
+		{
+			*Y[i] = 0;
+		}
 	}
 
 	for (size_t t = 0; t < t_count; t++)
 	{
 		execute(X, execution_values, activations, t, *Y, copy_Y_to_host);
+	}
+	if (is_Y_hat_on_host_memory)
+	{
+		data_t* temp_Y_hat = 0;
+		cudaMalloc(&temp_Y_hat, sizeof(data_t) * output_length * t_count);
+		cudaMemcpy(temp_Y_hat, Y_hat, sizeof(data_t) * output_length * t_count, cudaMemcpyHostToDevice);
+		Y_hat = temp_Y_hat;
 	}
 	calculate_supervised_output_costs_gradients(cost_function, t_count, Y_hat, activations, 0, costs, 0);
 	cudaDeviceSynchronize();
@@ -170,6 +182,15 @@ double NN::supervised_train(
 	{
 		subtract_gradients(gradients, gradient_count * t);
 	}
+
+	if (is_Y_hat_on_host_memory)
+		cudaFree(Y_hat);
+	cudaFree(activations);
+	cudaFree(execution_values);
+	cudaFree(costs);
+	cudaFree(gradients);
+	cudaDeviceSynchronize();
+
 	return 0;
 }
 

@@ -47,8 +47,9 @@ public:
 
 	double supervised_train(
 		size_t t_count, 
-		data_t* X, 
-		data_t* Y_hat, 
+		data_t* X,
+		data_t* Y_hat,
+		bool is_Y_hat_on_host_memory,
 		CostFunctions cost_function,
 		data_t** Y, 
 		bool copy_Y_to_host

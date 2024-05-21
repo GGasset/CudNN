@@ -20,6 +20,7 @@ void ILayer::generate_random_values(float** pointer, size_t connection_count, si
 {
 	curandGenerator_t generator;
 	curandCreateGenerator(&generator, CURAND_RNG_PSEUDO_XORWOW);
+	//curandSetPseudoRandomGeneratorSeed(generator, 15);
 	curandGenerateUniform(generator, weights + start_i, connection_count);
 }
 

@@ -78,7 +78,7 @@ __global__ void neuron_gradient_calculation(
 	ActivationFunctions activation
 )
 {
-	data_t input_gradient = costs[costs_start + layer_costs_start + threadIdx.x];
+	data_t input_gradient = -costs[costs_start + layer_costs_start + threadIdx.x];
 	data_t activation_input = execution_values[execution_values_start + execution_values_layer_start + threadIdx.x];
 	data_t bias_gradient = input_gradient;
 	switch (activation)

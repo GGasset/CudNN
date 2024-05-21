@@ -7,5 +7,5 @@ __global__ void MSE_derivative(
 )
 {
 	costs[costs_start + neuron_count * blockIdx.x + last_layer_activations_start + threadIdx.x] = 
-		2 * (Y_hat[blockIdx.x * output_length + threadIdx.x] - activations[activations_start + last_layer_activations_start + threadIdx.x]);
+		-2 * (Y_hat[blockIdx.x * output_length + threadIdx.x] - activations[activations_start + last_layer_activations_start + threadIdx.x]);
 }

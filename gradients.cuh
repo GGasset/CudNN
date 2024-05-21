@@ -16,7 +16,8 @@ __global__ void LSTM_gradient_calculation(
 
 __global__ void LSTM_gradient_subtraction(
 	data_t* gradients, size_t gradients_start, size_t layer_gradients_start, size_t* neuron_gradients_starts, size_t* connection_associated_gradient_counts,
-	field_t* neuron_weights
+	field_t* neuron_weights,
+	data_t learning_rate
 );
 
 __global__ void neuron_gradient_calculation(

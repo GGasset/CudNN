@@ -21,19 +21,20 @@ __global__ void cud_dense_gradient_calculation(
 
 __global__ void bias_gradient_subtraction(
 	data_t* gradients, size_t gradients_start, size_t layer_gradients_start, size_t* neuron_gradients_starts,
-	field_t* biases
+	field_t* biases, data_t learning_rate
 )
 {
 	size_t gradient_i = gradients_start + layer_gradients_start + neuron_gradients_starts[threadIdx.x];
-	biases[threadIdx.x] -= gradients[gradient_i];
+	biases[threadIdx.x] -= gradients[gradient_i] * learning_rate;
 }
 
 __global__ void cud_dense_gradient_subtraction(
 	data_t* gradients, size_t gradients_start, size_t layer_gradients_start, size_t* neuron_gradients_starts,
-	field_t* weights, size_t previous_layer_length
+	field_t* weights, size_t previous_layer_length,
+	data_t learning_rate
 )
 {
 	size_t gradient_i = gradients_start + layer_gradients_start + neuron_gradients_starts[blockIdx.x] + threadIdx.x + 1;
 	size_t weight_i = previous_layer_length * blockIdx.x + threadIdx.x;
-	weights[weight_i] -= gradients[gradient_i];
+	weights[weight_i] -= gradients[gradient_i] * learning_rate;
 }

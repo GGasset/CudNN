@@ -51,6 +51,7 @@ public:
 		data_t* Y_hat,
 		bool is_Y_hat_on_host_memory,
 		CostFunctions cost_function,
+		data_t learning_rate,
 		data_t** Y, 
 		bool copy_Y_to_host
 	);
@@ -79,7 +80,7 @@ public:
 	);
 
 	void subtract_gradients(
-		data_t* gradients, size_t gradients_start
+		data_t* gradients, size_t gradients_start, data_t learning_rate
 	);
 
 	void delete_memory();

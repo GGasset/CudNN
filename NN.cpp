@@ -135,6 +135,7 @@ double NN::supervised_train(
 	data_t* Y_hat,
 	bool is_Y_hat_on_host_memory,
 	CostFunctions cost_function,
+	data_t learning_rate,
 	data_t** Y,
 	bool copy_Y_to_host
 )
@@ -180,7 +181,7 @@ double NN::supervised_train(
 
 	for (size_t t = 0; t < t_count; t++)
 	{
-		subtract_gradients(gradients, gradient_count * t);
+		subtract_gradients(gradients, gradient_count * t, learning_rate);
 	}
 
 	if (is_Y_hat_on_host_memory)
@@ -284,11 +285,11 @@ void NN::calculate_gradients(
 	}
 }
 
-void NN::subtract_gradients(data_t* gradients, size_t gradients_start)
+void NN::subtract_gradients(data_t* gradients, size_t gradients_start, data_t learning_rate)
 {
 	for (size_t i = 0; i < layer_count; i++)
 	{
-		layers[i]->subtract_gradients(gradients, gradients_start);
+		layers[i]->subtract_gradients(gradients, gradients_start, learning_rate);
 	}
 	cudaDeviceSynchronize();
 }

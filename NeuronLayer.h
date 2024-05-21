@@ -21,7 +21,7 @@ public:
 	) override;
 
 	void subtract_gradients(
-		data_t* gradients, size_t gradients_start
+		data_t* gradients, size_t gradients_start, data_t learning_rate
 	) override;
 
 	void calculate_derivatives(

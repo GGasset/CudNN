@@ -58,16 +58,17 @@ __global__ void LSTM_gradient_calculation(
 
 __global__ void LSTM_gradient_subtraction(
 	data_t* gradients, size_t gradients_start, size_t layer_gradients_start, size_t* neuron_gradients_starts, size_t* connection_associated_gradient_counts,
-	field_t* neuron_weights
+	field_t* neuron_weights,
+	data_t learning_rate
 )
 {
 	size_t neuron_gradients_start = gradients_start + layer_gradients_start + neuron_gradients_starts[threadIdx.x] + connection_associated_gradient_counts[threadIdx.x];
 	size_t neuron_weights_start = static_cast<size_t>(4) * threadIdx.x;
 
-	neuron_weights[neuron_weights_start] -= gradients[neuron_gradients_start + 6]; // Forget weight
-	neuron_weights[neuron_weights_start + 1] -= gradients[neuron_gradients_start + 3]; // Store sigmoid weight
-	neuron_weights[neuron_weights_start + 2] -= gradients[neuron_gradients_start + 2]; // Store Tanh weight
-	neuron_weights[neuron_weights_start + 3] -= gradients[neuron_gradients_start + 1]; // Output_weight
+	neuron_weights[neuron_weights_start] -= gradients[neuron_gradients_start + 6] * learning_rate; // Forget weight
+	neuron_weights[neuron_weights_start + 1] -= gradients[neuron_gradients_start + 3] * learning_rate; // Store sigmoid weight
+	neuron_weights[neuron_weights_start + 2] -= gradients[neuron_gradients_start + 2] * learning_rate; // Store Tanh weight
+	neuron_weights[neuron_weights_start + 3] -= gradients[neuron_gradients_start + 1] * learning_rate; // Output_weight
 }
 
 __global__ void neuron_gradient_calculation(

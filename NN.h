@@ -80,7 +80,7 @@ public:
 	);
 
 	void subtract_gradients(
-		data_t* gradients, size_t gradients_start, data_t learning_rate
+		data_t* gradients, size_t gradients_start, data_t learning_rate, float dropout_rate
 	);
 
 	void delete_memory();

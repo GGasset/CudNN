@@ -31,7 +31,7 @@ public:
 	virtual void subtract_gradients(
 		data_t* gradients, size_t gradients_start, size_t layer_gradients_start, size_t* neuron_gradients_starts,
 		field_t* weights, field_t* biases, size_t neuron_count,
-		data_t learning_rate
+		data_t learning_rate, short* dropout
 	) = 0;
 
 	virtual void add_neuron(size_t neurons_to_add, size_t connections_per_neuron, size_t layer_i, size_t layer_i_prev_length, float connection_probability = 1) = 0;

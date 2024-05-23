@@ -137,7 +137,8 @@ double NN::supervised_train(
 	CostFunctions cost_function,
 	data_t learning_rate,
 	data_t** Y,
-	bool copy_Y_to_host
+	bool copy_Y_to_host,
+	float dropout_rate = .2
 )
 {
 	data_t* execution_values = 0;
@@ -181,7 +182,7 @@ double NN::supervised_train(
 
 	for (size_t t = 0; t < t_count; t++)
 	{
-		subtract_gradients(gradients, gradient_count * t, learning_rate);
+		subtract_gradients(gradients, gradient_count * t, learning_rate, dropout_rate);
 	}
 
 	if (is_Y_hat_on_host_memory)
@@ -285,11 +286,29 @@ void NN::calculate_gradients(
 	}
 }
 
-void NN::subtract_gradients(data_t* gradients, size_t gradients_start, data_t learning_rate)
+void NN::subtract_gradients(data_t* gradients, size_t gradients_start, data_t learning_rate, float dropout_rate)
 {
 	for (size_t i = 0; i < layer_count; i++)
 	{
-		layers[i]->subtract_gradients(gradients, gradients_start, learning_rate);
+		ILayer* current_layer = layers[i];
+		size_t layer_length = current_layer->neuron_count;
+
+		short* dropout = 0;
+		float* normalized_random_samples = 0;
+		cudaMalloc(&dropout, sizeof(char) * layer_length);
+		cudaMalloc(&normalized_random_samples, sizeof(float) * layer_length);
+		cudaDeviceSynchronize();
+		
+		cudaMemset(dropout, 0, sizeof(short) * layer_length);
+		ILayer::generate_random_values(&normalized_random_samples, layer_length);
+		cudaDeviceSynchronize();
+		cud_set_dropout kernel(1, layer_length) (dropout_rate, normalized_random_samples, dropout);
+		cudaDeviceSynchronize();
+
+		current_layer->subtract_gradients(gradients, gradients_start, learning_rate, dropout);
+
+		cudaFree(dropout);
+		cudaFree(normalized_random_samples);
 	}
 	cudaDeviceSynchronize();
 }

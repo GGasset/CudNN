@@ -1,7 +1,7 @@
 # Todo
 
-- LSTM 
-- Neuron
+- LSTM - Crossed
+- Neuron - Crossed
 - NEAT connections
 	-- Execute
 	-- Gradients

@@ -33,7 +33,7 @@ public:
 	void initialize_fields(size_t connection_count, size_t neuron_count);
 	virtual void layer_specific_initialize_fields(size_t connection_count, size_t neuron_count);
 
-	void generate_random_values(float** pointer, size_t connection_count, size_t start_i = 0);
+	static void generate_random_values(float** pointer, size_t connection_count, size_t start_i = 0);
 
 	virtual void add_neuron(size_t neurons_to_add, size_t connection_count_per_neuron, size_t layer_i, size_t layer_i_prev_length, float connection_probability = 1);
 

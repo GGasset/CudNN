@@ -26,3 +26,7 @@ __global__ void neuron_gradient_calculation(
 	data_t* costs, size_t costs_start, size_t layer_costs_start,
 	ActivationFunctions activation
 );
+
+__global__ void cud_set_dropout(
+	float dropout_rate, float* normalized_random_samples, short* dropout
+);

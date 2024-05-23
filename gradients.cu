@@ -95,3 +95,11 @@ __global__ void neuron_gradient_calculation(
 	size_t gradient_write_i = gradients_start + layer_gradients_start + neuron_gradients_starts[threadIdx.x];
 	gradients[gradient_write_i] = bias_gradient;
 }
+
+__global__ void cud_set_dropout(
+	float dropout_rate, float* normalized_random_samples, short* dropout
+)
+{
+	size_t i = threadIdx.x;
+	dropout[i] = normalized_random_samples[i] < dropout_rate;
+}

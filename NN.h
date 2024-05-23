@@ -53,7 +53,8 @@ public:
 		CostFunctions cost_function,
 		data_t learning_rate,
 		data_t** Y, 
-		bool copy_Y_to_host
+		bool copy_Y_to_host,
+		float dropout_rate
 	);
 
 	/// <param name="gradients">- pointer to cero and to a valid array are valid</param>

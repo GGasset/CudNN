@@ -47,6 +47,9 @@
     <ClCompile Include="DenseLSTMLayer.cpp">
       <Filter>Layers</Filter>
     </ClCompile>
+    <ClCompile Include="cuda_functionality.cu">
+      <Filter>Cuda\Static</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IConnections.h">
@@ -92,6 +95,9 @@
     <ClInclude Include="DenseLSTMLayer.h">
       <Filter>Layers</Filter>
     </ClInclude>
+    <ClInclude Include="cuda_functionality.cuh">
+      <Filter>Cuda\Static</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Connections">
@@ -117,6 +123,9 @@
     </Filter>
     <Filter Include="Cuda\Training\Connections">
       <UniqueIdentifier>{67b03a07-b722-4ef7-9de5-e3bbbf32d79b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Cuda\Static">
+      <UniqueIdentifier>{c20fa515-1707-472b-90bb-02e7e19ab0cd}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

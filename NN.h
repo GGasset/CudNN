@@ -54,7 +54,7 @@ public:
 		data_t learning_rate,
 		data_t** Y, 
 		bool copy_Y_to_host,
-		float dropout_rate
+		float dropout_rate = .2
 	);
 
 	/// <param name="gradients">- pointer to cero and to a valid array are valid</param>

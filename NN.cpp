@@ -138,7 +138,7 @@ double NN::supervised_train(
 	data_t learning_rate,
 	data_t** Y,
 	bool copy_Y_to_host,
-	float dropout_rate = .2
+	float dropout_rate
 )
 {
 	data_t* execution_values = 0;

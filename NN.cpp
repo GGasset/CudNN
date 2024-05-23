@@ -156,7 +156,7 @@ double NN::supervised_train(
 		*Y = new data_t[output_length * t_count];
 		for (size_t i = 0; i < output_length * t_count; i++)
 		{
-			*Y[i] = 0;
+			(*Y)[i] = 0;
 		}
 	}
 

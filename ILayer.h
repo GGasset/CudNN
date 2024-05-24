@@ -55,7 +55,7 @@ public:
 	) = 0;
 
 	virtual void subtract_gradients(
-		data_t* gradients, size_t gradients_start, data_t learning_rate, short* dropout
+		data_t* gradients, size_t gradients_start, data_t learning_rate, short* dropout, data_t gradient_clip
 	) = 0;
 
 	virtual void calculate_derivatives(

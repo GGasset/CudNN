@@ -137,7 +137,8 @@ double NN::supervised_train(
 	CostFunctions cost_function,
 	data_t learning_rate,
 	data_t** Y,
-	bool copy_Y_to_host,
+	bool copy_Y_to_host, 
+	data_t gradient_clip,
 	float dropout_rate
 )
 {
@@ -182,7 +183,7 @@ double NN::supervised_train(
 
 	for (size_t t = 0; t < t_count; t++)
 	{
-		subtract_gradients(gradients, gradient_count * t, learning_rate, dropout_rate);
+		subtract_gradients(gradients, gradient_count * t, learning_rate, dropout_rate, gradient_clip);
 	}
 
 	if (is_Y_hat_on_host_memory)
@@ -286,7 +287,7 @@ void NN::calculate_gradients(
 	}
 }
 
-void NN::subtract_gradients(data_t* gradients, size_t gradients_start, data_t learning_rate, float dropout_rate)
+void NN::subtract_gradients(data_t* gradients, size_t gradients_start, data_t learning_rate, float dropout_rate, data_t gradient_clip)
 {
 	for (size_t i = 0; i < layer_count; i++)
 	{
@@ -305,7 +306,7 @@ void NN::subtract_gradients(data_t* gradients, size_t gradients_start, data_t le
 		cud_set_dropout kernel(1, layer_length) (dropout_rate, normalized_random_samples, dropout);
 		cudaDeviceSynchronize();
 
-		current_layer->subtract_gradients(gradients, gradients_start, learning_rate, dropout);
+		current_layer->subtract_gradients(gradients, gradients_start, learning_rate, dropout, gradient_clip);
 
 		cudaFree(dropout);
 		cudaFree(normalized_random_samples);

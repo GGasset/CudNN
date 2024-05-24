@@ -54,6 +54,7 @@ public:
 		data_t learning_rate,
 		data_t** Y, 
 		bool copy_Y_to_host,
+		data_t gradient_clip,
 		float dropout_rate = .2
 	);
 
@@ -81,7 +82,7 @@ public:
 	);
 
 	void subtract_gradients(
-		data_t* gradients, size_t gradients_start, data_t learning_rate, float dropout_rate
+		data_t* gradients, size_t gradients_start, data_t learning_rate, float dropout_rate, data_t gradient_clip
 	);
 
 	void delete_memory();

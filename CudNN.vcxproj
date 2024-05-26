@@ -154,7 +154,9 @@
     <ClInclude Include="NN.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="cuda_functionality.cu" />
+    <CudaCompile Include="cuda_functionality.cu">
+      <FileType>Document</FileType>
+    </CudaCompile>
     <ClCompile Include="DenseLSTMLayer.cpp" />
     <ClCompile Include="DenseNeuronLayer.cpp" />
     <ClCompile Include="IConnections.cpp" />

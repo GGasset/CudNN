@@ -33,6 +33,9 @@
     <CudaCompile Include="ILayer.h">
       <Filter>Layers\Blocks</Filter>
     </CudaCompile>
+    <CudaCompile Include="cuda_functionality.cu">
+      <Filter>Cuda\Static</Filter>
+    </CudaCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="IConnections.cpp">
@@ -46,9 +49,6 @@
     </ClCompile>
     <ClCompile Include="DenseLSTMLayer.cpp">
       <Filter>Layers</Filter>
-    </ClCompile>
-    <ClCompile Include="cuda_functionality.cu">
-      <Filter>Cuda\Static</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

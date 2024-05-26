@@ -33,7 +33,7 @@ __global__ void LSTM_gradient_calculation(
 	linear_hidden_gradient += current_gradient *= derivatives[neuron_derivatives_start + 1];
 
 	current_gradient = output_multiplication_gradient;
-	current_gradient *= derivatives[neuron_gradients_start + 12];
+	current_gradient *= derivatives[neuron_derivatives_start + 12];
 	current_gradient += next_cell_state_gradient;
 
 	// Store gate

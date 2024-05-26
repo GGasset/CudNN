@@ -296,7 +296,7 @@ void NN::subtract_gradients(data_t* gradients, size_t gradients_start, data_t le
 
 		short* dropout = 0;
 		float* normalized_random_samples = 0;
-		cudaMalloc(&dropout, sizeof(char) * layer_length);
+		cudaMalloc(&dropout, sizeof(short) * layer_length);
 		cudaMalloc(&normalized_random_samples, sizeof(float) * layer_length);
 		cudaDeviceSynchronize();
 		
@@ -310,6 +310,7 @@ void NN::subtract_gradients(data_t* gradients, size_t gradients_start, data_t le
 
 		cudaFree(dropout);
 		cudaFree(normalized_random_samples);
+		cudaDeviceSynchronize();
 	}
 	cudaDeviceSynchronize();
 }

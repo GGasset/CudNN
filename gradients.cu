@@ -102,5 +102,5 @@ __global__ void cud_set_dropout(
 )
 {
 	size_t i = threadIdx.x;
-	dropout[i] = normalized_random_samples[i] < dropout_rate;
+	dropout[i] = normalized_random_samples[i] > dropout_rate;
 }

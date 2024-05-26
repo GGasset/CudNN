@@ -138,6 +138,7 @@
     <ClInclude Include="DenseLSTMLayer.h" />
     <ClInclude Include="derivatives.cuh" />
     <ClInclude Include="gradients.cuh" />
+    <ClInclude Include="NeatConnections.h" />
     <ClInclude Include="neuron_operations.cuh">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='verbose_debug|x64'">false</ExcludedFromBuild>
@@ -154,6 +155,7 @@
     <ClInclude Include="NN.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="NeatConnections.cpp" />
     <CudaCompile Include="cuda_functionality.cu">
       <FileType>Document</FileType>
     </CudaCompile>

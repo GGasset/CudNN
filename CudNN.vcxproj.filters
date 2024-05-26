@@ -50,6 +50,9 @@
     <ClCompile Include="DenseLSTMLayer.cpp">
       <Filter>Layers</Filter>
     </ClCompile>
+    <ClCompile Include="NeatConnections.cpp">
+      <Filter>Connections</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IConnections.h">
@@ -97,6 +100,9 @@
     </ClInclude>
     <ClInclude Include="cuda_functionality.cuh">
       <Filter>Cuda\Static</Filter>
+    </ClInclude>
+    <ClInclude Include="NeatConnections.h">
+      <Filter>Connections</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

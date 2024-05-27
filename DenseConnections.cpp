@@ -39,7 +39,7 @@ void DenseConnections::calculate_derivative(
 		derivatives_start, derivatives_layer_start, derivatives_per_neuron, derivatives,
 		weights
 	);
-	cud_add_bias_derivative kernel(1, layer_length) (
+	cud_add_bias_derivative kernel(layer_length / 32 + (layer_length % 32 > 0), 32) (
 		derivatives_start, derivatives_layer_start, derivatives_per_neuron, derivatives
 	);
 }

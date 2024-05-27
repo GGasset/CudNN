@@ -64,10 +64,14 @@ __global__ void cud_dense_linear_function_derivative(
 }
 
 __global__ void cud_add_bias_derivative(
+	size_t layer_length, 
 	size_t derivatives_start, size_t derivatives_layer_start, size_t derivatives_per_neuron, data_t* derivatives
 )
 {
-	derivatives[derivatives_start + derivatives_layer_start + derivatives_per_neuron * threadIdx.x] += 1;
+	size_t tid = get_tid();
+	if (tid >= layer_length)
+		return;
+	atomicAdd(derivatives + derivatives_start + derivatives_layer_start + derivatives_per_neuron * tid, 1);
 }
 
 #endif

@@ -26,5 +26,6 @@ __global__ void cud_dense_linear_function_derivative(
 );
 
 __global__ void cud_add_bias_derivative(
+	size_t layer_length,
 	size_t derivatives_start, size_t derivatives_layer_start, size_t derivatives_per_neuron, data_t* derivatives
 );

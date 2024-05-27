@@ -12,4 +12,5 @@ void NeatConnections::linear_function(size_t activations_start, data_t* activati
 		layer_length, biases, 
 		execution_values_start, execution_values_layer_start, layer_execution_values_per_neuron, execution_values
 	);
+	cudaDeviceSynchronize();
 }

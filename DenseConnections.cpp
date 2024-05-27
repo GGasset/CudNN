@@ -34,7 +34,7 @@ void DenseConnections::calculate_derivative(
 	field_t* weights, size_t layer_length
 )
 {
-	cud_dense_linear_function_derivative kernel(layer_length, previous_layer_length) (
+	cud_dense_linear_function_derivative kernel(dim3(previous_layer_length / 32 + (previous_layer_length % 32 > 0), layer_length, 1), 32) (
 		activations_start, previous_layer_activations_start, previous_layer_length, activations,
 		derivatives_start, derivatives_layer_start, derivatives_per_neuron, derivatives,
 		weights

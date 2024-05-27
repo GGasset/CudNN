@@ -4,7 +4,7 @@ class NeatConnections :
     public IConnections
 {
 	size_t* connection_points = 0;
-	size_t connection_count = 0;
+	size_t* connection_counts = 0;
 
 	void linear_function(size_t activations_start, data_t* activations,
 		data_t* execution_values, size_t execution_values_start, size_t execution_values_layer_start, size_t layer_execution_values_per_neuron,

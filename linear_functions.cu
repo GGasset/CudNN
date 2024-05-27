@@ -18,7 +18,21 @@ __global__ void cud_dense_linear_function(
 
 	field_t current_weight = weights[previous_layer_length * blockIdx.x + threadIdx.x];
 	atomicAdd(execution_values + execution_values_i, current_weight * activations[connected_activation_i]);
-	//execution_values[execution_values_i] += current_weight * activations[connected_activation_i];
+}
+
+__global__ void cud_NEAT_linear_function(
+	size_t connection_count, field_t* weights, size_t* connection_points, 
+	size_t activations_start, data_t* activations, 
+	size_t execution_values_start, size_t execution_values_layer_start, size_t layer_execution_values_per_neuron, data_t* execution_values
+)
+{
+	size_t tid = get_tid();
+	if (tid >= connection_count)
+		return;
+
+	size_t connection_i = connection_points[tid];
+	size_t execution_values_i = execution_values_start + execution_values_layer_start + layer_execution_values_per_neuron * blockIdx.y;
+	atomicAdd(execution_values + execution_values_i, activations[activations_start + connection_i] * weights[tid]);
 }
 
 __global__ void cud_add_biases(

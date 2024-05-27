@@ -36,11 +36,14 @@ __global__ void cud_NEAT_linear_function(
 }
 
 __global__ void cud_add_biases(
-	field_t* biases,
+	size_t layer_length, field_t* biases,
 	size_t execution_values_start, size_t execution_values_layer_start, size_t layer_execution_values_per_neuron, data_t* execution_values)
 {
-	size_t execution_values_i = execution_values_start + execution_values_layer_start + layer_execution_values_per_neuron * threadIdx.x;
-	atomicAdd(execution_values + execution_values_i, biases[threadIdx.x]);
+	size_t tid = get_tid();
+	if (tid >= layer_length)
+		return;
+	size_t execution_values_i = execution_values_start + execution_values_layer_start + layer_execution_values_per_neuron * tid;
+	atomicAdd(execution_values + execution_values_i, biases[tid]);
 }
 
 __global__ void cud_dense_linear_function_derivative(

@@ -7,3 +7,9 @@
 
 __device__ data_t device_min(data_t a, data_t b);
 
+/// <summary>
+/// Calculates linear thread_id up to blockIdx.x
+/// </summary>
+/// <returns></returns>
+__device__ size_t get_tid();
+

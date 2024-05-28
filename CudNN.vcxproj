@@ -155,7 +155,7 @@
     <ClInclude Include="NN.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="NeatConnections.cpp" />
+    <CudaCompile Include="NeatConnections.cpp" />
     <CudaCompile Include="cuda_functionality.cu">
       <FileType>Document</FileType>
     </CudaCompile>

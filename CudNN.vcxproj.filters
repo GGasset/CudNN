@@ -36,6 +36,9 @@
     <CudaCompile Include="cuda_functionality.cu">
       <Filter>Cuda\Static</Filter>
     </CudaCompile>
+    <CudaCompile Include="NeatConnections.cpp">
+      <Filter>Connections</Filter>
+    </CudaCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="IConnections.cpp">
@@ -49,9 +52,6 @@
     </ClCompile>
     <ClCompile Include="DenseLSTMLayer.cpp">
       <Filter>Layers</Filter>
-    </ClCompile>
-    <ClCompile Include="NeatConnections.cpp">
-      <Filter>Connections</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

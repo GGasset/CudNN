@@ -25,6 +25,12 @@ __global__ void cud_dense_linear_function_derivative(
 	field_t* weights
 );
 
+__global__ void cud_NEAT_linear_function_derivative(
+	size_t activations_start, data_t* activations,
+	size_t derivatives_start, size_t derivatives_layer_start, size_t derivatives_per_neuron, data_t* derivatives,
+	size_t neuron_i, size_t connection_count, field_t* weights, size_t* connection_points, size_t connections_start
+);
+
 __global__ void cud_add_bias_derivative(
 	size_t layer_length,
 	size_t derivatives_start, size_t derivatives_layer_start, size_t derivatives_per_neuron, data_t* derivatives

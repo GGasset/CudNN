@@ -66,6 +66,22 @@ __global__ void cud_dense_linear_function_derivative(
 	atomicAdd(derivatives + write_i, connection_derivative);
 }
 
+__global__ void cud_NEAT_linear_function_derivative(
+	size_t activations_start, data_t* activations,
+	size_t derivatives_start, size_t derivatives_layer_start, size_t derivatives_per_neuron, data_t* derivatives,
+	size_t neuron_i, size_t connection_count, field_t* weights, size_t* connection_points, size_t connections_start
+)
+{
+	size_t tid = get_tid();
+	if (tid >= connection_count)
+		return;
+
+	size_t activation_i = connection_points[connections_start + tid];
+	size_t weight_i = connections_start + tid;
+	size_t write_i = derivatives_start + derivatives_layer_start + derivatives_per_neuron * neuron_i;
+	atomicAdd(derivatives + write_i, activations[activation_i] + weights[weight_i]);
+}
+
 __global__ void cud_add_bias_derivative(
 	size_t layer_length, 
 	size_t derivatives_start, size_t derivatives_layer_start, size_t derivatives_per_neuron, data_t* derivatives

@@ -34,7 +34,5 @@ public:
 		field_t* weights, field_t* biases, size_t neuron_count,
 		data_t learning_rate, short* dropout, data_t gradient_clip
 	) override;
-
-	void add_neuron(size_t neurons_to_add, size_t connections_per_neuron, size_t layer_i, size_t layer_i_prev_length, float connection_probability) override;
 };
 

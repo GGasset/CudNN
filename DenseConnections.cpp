@@ -74,9 +74,4 @@ void DenseConnections::subtract_gradients(
 		biases, neuron_count, learning_rate, dropout, gradient_clip
 	);
 }
-
-void DenseConnections::add_neuron(size_t neurons_to_add, size_t connections_per_neuron, size_t layer_i, size_t layer_i_prev_length, float connection_probability = 1)
-{
-
-}
 #endif

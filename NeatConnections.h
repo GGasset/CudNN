@@ -3,6 +3,7 @@
 class NeatConnections :
     public IConnections
 {
+public:
 	size_t* connection_points = 0;
 	size_t* connection_counts = 0;
 

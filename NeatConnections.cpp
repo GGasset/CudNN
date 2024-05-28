@@ -1,6 +1,10 @@
 #include "NeatConnections.h"
 
-void NeatConnections::linear_function(size_t activations_start, data_t* activations, data_t* execution_values, size_t execution_values_start, size_t execution_values_layer_start, size_t layer_execution_values_per_neuron, field_t* weights, field_t* biases, size_t layer_length)
+void NeatConnections::linear_function(
+	size_t activations_start, data_t* activations, 
+	data_t* execution_values, size_t execution_values_start, size_t execution_values_layer_start, size_t layer_execution_values_per_neuron, 
+	field_t* weights, field_t* biases, size_t layer_length
+)
 {
 	size_t connections_start = 0;
 	for (size_t i = 0; i < layer_length; i++)

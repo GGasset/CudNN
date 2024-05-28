@@ -44,11 +44,14 @@ __global__ void cud_NEAT_gradient_calculation(
 
 __global__ void bias_gradient_subtraction(
 	data_t* gradients, size_t gradients_start, size_t layer_gradients_start, size_t* neuron_gradients_starts,
-	field_t* biases, data_t learning_rate, short* dropout, data_t max_subtracted_gradient
+	field_t* biases, size_t layer_length, data_t learning_rate, short* dropout, data_t max_subtracted_gradient
 )
 {
-	size_t gradient_i = gradients_start + layer_gradients_start + neuron_gradients_starts[threadIdx.x];
-	biases[threadIdx.x] -= device_min(max_subtracted_gradient, gradients[gradient_i] * learning_rate * dropout[threadIdx.x]);
+	size_t tid = get_tid();
+	if (tid >= layer_length) return;
+
+	size_t gradient_i = gradients_start + layer_gradients_start + neuron_gradients_starts[tid];
+	biases[tid] -= device_min(max_subtracted_gradient, gradients[gradient_i] * learning_rate * dropout[tid]);
 }
 
 __global__ void cud_dense_gradient_subtraction(
@@ -57,7 +60,10 @@ __global__ void cud_dense_gradient_subtraction(
 	data_t learning_rate, short* dropout, data_t max_subtracted_gradient
 )
 {
-	size_t gradient_i = gradients_start + layer_gradients_start + neuron_gradients_starts[blockIdx.x] + threadIdx.x + 1;
-	size_t weight_i = previous_layer_length * blockIdx.x + threadIdx.x;
-	atomicAdd(weights + weight_i, -device_min(max_subtracted_gradient, gradients[gradient_i] * learning_rate * dropout[blockIdx.x]));
+	size_t tid = get_tid();
+	if (tid >= previous_layer_length) return;
+
+	size_t gradient_i = gradients_start + layer_gradients_start + neuron_gradients_starts[blockIdx.y] + tid + 1;
+	size_t weight_i = previous_layer_length * blockIdx.y + tid;
+	atomicAdd(weights + weight_i, -device_min(max_subtracted_gradient, gradients[gradient_i] * learning_rate * dropout[blockIdx.y]));
 }

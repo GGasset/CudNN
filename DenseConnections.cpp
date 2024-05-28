@@ -65,13 +65,13 @@ void DenseConnections::subtract_gradients(
 	data_t learning_rate, short* dropout, data_t gradient_clip
 )
 {
-	cud_dense_gradient_subtraction kernel(neuron_count, previous_layer_length) (
+	cud_dense_gradient_subtraction kernel(dim3(previous_layer_length / 32 + (previous_layer_length % 32 > 0), neuron_count), 32) (
 		gradients, gradients_start, layer_gradients_start, neuron_gradients_starts,
 		weights, previous_layer_length, learning_rate, dropout, gradient_clip
 	);
-	bias_gradient_subtraction kernel(1, neuron_count) (
+	bias_gradient_subtraction kernel(neuron_count / 32 + (neuron_count % 32 > 0), 32) (
 		gradients, gradients_start, layer_gradients_start, neuron_gradients_starts,
-		biases, learning_rate, dropout, gradient_clip
+		biases, neuron_count, learning_rate, dropout, gradient_clip
 	);
 }
 

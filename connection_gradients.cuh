@@ -21,7 +21,7 @@ __global__ void cud_NEAT_gradient_calculation(
 
 __global__ void bias_gradient_subtraction(
 	data_t* gradients, size_t gradients_start, size_t layer_gradients_start, size_t* neuron_gradients_starts,
-	field_t* biases, data_t learning_rate, short* dropout, data_t max_subtracted_gradient
+	field_t* biases, size_t layer_length, data_t learning_rate, short* dropout, data_t max_subtracted_gradient
 );
 
 __global__ void cud_dense_gradient_subtraction(

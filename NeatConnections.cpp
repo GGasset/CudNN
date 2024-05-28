@@ -10,7 +10,7 @@ void NeatConnections::linear_function(
 	for (size_t i = 0; i < layer_length; i++)
 	{
 		size_t connection_count = connection_counts[i];
-		dim3 gridDim = dim3(connection_counts[i] / 32 + (connection_counts[i] % 32 > 0), 1, 1);
+		dim3 gridDim = dim3(connection_count / 32 + (connection_count % 32 > 0));
 		cud_NEAT_neuron_linear_function kernel(gridDim, 32) (
 			i, connection_count, weights, connection_points, connections_start,
 			activations_start, activations,
@@ -34,7 +34,7 @@ void NeatConnections::calculate_derivative(
 	for (size_t i = 0; i < layer_length; i++)
 	{
 		size_t connection_count = connection_counts[i];
-		cud_NEAT_linear_function_derivative kernel(connection_counts[i] / 32 + (connection_counts[i] % 32 > 0), 32) (
+		cud_NEAT_linear_function_derivative kernel(connection_count / 32 + (connection_count % 32 > 0), 32) (
 			activations_start, activations,
 			derivatives_start, derivatives_layer_start, derivatives_per_neuron, derivatives,
 			i, connection_count, weights, connection_points, connections_start

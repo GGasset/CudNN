@@ -22,6 +22,26 @@ __global__ void cud_dense_gradient_calculation(
 	atomicAdd(costs + costs_start + previous_layer_activations_start + tid, -input_gradient * weight);
 }
 
+__global__ void cud_NEAT_gradient_calculation(
+	data_t* activations, size_t activations_start,
+	data_t* gradients, size_t gradients_start, size_t layer_gradients_start, size_t* neuron_gradients_starts,
+	data_t* costs, size_t costs_start,
+	size_t neuron_i, size_t connection_count, field_t* weights, size_t* connection_points, size_t connections_start
+)
+{
+	size_t tid = get_tid();
+	if (tid >= connection_count)
+		return;
+
+	size_t input_gradient_i = gradients_start + layer_gradients_start + neuron_gradients_starts[neuron_i];
+	size_t weight_gradient_i = input_gradient_i + tid + 1;
+	size_t connection_input_i = connection_points[connections_start + tid];
+
+	data_t input_gradient = gradients[input_gradient_i];
+	gradients[weight_gradient_i] = input_gradient * activations[activations_start + connection_input_i];
+	atomicAdd(costs + costs_start + connection_input_i, -input_gradient * weights[connections_start + tid]);
+}
+
 __global__ void bias_gradient_subtraction(
 	data_t* gradients, size_t gradients_start, size_t layer_gradients_start, size_t* neuron_gradients_starts,
 	field_t* biases, data_t learning_rate, short* dropout, data_t max_subtracted_gradient

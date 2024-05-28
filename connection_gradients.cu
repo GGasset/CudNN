@@ -39,5 +39,5 @@ __global__ void cud_dense_gradient_subtraction(
 {
 	size_t gradient_i = gradients_start + layer_gradients_start + neuron_gradients_starts[blockIdx.x] + threadIdx.x + 1;
 	size_t weight_i = previous_layer_length * blockIdx.x + threadIdx.x;
-	weights[weight_i] -= device_min(max_subtracted_gradient, gradients[gradient_i] * learning_rate * dropout[blockIdx.x]);
+	atomicAdd(weights + weight_i, -device_min(max_subtracted_gradient, gradients[gradient_i] * learning_rate * dropout[blockIdx.x]));
 }

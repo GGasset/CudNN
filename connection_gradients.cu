@@ -67,3 +67,17 @@ __global__ void cud_dense_gradient_subtraction(
 	size_t weight_i = previous_layer_length * blockIdx.y + tid;
 	atomicAdd(weights + weight_i, -device_min(max_subtracted_gradient, gradients[gradient_i] * learning_rate * dropout[blockIdx.y]));
 }
+
+__global__ void cud_NEAT_gradient_subtraction(
+	data_t* gradients, size_t gradients_start, size_t layer_gradients_start, size_t* neuron_gradients_starts,
+	size_t neuron_i, size_t connection_count, field_t* weights, size_t connections_start,
+	data_t learning_rate, short* dropout, data_t max_subtracted_gradient
+)
+{
+	size_t tid = get_tid();
+	if (tid >= connection_count) return;
+
+	size_t gradient_i = gradients_start + layer_gradients_start + neuron_gradients_starts[neuron_i] + tid + 1;
+	size_t weight_i = connections_start + tid;
+	atomicAdd(weights + weight_i, -device_min(max_subtracted_gradient, gradients[gradient_i] * learning_rate * dropout[neuron_i]));
+}

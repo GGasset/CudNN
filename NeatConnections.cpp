@@ -70,3 +70,24 @@ void NeatConnections::calculate_gradients(
 	}
 	cudaDeviceSynchronize();
 }
+
+void NeatConnections::subtract_gradients(
+	data_t* gradients, size_t gradients_start, size_t layer_gradients_start, size_t* neuron_gradients_starts, 
+	field_t* weights, field_t* biases, size_t neuron_count, 
+	data_t learning_rate, short* dropout, data_t gradient_clip
+)
+{
+	size_t connections_start = 0;
+	for (size_t i = 0; i < neuron_count; i++)
+	{
+		size_t connection_count = connection_counts[i];
+		cud_NEAT_gradient_subtraction kernel(connection_count / 32 + (connection_count % 32 + 1), 32) (
+			gradients, gradients_start, layer_gradients_start, neuron_gradients_starts,
+			i, connection_count, weights, connections_start,
+			learning_rate, dropout, gradient_clip
+		);
+		connections_start += connection_count;
+	}
+	cudaDeviceSynchronize();
+}
+

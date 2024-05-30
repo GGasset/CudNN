@@ -9,9 +9,8 @@ void NeuronLayer::execute(
 )
 {
 	connections->linear_function(activations_start, activations,
-		execution_values, execution_values_start, execution_values_layer_start, execution_values_per_neuron,
-		weights, biases,
-		neuron_count);
+		execution_values, execution_values_start, execution_values_layer_start, execution_values_per_neuron
+	);
 	switch (activation)
 	{
 	case ActivationFunctions::sigmoid:
@@ -49,8 +48,7 @@ void NeuronLayer::calculate_gradients(
 	cudaDeviceSynchronize();
 	connections->calculate_gradients(
 		activations, activations_start, gradients, gradients_start, layer_gradients_start, neuron_gradients_starts,
-		costs, costs_start,
-		weights, neuron_count
+		costs, costs_start
 	);
 	cudaDeviceSynchronize();
 }
@@ -59,7 +57,6 @@ void NeuronLayer::subtract_gradients(data_t* gradients, size_t gradients_start, 
 {
 	connections->subtract_gradients(
 		gradients, gradients_start, layer_gradients_start, neuron_gradients_starts,
-		weights, biases, neuron_count,
 		learning_rate, dropout, gradient_clip
 	);
 }

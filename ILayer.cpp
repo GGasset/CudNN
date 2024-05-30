@@ -16,22 +16,15 @@ void ILayer::add_neuron(size_t neurons_to_add, size_t connection_count_per_neuro
 	neuron_count += neurons_to_add;
 }
 
-void ILayer::generate_random_values(float** pointer, size_t float_count, size_t start_i)
-{
-	curandGenerator_t generator;
-	curandCreateGenerator(&generator, CURAND_RNG_PSEUDO_XORWOW);
-	//curandSetPseudoRandomGeneratorSeed(generator, 15);
-	curandGenerateUniform(generator, *pointer + start_i, float_count);
-}
 
+void ILayer::set_neuron_count(size_t neuron_count)
+{
+	this->neuron_count = neuron_count;
+	connections->neuron_count = neuron_count;
+}
 
 void ILayer::initialize_fields(size_t connection_count, size_t neuron_count)
 {
-	cudaMalloc(&weights, sizeof(field_t) * connection_count);
-	cudaMalloc(&biases, sizeof(field_t) * neuron_count);
-	cudaDeviceSynchronize();
-	generate_random_values(&weights, connection_count);
-	generate_random_values(&biases, neuron_count);
 	layer_specific_initialize_fields(connection_count, neuron_count);
 	cudaDeviceSynchronize();
 }

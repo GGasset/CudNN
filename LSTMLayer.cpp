@@ -6,7 +6,7 @@ void LSTMLayer::layer_specific_initialize_fields(size_t connection_count, size_t
 	cudaMalloc(&neuron_weights, sizeof(field_t) * neuron_count * 4);
 	cudaDeviceSynchronize();
 	cudaMemset(state, 0, sizeof(data_t) * neuron_count * 2);
-	generate_random_values(&neuron_weights, neuron_count * 4);
+	IConnections::generate_random_values(&neuron_weights, neuron_count * 4);
 	cudaDeviceSynchronize();
 }
 
@@ -16,8 +16,7 @@ void LSTMLayer::execute(data_t* activations, size_t activations_start, data_t* e
 	connections->linear_function(
 		activations_start, activations,
 		execution_values, execution_values_start,
-		execution_values_layer_start, execution_values_per_neuron,
-		weights, biases, neuron_count
+		execution_values_layer_start, execution_values_per_neuron
 	);
 	LSTM_execution kernel(1, neuron_count) (
 		activations, activations_start, layer_activations_start,
@@ -43,8 +42,7 @@ void LSTMLayer::calculate_gradients(
 	connections->calculate_gradients(
 		activations, activations_start,
 		gradients, gradients_start, layer_gradients_start, neuron_gradients_starts,
-		costs, costs_start,
-		weights, neuron_count
+		costs, costs_start
 	);
 	cudaDeviceSynchronize();
 }
@@ -53,7 +51,7 @@ void LSTMLayer::subtract_gradients(data_t* gradients, size_t gradients_start, da
 {
 	connections->subtract_gradients(
 		gradients, gradients_start, layer_gradients_start, neuron_gradients_starts,
-		weights, biases, neuron_count, learning_rate, dropout, gradient_clip
+		learning_rate, dropout, gradient_clip
 	);
 	LSTM_gradient_subtraction kernel(1, neuron_count) (
 		gradients, gradients_start, layer_gradients_start, neuron_gradients_starts, connection_associated_gradient_counts,
@@ -68,8 +66,7 @@ void LSTMLayer::calculate_derivatives(
 )
 {
 	connections->calculate_derivative(
-		activations_start, activations, derivatives_start, layer_derivatives_start, derivatives_per_neuron, derivatives,
-		weights, neuron_count
+		activations_start, activations, derivatives_start, layer_derivatives_start, derivatives_per_neuron, derivatives
 	);
 	cudaDeviceSynchronize();
 	LSTM_derivative_calculation kernel(1, neuron_count) (

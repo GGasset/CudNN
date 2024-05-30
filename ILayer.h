@@ -9,12 +9,13 @@
 #pragma once
 class ILayer
 {
+private:
+	size_t neuron_count = 0;
+
 public:
 	size_t connection_count = 0;
 	size_t neuron_count = 0;
 	IConnections* connections = 0;
-	field_t* weights = 0;
-	field_t* biases = 0;
 
 	size_t layer_activations_start = 0;
 
@@ -30,10 +31,10 @@ public:
 	size_t* neuron_gradients_starts = 0;
 	size_t* connection_associated_gradient_counts = 0;
 
+	void set_neuron_count(size_t neuron_count);
+
 	void initialize_fields(size_t connection_count, size_t neuron_count);
 	virtual void layer_specific_initialize_fields(size_t connection_count, size_t neuron_count);
-
-	static void generate_random_values(float** pointer, size_t float_count, size_t start_i = 0);
 
 	virtual void add_neuron(size_t neurons_to_add, size_t connection_count_per_neuron, size_t layer_i, size_t layer_i_prev_length, float connection_probability = 1);
 

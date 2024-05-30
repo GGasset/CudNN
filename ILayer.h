@@ -14,7 +14,6 @@ private:
 
 public:
 	size_t connection_count = 0;
-	size_t neuron_count = 0;
 	IConnections* connections = 0;
 
 	size_t layer_activations_start = 0;

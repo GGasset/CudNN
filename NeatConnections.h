@@ -28,6 +28,6 @@ public:
 	) override;
 
 	void add_neuron(size_t previous_layer_length, size_t previous_layer_activations_start, float previous_layer_connection_probability, size_t min_connections);
-	void adjust_to_added_neuron(size_t neuron_i)
+	//void adjust_to_added_neuron(size_t neuron_i)
 };
 

@@ -23,7 +23,7 @@ NN::~NN()
 
 void NN::set_fields()
 {
-	output_length = layers[layer_count - 1]->neuron_count;
+	output_length = layers[layer_count - 1]->get_neuron_count();
 
 	size_t neuron_count = input_length;
 	size_t execution_value_count = 0;
@@ -34,10 +34,10 @@ void NN::set_fields()
 		ILayer* layer = layers[i];
 
 		layer->layer_activations_start = neuron_count;
-		neuron_count += layer->neuron_count;
+		neuron_count += layer->get_neuron_count();
 
 		layer->execution_values_layer_start = execution_value_count;
-		execution_value_count += layer->execution_values_per_neuron * layer->neuron_count;
+		execution_value_count += layer->execution_values_per_neuron * layer->get_neuron_count();
 
 		layer->layer_derivatives_start = derivative_count;
 		derivative_count += layer->layer_derivative_count;
@@ -292,7 +292,7 @@ void NN::subtract_gradients(data_t* gradients, size_t gradients_start, data_t le
 	for (size_t i = 0; i < layer_count; i++)
 	{
 		ILayer* current_layer = layers[i];
-		size_t layer_length = current_layer->neuron_count;
+		size_t layer_length = current_layer->get_neuron_count();
 
 		short* dropout = 0;
 		float* normalized_random_samples = 0;
@@ -301,7 +301,7 @@ void NN::subtract_gradients(data_t* gradients, size_t gradients_start, data_t le
 		cudaDeviceSynchronize();
 		
 		cudaMemset(dropout, 0, sizeof(short) * layer_length);
-		ILayer::generate_random_values(&normalized_random_samples, layer_length);
+		IConnections::generate_random_values(&normalized_random_samples, layer_length);
 		cudaDeviceSynchronize();
 		cud_set_dropout kernel(1, layer_length) (dropout_rate, normalized_random_samples, dropout);
 		cudaDeviceSynchronize();

@@ -9,7 +9,7 @@
 #pragma once
 class ILayer
 {
-private:
+protected:
 	size_t neuron_count = 0;
 
 public:

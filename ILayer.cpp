@@ -17,6 +17,11 @@ void ILayer::add_neuron(size_t neurons_to_add, size_t connection_count_per_neuro
 }
 
 
+size_t ILayer::get_neuron_count()
+{
+	return neuron_count;
+}
+
 void ILayer::set_neuron_count(size_t neuron_count)
 {
 	this->neuron_count = neuron_count;

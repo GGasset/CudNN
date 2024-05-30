@@ -31,6 +31,7 @@ public:
 	size_t* neuron_gradients_starts = 0;
 	size_t* connection_associated_gradient_counts = 0;
 
+	size_t get_neuron_count();
 	void set_neuron_count(size_t neuron_count);
 
 	void initialize_fields(size_t connection_count, size_t neuron_count);

@@ -10,4 +10,12 @@ void IConnections::generate_random_values(float** pointer, size_t float_count, s
 
 void IConnections::deallocate()
 {
+	cudaFree(weights);
+	cudaFree(biases);
+	specific_deallocate();
+	cudaDeviceSynchronize();
+}
+
+void IConnections::specific_deallocate()
+{
 }

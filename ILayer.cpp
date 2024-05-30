@@ -31,8 +31,6 @@ void ILayer::layer_specific_initialize_fields(size_t connection_count, size_t ne
 
 void ILayer::deallocate()
 {
-	cudaFree(weights);
-	cudaFree(biases);
 	connections->deallocate();
 	layer_specific_deallocate();
 	cudaDeviceSynchronize();

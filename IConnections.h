@@ -1,5 +1,6 @@
 #include "cuda_runtime.h"
 #include "device_launch_parameters.h"
+#include <curand.h>
 
 #include "data_type.h"
 #include "kernel_macros.h"
@@ -42,6 +43,7 @@ public:
 
 	}
 
-	virtual void deallocate();
+	void deallocate();
+	virtual void specific_deallocate();
 };
 

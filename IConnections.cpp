@@ -8,6 +8,18 @@ void IConnections::generate_random_values(float** pointer, size_t float_count, s
 	curandGenerateUniform(generator, *pointer + start_i, float_count);
 }
 
+void IConnections::add_neuron(size_t previous_layer_length, size_t previous_layer_activations_start, float previous_layer_connection_probability, size_t min_connections)
+{
+}
+
+void IConnections::remove_neuron(size_t neuron_i)
+{
+}
+
+void IConnections::adjust_to_added_neuron(size_t added_neuron_i)
+{
+}
+
 void IConnections::deallocate()
 {
 	cudaFree(weights);

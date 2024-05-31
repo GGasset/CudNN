@@ -39,8 +39,9 @@ public:
 	) = 0;
 
 	virtual void add_neuron(size_t previous_layer_length, size_t previous_layer_activations_start, float previous_layer_connection_probability, size_t min_connections);
+	virtual void adjust_to_added_neuron(size_t added_neuron_i, float connection_probability);
 	virtual void remove_neuron(size_t neuron_i);
-	virtual void adjust_to_added_neuron(size_t added_neuron_i);
+	virtual void adjust_to_removed_neuron(size_t neuron_i);
 	//virtual void add_connection(size_t connection_addition_neuron_i, size_t pointed_neuron_i);
 	//virtual void remove_connection();
 	virtual size_t get_connection_count_to(size_t neuron_i) = 0;

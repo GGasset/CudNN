@@ -10,6 +10,9 @@
 class ILayer
 {
 protected:
+	/// <summary>
+	/// Modify through set neuron count
+	/// </summary>
 	size_t neuron_count = 0;
 
 public:
@@ -64,6 +67,11 @@ public:
 		data_t* derivatives, size_t previous_derivatives_start, size_t derivatives_start,
 		data_t* execution_values, size_t execution_values_start
 	) = 0;
+
+	virtual void add_neuron(size_t previous_layer_length, size_t previous_layer_activations_start, float previous_layer_connection_probability, size_t min_connections) = 0;
+	virtual void adjust_to_added_neuron(size_t added_neuron_i, float connection_probability) = 0;
+	virtual void remove_neuron(size_t layer_neuron_i) = 0;
+	virtual void adjust_to_removed_neuron(size_t neuron_i) = 0;
 
 	virtual void delete_memory();
 };

@@ -71,8 +71,4 @@ void DenseConnections::subtract_gradients(
 		biases, neuron_count, learning_rate, dropout, gradient_clip
 	);
 }
-size_t DenseConnections::get_connection_count_to(size_t neuron_i)
-{
-	return neuron_count * (neuron_i > previous_layer_activations_start && neuron_i < previous_layer_activations_start + previous_layer_length);
-}
 #endif

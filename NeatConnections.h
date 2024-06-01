@@ -6,7 +6,13 @@ class NeatConnections :
     public IConnections
 {
 public:
+    /// <summary>
+    /// Device array
+    /// </summary>
     size_t* connection_points = 0;
+    /// <summary>
+    /// Host array
+    /// </summary>
     size_t* connection_counts = 0;
     size_t connection_count = 0;
 

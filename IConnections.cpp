@@ -16,10 +16,6 @@ void IConnections::remove_neuron(size_t neuron_i)
 {
 }
 
-void IConnections::adjust_to_removed_neuron(size_t neuron_i)
-{
-}
-
 void IConnections::adjust_to_added_neuron(size_t added_neuron_i, float connection_probability)
 {
 }

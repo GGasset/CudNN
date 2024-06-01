@@ -40,6 +40,5 @@ public:
     void adjust_to_added_neuron(size_t added_neuron_i, float connection_probability) override;
     void remove_neuron(size_t neuron_i) override;
     void adjust_to_removed_neuron(size_t neuron_i) override;
-    size_t get_connection_count_to(size_t neuron_i) override;
 };
 

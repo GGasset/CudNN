@@ -8,6 +8,7 @@
 
 DenseConnections::DenseConnections(size_t previous_layer_activations_start, size_t previous_layer_length)
 {
+	this->connection_count = previous_layer_length;
 	this->previous_layer_activations_start = previous_layer_activations_start;
 	this->previous_layer_length = previous_layer_length;
 }

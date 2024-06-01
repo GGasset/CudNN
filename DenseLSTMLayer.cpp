@@ -4,7 +4,6 @@ DenseLSTMLayer::DenseLSTMLayer(size_t layer_gradients_start, size_t neuron_count
 {
 	connections = new DenseConnections(previous_layer_neuron_i_start, previous_layer_length);
 	set_neuron_count(neuron_count);
-	this->connection_count = neuron_count * previous_layer_length;
 	execution_values_per_neuron = 10;
 
 	size_t* connection_gradient_counts = new size_t[neuron_count];
@@ -26,6 +25,6 @@ DenseLSTMLayer::DenseLSTMLayer(size_t layer_gradients_start, size_t neuron_count
 
 	derivatives_per_neuron = 16;
 	layer_derivative_count = derivatives_per_neuron * neuron_count;
-	layer_gradient_count = connection_count + 7 * neuron_count;
+	layer_gradient_count = connections->connection_count + 7 * neuron_count;
 	initialize_fields(previous_layer_length * neuron_count, neuron_count);
 }

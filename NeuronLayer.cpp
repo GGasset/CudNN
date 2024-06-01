@@ -61,4 +61,11 @@ void NeuronLayer::subtract_gradients(data_t* gradients, size_t gradients_start, 
 	);
 }
 
+void NeuronLayer::add_neuron(size_t previous_layer_length, size_t previous_layer_activations_start, float previous_layer_connection_probability, size_t min_connections)
+{
+	
+	connections->add_neuron(previous_layer_length, previous_layer_activations_start, previous_layer_connection_probability, min_connections);
+	set_neuron_count(neuron_count + 1);
+}
+
 #endif

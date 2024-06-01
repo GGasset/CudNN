@@ -8,7 +8,6 @@ DenseNeuronLayer::DenseNeuronLayer(size_t layer_gradients_start, size_t neuron_c
 	connections = new DenseConnections(previous_layer_neuron_i_start, previous_layer_length);
 	this->activation = activation;
 	set_neuron_count(neuron_count);
-	this->connection_count = neuron_count * previous_layer_length;
 	execution_values_per_neuron = 1;
 	
 	size_t neuron_gradient_i = layer_gradients_start;
@@ -23,7 +22,7 @@ DenseNeuronLayer::DenseNeuronLayer(size_t layer_gradients_start, size_t neuron_c
 	cudaMemcpy(this->neuron_gradients_starts, neuron_gradients_starts, neuron_count * sizeof(size_t), cudaMemcpyHostToDevice);
 	delete[] neuron_gradients_starts;
 
-	layer_gradient_count = connection_count + neuron_count;
+	layer_gradient_count = connections->connection_count + neuron_count;
 	initialize_fields(previous_layer_length * neuron_count, neuron_count);
 }
 

@@ -63,9 +63,28 @@ void NeuronLayer::subtract_gradients(data_t* gradients, size_t gradients_start, 
 
 void NeuronLayer::add_neuron(size_t previous_layer_length, size_t previous_layer_activations_start, float previous_layer_connection_probability, size_t min_connections)
 {
-	
+	size_t added_connections = connections->connection_count;
 	connections->add_neuron(previous_layer_length, previous_layer_activations_start, previous_layer_connection_probability, min_connections);
+	added_connections = connections->connection_count - added_connections;
+
+
+	layer_derivative_count += derivatives_per_neuron;
+	layer_gradient_count++;
+	
+	size_t* new_neuron_gradients_starts = new size_t[neuron_count + 1];
+	cudaMemcpy(new_neuron_gradients_starts, neuron_gradients_starts, sizeof(size_t) * neuron_count, cudaMemcpyDeviceToHost);
+	new_neuron_gradients_starts[neuron_count] = new_neuron_gradients_starts[neuron_count - 1] + added_connections;
+	cudaDeviceSynchronize();
+	
+	cudaFree(neuron_gradients_starts);
+	cudaDeviceSynchronize();
+
 	set_neuron_count(neuron_count + 1);
+
+	cudaMalloc(&neuron_gradients_starts, sizeof(size_t) * neuron_count);
+	cudaDeviceSynchronize();
+	cudaMemcpy(neuron_gradients_starts, new_neuron_gradients_starts, sizeof(size_t) * neuron_count);
+	delete[] new_neuron_gradients_starts;
 }
 
 #endif

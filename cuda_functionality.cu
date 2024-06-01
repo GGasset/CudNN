@@ -9,11 +9,3 @@ __device__ size_t get_tid()
 {
 	return blockIdx.x * blockDim.z + threadIdx.z * blockDim.y + threadIdx.y * blockDim.x + threadIdx.x;
 }
-
-__global__ void get_occurrences(size_t array_value_count, size_t* read_array, size_t search_value, size_t* count)
-{
-	size_t tid = get_tid();
-	if (tid > array_value_count) return;
-
-	atomicAdd(count, read_array[tid] == search_value);
-}

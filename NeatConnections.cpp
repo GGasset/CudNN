@@ -149,7 +149,7 @@ void NeatConnections::add_neuron(size_t previous_layer_length, size_t previous_l
 }
 
 // TODO: add weights to added connections
-void NeatConnections::adjust_to_added_neuron(size_t added_neuron_i, float connection_probability)
+void NeatConnections::adjust_to_added_neuron(size_t added_neuron_i, float connection_probability, std::vector<size_t>* added_connections_neuron_i)
 {
 	// Transform data to a vector
 	size_t *host_connection_points = new size_t[connection_count];
@@ -178,6 +178,7 @@ void NeatConnections::adjust_to_added_neuron(size_t added_neuron_i, float connec
 		
 		if (is_connection_added)
 		{
+			added_connections_neuron_i->push_back(i);
 			vector_connection_points.insert(vector_connection_points.begin() + tmp_connection_count + old_neuron_connection_count, added_neuron_i);
 			vector_weights.insert(vector_weights.begin() + tmp_connection_count + old_neuron_connection_count, rand() % 100000 / 100000.0);
 		}
@@ -249,7 +250,7 @@ void NeatConnections::remove_neuron(size_t neuron_i)
 	biases = tmp_biases;
 }
 
-void NeatConnections::adjust_to_removed_neuron(size_t neuron_i)
+void NeatConnections::adjust_to_removed_neuron(size_t neuron_i, std::vector<size_t>* removed_connections_neuron_i)
 {
 	size_t* host_connection_points = new size_t[connection_count];
 	field_t* host_weights = new field_t[neuron_count];
@@ -288,6 +289,7 @@ void NeatConnections::adjust_to_removed_neuron(size_t neuron_i)
 		}
 
 		// Update info
+		removed_connections_neuron_i->push_back(connection_neuron_i);
 		vector_weights.erase(vector_weights.begin() + found_i);
 		connection_points_vector.erase(connection_points_vector.begin() + found_i);
 		connection_counts[connection_neuron_i]--;

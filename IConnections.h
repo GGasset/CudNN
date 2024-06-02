@@ -6,6 +6,7 @@
 #include "kernel_macros.h"
 #include "linear_functions.cuh"
 #include "connection_gradients.cuh"
+#include "vector"
 
 #pragma once
 class IConnections
@@ -46,9 +47,9 @@ public:
 	) = 0;
 
 	virtual void add_neuron(size_t previous_layer_length, size_t previous_layer_activations_start, float previous_layer_connection_probability, size_t min_connections);
-	virtual void adjust_to_added_neuron(size_t added_neuron_i, float connection_probability);
+	virtual void adjust_to_added_neuron(size_t added_neuron_i, float connection_probability, std::vector<size_t>* added_connections_neuron_i);
 	virtual void remove_neuron(size_t layer_neuron_i);
-	virtual void adjust_to_removed_neuron(size_t neuron_i);
+	virtual void adjust_to_removed_neuron(size_t neuron_i, std::vector<size_t>* removed_connections_neuron_i);
 
 	void deallocate();
 	virtual void specific_deallocate();

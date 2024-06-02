@@ -96,8 +96,8 @@ void NeuronLayer::adjust_to_added_neuron(size_t added_neuron_i, float connection
 	{
 		layer_gradient_count++;
 		size_t added_connection_neuron_i = added_connections_neuron_i[i];
-		for (size_t i = added_connection_neuron_i; i < neuron_count; i++)
-			neuron_gradients_starts[i]++;
+		for (size_t j = added_connection_neuron_i + 1; j < neuron_count; j++)
+			neuron_gradients_starts[j]++;
 	}
 }
 

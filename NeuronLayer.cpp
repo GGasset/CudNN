@@ -87,4 +87,17 @@ void NeuronLayer::add_neuron(size_t previous_layer_length, size_t previous_layer
 	delete[] new_neuron_gradients_starts;
 }
 
+void NeuronLayer::adjust_to_added_neuron(size_t added_neuron_i, float connection_probability)
+{
+	auto added_connections_neuron_i = std::vector<size_t>();
+	connections->adjust_to_added_neuron(added_neuron_i, connection_probability, &added_connections_neuron_i);
+	for (size_t i = 0; i < added_connections_neuron_i.size(); i++)
+	{
+		layer_gradient_count++;
+		size_t added_connection_neuron_i = added_connections_neuron_i[i];
+		for (size_t i = added_connection_neuron_i; i < neuron_count; i++)
+			neuron_gradients_starts[i]++;
+	}
+}
+
 #endif

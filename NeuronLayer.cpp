@@ -114,7 +114,8 @@ void NeuronLayer::remove_neuron(size_t layer_neuron_i)
 
 	cudaMalloc(&tmp_neuron_gradients_starts, sizeof(size_t) * neuron_count);
 	cudaDeviceSynchronize();
-	cudaMemcpy(tmp_neuron_gradients_starts, neuron_gradients_starts, sizeof(size_t) * neuron_count, cudaMemcpyDeviceToDevice);
+	cudaMemcpy(tmp_neuron_gradients_starts, neuron_gradients_starts, sizeof(size_t) * layer_neuron_i, cudaMemcpyDeviceToDevice);
+	cudaMemcpy(tmp_neuron_gradients_starts + layer_neuron_i, neuron_gradients_starts + layer_neuron_i + 1, sizeof(size_t) * (neuron_count - layer_neuron_i), cudaMemcpyDeviceToDevice);
 	cudaDeviceSynchronize();
 	cudaFree(neuron_gradients_starts);
 	cudaDeviceSynchronize();

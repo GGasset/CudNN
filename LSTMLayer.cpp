@@ -125,6 +125,20 @@ void LSTMLayer::add_neuron(size_t previous_layer_length, size_t previous_layer_a
 	delete[] tmp_connection_associated_gradient_counts;
 }
 
+void LSTMLayer::adjust_to_added_neuron(size_t added_neuron_i, float connection_probability)
+{
+	auto added_connections_neuron_i = std::vector<size_t>();
+	connections->adjust_to_added_neuron(added_neuron_i, connection_probability, &added_connections_neuron_i);
+	for (size_t i = 0; i < added_connections_neuron_i.size(); i++)
+	{
+		size_t added_neuron_i = added_connections_neuron_i[i];
+		layer_gradient_count++;
+		connection_associated_gradient_counts[added_neuron_i]++;
+		for (size_t j = added_neuron_i + 1; j < neuron_count; j++)
+			neuron_gradients_starts[j]++;
+	}
+}
+
 void LSTMLayer::delete_memory()
 {
 	cudaMemset(state, 0, sizeof(data_t) * 2 * neuron_count);

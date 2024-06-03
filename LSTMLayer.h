@@ -33,6 +33,11 @@ public:
 		data_t* execution_values, size_t execution_values_start
 	) override;
 
+	void add_neuron(size_t previous_layer_length, size_t previous_layer_activations_start, float previous_layer_connection_probability, size_t min_connections) override;
+	void adjust_to_added_neuron(size_t added_neuron_i, float connection_probability) override;
+	void remove_neuron(size_t layer_neuron_i) override;
+	void adjust_to_removed_neuron(size_t neuron_i) override;
+
 	void delete_memory() override;
 };
 

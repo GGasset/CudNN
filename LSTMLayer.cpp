@@ -76,6 +76,55 @@ void LSTMLayer::calculate_derivatives(
 	);
 }
 
+void LSTMLayer::add_neuron(size_t previous_layer_length, size_t previous_layer_activations_start, float previous_layer_connection_probability, size_t min_connections)
+{
+	size_t added_connection_count = connections->connection_count;
+	connections->add_neuron(previous_layer_length, previous_layer_activations_start, previous_layer_connection_probability, min_connections);
+	added_connection_count = connections->connection_count - added_connection_count;
+	set_neuron_count(neuron_count + 1);
+	
+	field_t* tmp_neuron_weights = 0;
+	data_t* tmp_state = 0;
+	size_t* tmp_neuron_gradients_starts = new size_t[neuron_count];
+	size_t* tmp_connection_associated_gradient_counts = new size_t[neuron_count];
+	
+	cudaMalloc(&tmp_neuron_weights, sizeof(field_t) * neuron_count * 4);
+	cudaMalloc(&tmp_state, sizeof(data_t) * neuron_count * 2);
+	cudaDeviceSynchronize();
+
+	cudaMemcpy(tmp_neuron_weights, neuron_weights, sizeof(field_t) * (neuron_count - 1) * 4, cudaMemcpyDeviceToDevice);
+	IConnections::generate_random_values(&tmp_neuron_weights, 4, (neuron_count - 1) * 4);
+	
+	cudaMemcpy(tmp_state, state, sizeof(data_t) * (neuron_count - 1) * 2, cudaMemcpyDeviceToDevice);
+	cudaMemset(tmp_state + (neuron_count - 1) * 4, 0, sizeof(data_t) * 4);
+
+	cudaMemcpy(tmp_neuron_gradients_starts, neuron_gradients_starts, sizeof(size_t) * neuron_count - 1, cudaMemcpyDeviceToHost);
+	cudaMemcpy(connection_associated_gradient_counts, connection_associated_gradient_counts, sizeof(size_t) * neuron_count - 1, cudaMemcpyDeviceToHost);
+	cudaDeviceSynchronize();
+	tmp_neuron_gradients_starts[neuron_count - 1] = tmp_neuron_gradients_starts[neuron_count - 2] + connection_associated_gradient_counts[neuron_count - 2] + 7;
+	connection_associated_gradient_counts[neuron_count - 1] = added_connection_count;
+
+	cudaFree(state);
+	cudaFree(neuron_weights);
+	cudaFree(neuron_gradients_starts);
+	cudaFree(connection_associated_gradient_counts);
+	cudaDeviceSynchronize();
+
+	state = tmp_state;
+	neuron_weights = tmp_neuron_weights;
+
+	cudaMalloc(&neuron_gradients_starts, sizeof(size_t) * neuron_count);
+	cudaMalloc(&connection_associated_gradient_counts, sizeof(size_t) * neuron_count);
+
+	cudaDeviceSynchronize();
+	cudaMemcpy(neuron_gradients_starts, tmp_neuron_gradients_starts, sizeof(size_t) * neuron_count, cudaMemcpyHostToDevice);
+	cudaMemcpy(connection_associated_gradient_counts, tmp_connection_associated_gradient_counts, sizeof(size_t) * neuron_count, cudaMemcpyHostToDevice);
+
+	cudaDeviceSynchronize();
+	delete[] tmp_neuron_gradients_starts;
+	delete[] tmp_connection_associated_gradient_counts;
+}
+
 void LSTMLayer::delete_memory()
 {
 	cudaMemset(state, 0, sizeof(data_t) * 2 * neuron_count);

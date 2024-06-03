@@ -123,6 +123,9 @@ void LSTMLayer::add_neuron(size_t previous_layer_length, size_t previous_layer_a
 	cudaDeviceSynchronize();
 	delete[] tmp_neuron_gradients_starts;
 	delete[] tmp_connection_associated_gradient_counts;
+
+	layer_derivative_count += derivatives_per_neuron;
+	layer_gradient_count += added_connection_count + 7;
 }
 
 void LSTMLayer::adjust_to_added_neuron(size_t added_neuron_i, float connection_probability)

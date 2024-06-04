@@ -11,9 +11,9 @@ DenseLSTMLayer::DenseLSTMLayer(size_t layer_gradients_start, size_t neuron_count
 	size_t* neuron_gradients_starts = new size_t[neuron_count];
 	for (size_t i = 0; i < neuron_count; i++)
 	{
-		connection_gradient_counts[i] = previous_layer_length;
+		connection_gradient_counts[i] = previous_layer_length + 1;
 		neuron_gradients_starts[i] = neuron_gradient_i;
-		neuron_gradient_i += previous_layer_length + 7;
+		neuron_gradient_i += 1 + previous_layer_length + 7;
 	}
 	cudaMalloc(&connection_associated_gradient_counts, sizeof(size_t) * neuron_count);
 	cudaMalloc(&this->neuron_gradients_starts, neuron_count * sizeof(size_t));
@@ -25,6 +25,6 @@ DenseLSTMLayer::DenseLSTMLayer(size_t layer_gradients_start, size_t neuron_count
 
 	derivatives_per_neuron = 16;
 	layer_derivative_count = derivatives_per_neuron * neuron_count;
-	layer_gradient_count = connections->connection_count + 7 * neuron_count;
+	layer_gradient_count = neuron_count + connections->connection_count + 7 * neuron_count;
 	initialize_fields(previous_layer_length * neuron_count, neuron_count);
 }

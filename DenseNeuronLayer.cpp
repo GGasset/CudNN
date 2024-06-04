@@ -3,11 +3,11 @@
 
 #include "DenseNeuronLayer.h"
 
-DenseNeuronLayer::DenseNeuronLayer(size_t layer_gradients_start, size_t neuron_count, size_t previous_layer_neuron_i_start, size_t previous_layer_length, ActivationFunctions activation)
+DenseNeuronLayer::DenseNeuronLayer(size_t neuron_count, size_t previous_layer_neuron_i_start, size_t previous_layer_length, ActivationFunctions activation)
 {
-	connections = new DenseConnections(previous_layer_neuron_i_start, previous_layer_length);
-	this->activation = activation;
+	connections = new DenseConnections(previous_layer_neuron_i_start, previous_layer_length, neuron_count);
 	set_neuron_count(neuron_count);
+	this->activation = activation;
 	execution_values_per_neuron = 1;
 	
 	size_t neuron_gradient_i = layer_gradients_start;

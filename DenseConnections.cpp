@@ -6,11 +6,18 @@
 
 #include "DenseConnections.h"
 
-DenseConnections::DenseConnections(size_t previous_layer_activations_start, size_t previous_layer_length)
+DenseConnections::DenseConnections(size_t previous_layer_activations_start, size_t previous_layer_length, size_t neuron_count)
 {
+	this->neuron_count = neuron_count;
 	this->connection_count = previous_layer_length;
 	this->previous_layer_activations_start = previous_layer_activations_start;
 	this->previous_layer_length = previous_layer_length;
+	cudaMalloc(&weights, sizeof(field_t) * previous_layer_length * neuron_count);
+	cudaMalloc(&biases, sizeof(field_t) * neuron_count);
+	cudaDeviceSynchronize();
+	generate_random_values(&weights, previous_layer_length * neuron_count);
+	generate_random_values(&biases, neuron_count);
+	cudaDeviceSynchronize();
 }
 
 void DenseConnections::linear_function(size_t activations_start, data_t* activations,

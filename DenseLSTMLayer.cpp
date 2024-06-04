@@ -1,8 +1,8 @@
 #include "DenseLSTMLayer.h"
 
-DenseLSTMLayer::DenseLSTMLayer(size_t layer_gradients_start, size_t neuron_count, size_t previous_layer_neuron_i_start, size_t previous_layer_length)
+DenseLSTMLayer::DenseLSTMLayer(size_t neuron_count, size_t previous_layer_neuron_i_start, size_t previous_layer_length)
 {
-	connections = new DenseConnections(previous_layer_neuron_i_start, previous_layer_length);
+	connections = new DenseConnections(previous_layer_neuron_i_start, previous_layer_length, neuron_count);
 	set_neuron_count(neuron_count);
 	execution_values_per_neuron = 10;
 

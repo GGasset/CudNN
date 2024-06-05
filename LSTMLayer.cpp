@@ -170,6 +170,17 @@ void LSTMLayer::remove_neuron(size_t layer_neuron_i)
 
 void LSTMLayer::adjust_to_removed_neuron(size_t neuron_i)
 {
+	auto removed_connections_neuron_i = std::vector<size_t>();
+	connections->adjust_to_removed_neuron(neuron_i, &removed_connections_neuron_i);
+	for (size_t i = 0; i < removed_connections_neuron_i.size(); i++)
+	{
+		size_t added_neuron_i = removed_connections_neuron_i[i];
+		layer_gradient_count--;
+		connection_associated_gradient_counts[added_neuron_i]--;
+		for (size_t j = added_neuron_i + 1; j < neuron_count; j++)
+			neuron_gradients_starts[j]--;
+	}
+
 }
 
 void LSTMLayer::delete_memory()

@@ -315,6 +315,12 @@ void NN::subtract_gradients(data_t* gradients, size_t gradients_start, data_t le
 	cudaDeviceSynchronize();
 }
 
+void NN::remove_neuron(size_t layer_i)
+{
+	size_t layer_neuron_count = layers[layer_i]->get_neuron_count();
+	remove_neuron(layer_i, rand() % layer_neuron_count);
+}
+
 void NN::remove_neuron(size_t layer_i, size_t neuron_i)
 {
 	size_t removed_neuron_i = layers[layer_i]->layer_activations_start + neuron_i;

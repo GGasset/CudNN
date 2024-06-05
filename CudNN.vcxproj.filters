@@ -104,6 +104,7 @@
     <ClInclude Include="NeatConnections.h">
       <Filter>Connections</Filter>
     </ClInclude>
+    <ClInclude Include="evolution_info.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Connections">

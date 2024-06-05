@@ -137,6 +137,7 @@
     <ClInclude Include="cuda_functionality.cuh" />
     <ClInclude Include="DenseLSTMLayer.h" />
     <ClInclude Include="derivatives.cuh" />
+    <ClInclude Include="evolution_info.h" />
     <ClInclude Include="gradients.cuh" />
     <ClInclude Include="NeatConnections.h" />
     <ClInclude Include="neuron_operations.cuh">

@@ -265,7 +265,7 @@ void NeatConnections::adjust_to_removed_neuron(size_t neuron_i, std::vector<size
 	for (size_t i = 0; i < connection_count; i++)
 	{
 		// Adjust connections for index change while transforming points to a vector
-		connection_points_vector.push_back(host_connection_points[i] - (host_connection_points[i] >= neuron_i));
+		connection_points_vector.push_back(host_connection_points[i] - (host_connection_points[i] > neuron_i));
 		vector_weights.push_back(host_weights[i]);
 	}
 

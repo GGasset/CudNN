@@ -366,7 +366,7 @@ void NN::remove_neuron(size_t layer_i)
 void NN::remove_neuron(size_t layer_i, size_t layer_neuron_i)
 {
 	size_t removed_neuron_i = layers[layer_i]->layer_activations_start + layer_neuron_i;
-	layers[layer_i]->remove_neuron(neuron_i);
+	layers[layer_i]->remove_neuron(layer_neuron_i);
 	for (size_t i = layer_i + 1; i < layer_count; i++)
 		layers[i]->adjust_to_removed_neuron(removed_neuron_i);
 

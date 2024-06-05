@@ -315,6 +315,27 @@ void NN::subtract_gradients(data_t* gradients, size_t gradients_start, data_t le
 	cudaDeviceSynchronize();
 }
 
+void NN::add_layer(size_t insert_i, ILayer* layer)
+{
+	ILayer** tmp_layers = layers;
+	layer_count++;
+
+	// insert layer
+	layers = new ILayer * [layer_count];
+	for (size_t i = 0; i < insert_i; i++)
+		layers[i] = tmp_layers[i];
+	layers[insert_i] = layer;
+	for (size_t i = insert_i + 1; i < layer_count; i++)
+		layers[i] = tmp_layers[i - 1];
+
+	// Update info
+	set_fields();
+	size_t added_neuron_count = layer->get_neuron_count();
+	size_t added_layer_activations_start = layer->layer_activations_start;
+	for (size_t i = 0; i < added_neuron_count; i++)
+		adjust_to_added_neuron(insert_i, added_layer_activations_start + i);
+}
+
 void NN::add_output_neuron()
 {
 	add_neuron(layer_count - 1);

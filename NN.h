@@ -87,7 +87,7 @@ public:
 		data_t* gradients, size_t gradients_start, data_t learning_rate, float dropout_rate, data_t gradient_clip
 	);
 
-	//void add_layer(size_t insert_i, ILayer* layer);
+	void add_layer(size_t insert_i, ILayer* layer);
 	void add_output_neuron();
 	void add_input_neuron();
 	void add_neuron(size_t layer_i);

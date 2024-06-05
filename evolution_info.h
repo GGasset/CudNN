@@ -8,4 +8,5 @@ typedef struct evolution_metadata {
 	float layer_addition_probability = .05;
 	float neuron_deletion_probability = .1;
 	float neuron_addition_probability = .1;
+	float layer_distance_from_added_neuron_connection_addition_modifier = .01;
 };

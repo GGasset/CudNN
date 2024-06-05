@@ -1,5 +1,6 @@
 #include "ILayer.h"
 #include "costs.cuh"
+#include "evolution_info.h"
 
 #pragma once
 class NN
@@ -89,7 +90,7 @@ public:
 	//void add_layer(size_t insert_i, ILayer* layer);
 	// void add_output_neuron();
 	//void add_input_neuron();
-	//void add_neuron(size_t layer_i);
+	void add_neuron(size_t layer_i);
 	void remove_neuron(size_t layer_i);
 	void remove_neuron(size_t layer_i, size_t neuron_i);
 

@@ -89,10 +89,13 @@ public:
 
 	//void add_layer(size_t insert_i, ILayer* layer);
 	// void add_output_neuron();
-	//void add_input_neuron();
+	void add_input_neuron();
 	void add_neuron(size_t layer_i);
+	
+	/// <param name="neuron_i">in respect to the whole network</param>
+	void adjust_to_added_neuron(size_t layer_i, size_t neuron_i);
 	void remove_neuron(size_t layer_i);
-	void remove_neuron(size_t layer_i, size_t neuron_i);
+	void remove_neuron(size_t layer_i, size_t layer_neuron_i);
 
 
 	void delete_memory();

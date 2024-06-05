@@ -315,6 +315,16 @@ void NN::subtract_gradients(data_t* gradients, size_t gradients_start, data_t le
 	cudaDeviceSynchronize();
 }
 
+void NN::add_input_neuron()
+{
+	for (size_t i = 0; i < layer_count; i++)
+	{
+		adjust_to_added_neuron(0, input_length);
+	}
+	input_length++;
+	set_fields();
+}
+
 void NN::add_neuron(size_t layer_i)
 {
 
@@ -332,14 +342,19 @@ void NN::add_neuron(size_t layer_i)
 	}
 	size_t added_neuron_i = layers[layer_i]->layer_activations_start + layers[layer_i]->get_neuron_count();
 	layers[layer_i]->add_neuron(previous_layer_length, previous_layer_activations_start, 1, 0);
+	adjust_to_added_neuron(layer_i, added_neuron_i);
+	set_fields();
+}
+
+void NN::adjust_to_added_neuron(size_t layer_i, size_t neuron_i)
+{
 	size_t layer_distance_from_added_neuron = 1;
 	for (size_t i = layer_i + 1; i < layer_count; i++, layer_distance_from_added_neuron++)
 	{
 		float connection_probability = 1.0 / layer_distance_from_added_neuron;
 		connection_probability += (1 - connection_probability) * evolution_values.layer_distance_from_added_neuron_connection_addition_modifier;
-		layers[i]->adjust_to_added_neuron(added_neuron_i, connection_probability);
+		layers[i]->adjust_to_added_neuron(neuron_i, connection_probability);
 	}
-	set_fields();
 }
 
 void NN::remove_neuron(size_t layer_i)
@@ -348,9 +363,9 @@ void NN::remove_neuron(size_t layer_i)
 	remove_neuron(layer_i, rand() % layer_neuron_count);
 }
 
-void NN::remove_neuron(size_t layer_i, size_t neuron_i)
+void NN::remove_neuron(size_t layer_i, size_t layer_neuron_i)
 {
-	size_t removed_neuron_i = layers[layer_i]->layer_activations_start + neuron_i;
+	size_t removed_neuron_i = layers[layer_i]->layer_activations_start + layer_neuron_i;
 	layers[layer_i]->remove_neuron(neuron_i);
 	for (size_t i = layer_i + 1; i < layer_count; i++)
 		layers[i]->adjust_to_removed_neuron(removed_neuron_i);

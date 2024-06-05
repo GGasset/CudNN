@@ -88,7 +88,7 @@ public:
 	);
 
 	//void add_layer(size_t insert_i, ILayer* layer);
-	// void add_output_neuron();
+	void add_output_neuron();
 	void add_input_neuron();
 	void add_neuron(size_t layer_i);
 	

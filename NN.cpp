@@ -315,6 +315,11 @@ void NN::subtract_gradients(data_t* gradients, size_t gradients_start, data_t le
 	cudaDeviceSynchronize();
 }
 
+void NN::add_output_neuron()
+{
+	add_neuron(layer_count - 1);
+}
+
 void NN::add_input_neuron()
 {
 	for (size_t i = 0; i < layer_count; i++)

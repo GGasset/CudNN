@@ -3,11 +3,6 @@
 
 #include "ILayer.h"
 
-void ILayer::add_neuron(size_t neurons_to_add, size_t connection_count_per_neuron, size_t layer_i, size_t layer_i_prev_length, float connection_probability)
-{
-}
-
-
 size_t ILayer::get_neuron_count()
 {
 	return neuron_count;

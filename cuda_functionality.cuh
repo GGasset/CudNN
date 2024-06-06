@@ -17,4 +17,4 @@ __global__ void mutate_field_array(
 	field_t* array, size_t length,
 	float mutation_chance, float max_mutation,
 	float* triple_length_normalized_random_arr
-)
+);

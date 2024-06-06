@@ -8,6 +8,6 @@
 
 ## Not to do until all Layer constructors are made:
 	* Tensorflow-like class constructor
-	* Save, Load
+	* Save, Load, Cloning
 	* Evolution - doing
 	* Modify kernel launches to have more capacity of neurons (current max 1024) - doing

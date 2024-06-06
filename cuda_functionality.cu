@@ -17,7 +17,7 @@ __global__ void mutate_field_array(
 )
 {
 	size_t tid = get_tid();
-	if (tid > length) return;
+	if (tid >= length) return;
 
 	array[tid] += triple_length_normalized_random_arr[tid] * max_mutation * (triple_length_normalized_random_arr[tid + length] < mutation_chance);
 	array[tid] *= 1 - 2 * (triple_length_normalized_random_arr[tid + length * 2] < .5);

@@ -334,6 +334,7 @@ void NN::add_layer(size_t insert_i, ILayer* layer)
 	size_t added_layer_activations_start = layer->layer_activations_start;
 	for (size_t i = 0; i < added_neuron_count; i++)
 		adjust_to_added_neuron(insert_i, added_layer_activations_start + i);
+	set_fields();
 }
 
 void NN::add_output_neuron()

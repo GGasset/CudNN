@@ -346,7 +346,7 @@ void NN::add_input_neuron()
 {
 	for (size_t i = 0; i < layer_count; i++)
 	{
-		adjust_to_added_neuron(0, input_length);
+		adjust_to_added_neuron(-1, input_length);
 	}
 	input_length++;
 	set_fields();
@@ -373,10 +373,10 @@ void NN::add_neuron(size_t layer_i)
 	set_fields();
 }
 
-void NN::adjust_to_added_neuron(size_t layer_i, size_t neuron_i)
+void NN::adjust_to_added_neuron(int layer_i, size_t neuron_i)
 {
 	size_t layer_distance_from_added_neuron = 1;
-	for (size_t i = layer_i + 1; i < layer_count; i++, layer_distance_from_added_neuron++)
+	for (int i = layer_i + 1; i < layer_count; i++, layer_distance_from_added_neuron++)
 	{
 		float connection_probability = 1.0 / layer_distance_from_added_neuron;
 		connection_probability += (1 - connection_probability) * evolution_values.layer_distance_from_added_neuron_connection_addition_modifier;

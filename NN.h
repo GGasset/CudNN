@@ -93,7 +93,7 @@ public:
 	void add_neuron(size_t layer_i);
 	
 	/// <param name="neuron_i">in respect to the whole network</param>
-	void adjust_to_added_neuron(size_t layer_i, size_t neuron_i);
+	void adjust_to_added_neuron(int layer_i, size_t neuron_i);
 	void remove_neuron(size_t layer_i);
 	void remove_neuron(size_t layer_i, size_t layer_neuron_i);
 

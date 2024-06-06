@@ -32,7 +32,7 @@ void IConnections::mutate_fields(evolution_metadata evolution_values)
 	mutate_field_array kernel(connection_count / 32 + (connection_count % 32 > 0), 32) (
 		weights, connection_count,
 		evolution_values.field_max_evolution, evolution_values.field_mutation_chance,
-		arr0, arr1, arr2
+		arr0
 	);
 
 	cudaFree(arr0);

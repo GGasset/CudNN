@@ -303,7 +303,7 @@ void NN::subtract_gradients(data_t* gradients, size_t gradients_start, data_t le
 		cudaMemset(dropout, 0, sizeof(short) * layer_length);
 		IConnections::generate_random_values(&normalized_random_samples, layer_length);
 		cudaDeviceSynchronize();
-		cud_set_dropout kernel(1, layer_length) (dropout_rate, normalized_random_samples, dropout);
+		cud_set_dropout kernel(layer_length / 32 +  (layer_length % 32 > 0), 32) (dropout_rate, normalized_random_samples, dropout, layer_length);
 		cudaDeviceSynchronize();
 
 		current_layer->subtract_gradients(gradients, gradients_start, learning_rate, dropout, gradient_clip);
@@ -313,6 +313,15 @@ void NN::subtract_gradients(data_t* gradients, size_t gradients_start, data_t le
 		cudaDeviceSynchronize();
 	}
 	cudaDeviceSynchronize();
+}
+
+void NN::evolve()
+{
+	for (size_t i = 0; i < layer_count; i++)
+	{
+		layers[i]->mutate_fields(evolution_values);
+		layers[i]->connections->mutate_fields(evolution_values);
+	}
 }
 
 void NN::add_layer(size_t insert_i, ILayer* layer)

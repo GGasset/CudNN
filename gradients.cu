@@ -5,15 +5,19 @@
 __global__ void LSTM_gradient_calculation(
 	data_t* derivatives, size_t derivatives_start, size_t derivatives_layer_start, size_t derivatives_per_neuron,
 	data_t* gradients, size_t gradients_start, size_t next_t_gradients_start, size_t layer_gradients_start, size_t* neuron_gradients_starts, size_t* connection_associated_gradient_counts,
-	data_t* costs, size_t costs_start, size_t layer_costs_start
+	data_t* costs, size_t costs_start, size_t layer_costs_start,
+	size_t layer_length
 )
 {
-	size_t neuron_derivatives_start = derivatives_start + derivatives_layer_start + derivatives_per_neuron * threadIdx.x;
-	size_t connections_gradients_start = gradients_start + layer_gradients_start + neuron_gradients_starts[threadIdx.x];
-	size_t neuron_gradients_start = connections_gradients_start + connection_associated_gradient_counts[threadIdx.x];
-	size_t next_neuron_gradients_start = next_t_gradients_start + layer_gradients_start + neuron_gradients_starts[threadIdx.x];
+	size_t tid = get_tid();
+	if (tid >= layer_length) return;
 
-	data_t current_gradient = costs[costs_start + layer_costs_start + threadIdx.x];
+	size_t neuron_derivatives_start = derivatives_start + derivatives_layer_start + derivatives_per_neuron * tid;
+	size_t connections_gradients_start = gradients_start + layer_gradients_start + neuron_gradients_starts[tid];
+	size_t neuron_gradients_start = connections_gradients_start + connection_associated_gradient_counts[tid];
+	size_t next_neuron_gradients_start = next_t_gradients_start + layer_gradients_start + neuron_gradients_starts[tid];
+
+	data_t current_gradient = costs[costs_start + layer_costs_start + tid];
 
 	data_t next_hidden_state_gradient = 0;
 	data_t next_cell_state_gradient = 0;
@@ -59,12 +63,16 @@ __global__ void LSTM_gradient_calculation(
 __global__ void LSTM_gradient_subtraction(
 	data_t* gradients, size_t gradients_start, size_t layer_gradients_start, size_t* neuron_gradients_starts, size_t* connection_associated_gradient_counts,
 	field_t* neuron_weights,
-	data_t learning_rate, short* dropout, data_t max_subtracted_gradient
+	data_t learning_rate, short* dropout, data_t max_subtracted_gradient,
+	size_t layer_length
 )
 {
-	size_t neuron_i = threadIdx.x;
-	size_t neuron_gradients_start = gradients_start + layer_gradients_start + neuron_gradients_starts[threadIdx.x] + connection_associated_gradient_counts[threadIdx.x];
-	size_t neuron_weights_start = static_cast<size_t>(4) * threadIdx.x;
+	size_t tid = get_tid();
+	if (tid >= layer_length) return;
+
+	size_t neuron_i = tid;
+	size_t neuron_gradients_start = gradients_start + layer_gradients_start + neuron_gradients_starts[tid] + connection_associated_gradient_counts[tid];
+	size_t neuron_weights_start = static_cast<size_t>(4) * tid;
 
 	neuron_weights[neuron_weights_start] -= device_min(max_subtracted_gradient, gradients[neuron_gradients_start + 6] * learning_rate * dropout[neuron_i]); // Forget weight
 	neuron_weights[neuron_weights_start + 1] -= device_min(max_subtracted_gradient, gradients[neuron_gradients_start + 3] * learning_rate * dropout[neuron_i]); // Store sigmoid weight
@@ -76,11 +84,15 @@ __global__ void neuron_gradient_calculation(
 	data_t* execution_values, size_t execution_values_start, size_t execution_values_layer_start,
 	data_t* gradients, size_t gradients_start, size_t layer_gradients_start, size_t* neuron_gradients_starts,
 	data_t* costs, size_t costs_start, size_t layer_costs_start,
-	ActivationFunctions activation
+	ActivationFunctions activation,
+	size_t layer_length
 )
 {
-	data_t input_gradient = -costs[costs_start + layer_costs_start + threadIdx.x];
-	data_t activation_input = execution_values[execution_values_start + execution_values_layer_start + threadIdx.x];
+	size_t tid = get_tid();
+	if (tid >= layer_length) return;
+
+	data_t input_gradient = -costs[costs_start + layer_costs_start + tid];
+	data_t activation_input = execution_values[execution_values_start + execution_values_layer_start + tid];
 	data_t bias_gradient = input_gradient;
 	switch (activation)
 	{
@@ -93,14 +105,18 @@ __global__ void neuron_gradient_calculation(
 	default:
 		break;
 	}
-	size_t gradient_write_i = gradients_start + layer_gradients_start + neuron_gradients_starts[threadIdx.x];
+	size_t gradient_write_i = gradients_start + layer_gradients_start + neuron_gradients_starts[tid];
 	gradients[gradient_write_i] = bias_gradient;
 }
 
 __global__ void cud_set_dropout(
-	float dropout_rate, float* normalized_random_samples, short* dropout
+	float dropout_rate, float* normalized_random_samples, short* dropout,
+	size_t layer_length
 )
 {
-	size_t i = threadIdx.x;
+	size_t tid = get_tid();
+	if (tid >= layer_length) return;
+
+	size_t i = tid;
 	dropout[i] = normalized_random_samples[i] > dropout_rate;
 }

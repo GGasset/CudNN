@@ -39,11 +39,11 @@
     <CudaCompile Include="NeatConnections.cpp">
       <Filter>Connections</Filter>
     </CudaCompile>
+    <CudaCompile Include="IConnections.cpp">
+      <Filter>Connections</Filter>
+    </CudaCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="IConnections.cpp">
-      <Filter>Connections</Filter>
-    </ClCompile>
     <ClCompile Include="ILayer.cpp">
       <Filter>Layers\Blocks</Filter>
     </ClCompile>

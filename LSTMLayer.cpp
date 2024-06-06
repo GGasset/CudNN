@@ -18,10 +18,11 @@ void LSTMLayer::execute(data_t* activations, size_t activations_start, data_t* e
 		execution_values, execution_values_start,
 		execution_values_layer_start, execution_values_per_neuron
 	);
-	LSTM_execution kernel(1, neuron_count) (
+	LSTM_execution kernel(neuron_count / 32 + (neuron_count % 32 > 0), 32) (
 		activations, activations_start, layer_activations_start,
 		execution_values, execution_values_start, execution_values_layer_start, execution_values_per_neuron,
-		neuron_weights, state
+		neuron_weights, state,
+		neuron_count
 	);
 }
 
@@ -33,10 +34,11 @@ void LSTMLayer::calculate_gradients(
 	data_t* costs, size_t costs_start
 )
 {
-	LSTM_gradient_calculation kernel(1, neuron_count) (
+	LSTM_gradient_calculation kernel(neuron_count / 32 + (neuron_count % 32 > 0), 32) (
 		derivatives, derivatives_start, layer_derivatives_start, derivatives_per_neuron,
 		gradients, gradients_start, next_gradients_start, layer_gradients_start, neuron_gradients_starts, connection_associated_gradient_counts,
-		costs, costs_start, layer_activations_start
+		costs, costs_start, layer_activations_start,
+		neuron_count
 	);
 	cudaDeviceSynchronize();
 	connections->calculate_gradients(
@@ -53,9 +55,10 @@ void LSTMLayer::subtract_gradients(data_t* gradients, size_t gradients_start, da
 		gradients, gradients_start, layer_gradients_start, neuron_gradients_starts,
 		learning_rate, dropout, gradient_clip
 	);
-	LSTM_gradient_subtraction kernel(1, neuron_count) (
+	LSTM_gradient_subtraction kernel(neuron_count / 32 + (neuron_count % 32 > 0), 32) (
 		gradients, gradients_start, layer_gradients_start, neuron_gradients_starts, connection_associated_gradient_counts,
-		neuron_weights, learning_rate, dropout, gradient_clip
+		neuron_weights, learning_rate, dropout, gradient_clip,
+		neuron_count
 	);
 }
 
@@ -69,10 +72,11 @@ void LSTMLayer::calculate_derivatives(
 		activations_start, activations, derivatives_start, layer_derivatives_start, derivatives_per_neuron, derivatives
 	);
 	cudaDeviceSynchronize();
-	LSTM_derivative_calculation kernel(1, neuron_count) (
+	LSTM_derivative_calculation kernel(neuron_count / 32 + (neuron_count % 32 > 0), 32) (
 		derivatives, previous_derivatives_start, derivatives_start, layer_derivatives_start, derivatives_per_neuron,
 		execution_values, execution_values_start, execution_values_layer_start, execution_values_per_neuron,
-		neuron_weights
+		neuron_weights,
+		neuron_count
 	);
 }
 

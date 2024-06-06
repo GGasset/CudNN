@@ -14,15 +14,17 @@ void NeuronLayer::execute(
 	switch (activation)
 	{
 	case ActivationFunctions::sigmoid:
-		sigmoid_activation kernel(1, neuron_count) (
+		sigmoid_activation kernel(neuron_count / 32 + (neuron_count % 32 > 0), 32) (
 			activations, activations_start, layer_activations_start, true,
-			execution_values, execution_values_start, execution_values_layer_start, execution_values_per_neuron, 0, 0, 0
+			execution_values, execution_values_start, execution_values_layer_start, execution_values_per_neuron, 0, 0, 0,
+			neuron_count
 		);
 		break;
 	case ActivationFunctions::_tanh:
-		tanh_activation kernel(1, neuron_count) (
+		tanh_activation kernel(neuron_count / 32 + (neuron_count % 32 > 0), 32) (
 			activations, activations_start, layer_activations_start, true,
-			execution_values, execution_values_start, execution_values_layer_start, execution_values_per_neuron, 0, 0, 0
+			execution_values, execution_values_start, execution_values_layer_start, execution_values_per_neuron, 0, 0, 0,
+			neuron_count
 		);
 		break;
 	default:
@@ -39,11 +41,12 @@ void NeuronLayer::calculate_gradients(
 	data_t* costs, size_t costs_start
 )
 {
-	neuron_gradient_calculation kernel(1, neuron_count) (
+	neuron_gradient_calculation kernel(neuron_count / 32 + (neuron_count % 32 > 0), 32) (
 		execution_values, execution_values_start, execution_values_layer_start,
 		gradients, gradients_start, layer_gradients_start, neuron_gradients_starts,
 		costs, costs_start, layer_activations_start,
-		activation
+		activation,
+		neuron_count
 	);
 	cudaDeviceSynchronize();
 	connections->calculate_gradients(

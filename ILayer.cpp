@@ -37,6 +37,10 @@ void ILayer::layer_specific_deallocate()
 
 }
 
+void ILayer::mutate_fields(evolution_metadata evolution_values)
+{
+}
+
 void ILayer::delete_memory()
 {
 }

@@ -76,6 +76,22 @@ void LSTMLayer::calculate_derivatives(
 	);
 }
 
+void LSTMLayer::mutate_fields(evolution_metadata evolution_values)
+{
+	float* arr = 0;
+	cudaMalloc(&arr, sizeof(field_t) * neuron_count * 4 * 3);
+	cudaDeviceSynchronize();
+	IConnections::generate_random_values(&arr, neuron_count * 4 * 3);
+	cudaDeviceSynchronize();
+
+	mutate_field_array kernel(neuron_count / 32 + (neuron_count % 32 > 0), 32) (
+		neuron_weights, neuron_count, 
+		evolution_values.field_mutation_chance, evolution_values.field_max_evolution, 
+		arr
+	);
+	cudaDeviceSynchronize();
+}
+
 void LSTMLayer::add_neuron(size_t previous_layer_length, size_t previous_layer_activations_start, float previous_layer_connection_probability, size_t min_connections)
 {
 	size_t added_connection_count = connections->connection_count;

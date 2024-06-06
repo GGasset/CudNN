@@ -12,3 +12,9 @@ __device__ data_t device_min(data_t a, data_t b);
 /// </summary>
 /// <returns></returns>
 __device__ size_t get_tid();
+
+__global__ void mutate_field_array(
+	field_t* array, size_t length,
+	float mutation_chance, float max_mutation,
+	float* normalized_random_arr0, float* normalized_random_arr1, float* normalized_random_arr2
+);

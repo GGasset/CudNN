@@ -341,3 +341,9 @@ void NeatConnections::adjust_to_removed_neuron(size_t neuron_i, std::vector<size
 	cudaDeviceSynchronize();
 }
 
+void NeatConnections::specific_deallocate()
+{
+	cudaFree(connection_points);
+	cudaFree(connection_counts);
+}
+

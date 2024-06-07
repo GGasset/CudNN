@@ -138,6 +138,7 @@
     <ClInclude Include="DenseLSTMLayer.h" />
     <ClInclude Include="derivatives.cuh" />
     <ClInclude Include="evolution_info.h" />
+    <ClInclude Include="functionality.h" />
     <ClInclude Include="gradients.cuh" />
     <ClInclude Include="NeatConnections.h" />
     <ClInclude Include="neuron_operations.cuh">
@@ -163,6 +164,7 @@
     <ClCompile Include="DenseLSTMLayer.cpp" />
     <ClCompile Include="DenseNeuronLayer.cpp" />
     <CudaCompile Include="IConnections.cpp" />
+    <ClCompile Include="functionality.cpp" />
     <ClCompile Include="ILayer.cpp" />
     <CudaCompile Include="LSTMLayer.cpp" />
     <CudaCompile Include="NeuronLayer.cpp" />

@@ -53,6 +53,9 @@
     <ClCompile Include="DenseLSTMLayer.cpp">
       <Filter>Layers</Filter>
     </ClCompile>
+    <ClCompile Include="functionality.cpp">
+      <Filter>Static</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IConnections.h">
@@ -105,6 +108,9 @@
       <Filter>Connections</Filter>
     </ClInclude>
     <ClInclude Include="evolution_info.h" />
+    <ClInclude Include="functionality.h">
+      <Filter>Static</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Connections">

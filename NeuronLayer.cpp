@@ -73,6 +73,7 @@ void NeuronLayer::add_neuron(size_t previous_layer_length, size_t previous_layer
 
 	layer_derivative_count += derivatives_per_neuron;
 	layer_gradient_count++;
+	layer_gradient_count += added_connections;
 	
 	size_t* new_neuron_gradients_starts = new size_t[neuron_count + 1];
 	cudaMemcpy(new_neuron_gradients_starts, neuron_gradients_starts, sizeof(size_t) * neuron_count, cudaMemcpyDeviceToHost);

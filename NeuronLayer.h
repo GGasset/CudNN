@@ -7,6 +7,9 @@ protected:
 	ActivationFunctions activation = ActivationFunctions::sigmoid;
 
 public:
+	NeuronLayer(IConnections* connections, size_t neuron_count, ActivationFunctions activation);
+	void layer_specific_deallocate() override;
+
 	void execute(
 		data_t* activations, size_t activations_start,
 		data_t* execution_values, size_t execution_values_start

@@ -322,6 +322,40 @@ void NN::evolve()
 		layers[i]->mutate_fields(evolution_values);
 		layers[i]->connections->mutate_fields(evolution_values);
 	}
+	if (evolution_values.layer_addition_probability > get_random_float())
+	{
+		NeuronTypes insert_type = (NeuronTypes)(rand() % NeuronTypes::last_entry);
+		size_t insert_i = rand() % (layer_count - 1);
+		switch (insert_type)
+		{
+		case NN::Neuron:
+			break;
+		case NN::LSTM:
+			break;
+		default:
+			printf("Non-critical exception. Please add neuron type with ID: %i to evolve method.");
+			
+			break;
+		}
+	}
+	if (evolution_values.neuron_deletion_probability > get_random_float())
+	{
+		size_t layer_i = rand() % (layer_count - 1);
+		remove_neuron(layer_i);
+	}
+	if (evolution_values.neuron_addition_probability > get_random_float())
+	{
+		size_t layer_i = rand() % (layer_count - 1);
+		add_neuron(layer_i);
+	}
+	float* evolution_values_pointer = (float*)(&evolution_values);
+	for (size_t i = 0; i < sizeof(evolution_metadata) / sizeof(float); i++)
+	{
+		evolution_values_pointer[i] +=
+			evolution_values.evolution_metadata_field_max_mutation *
+			(evolution_values.evolution_metadata_field_mutation_chance > get_random_float()) *
+			(1 - 2 * (get_random_float() > .5));
+	}
 }
 
 void NN::add_layer(size_t insert_i, ILayer* layer)

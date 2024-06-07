@@ -7,13 +7,37 @@
 
 #include "NN.h"
 #include "DenseNeuronLayer.h"
+#include "DenseLSTMLayer.h"
+
+static int increment_i(size_t size, int to_increment, size_t i)
+{
+	i += to_increment;
+	i -= (i - i % size) * (i >= size);
+	i = (i % size) * (i < 0) + i * (i >= 0);
+	return i;
+}
 
 int main()
 {
-	const size_t input_length = 1;
-	const size_t output_length = 1;
-	data_t X[input_length];
-	data_t Y_hat[output_length];
+	cudaSetDevice(0);
+
+	const size_t t_count = 2;
+	const size_t input_length = 2;
+	const size_t output_length = 3;
+	data_t X[input_length * t_count]{};
+	data_t Y_hat[output_length * t_count]{};
+
+	for (size_t t = 0; t < t_count; t++)
+	{
+		for (size_t i = 0; i < input_length; i++)
+		{
+			X[t * input_length + i] = (.3) / t_count * (t + 1) + .2 / t_count;
+		}
+		for (size_t i = 0; i < output_length; i++)
+		{
+			Y_hat[t * output_length + i] = (.2) / t_count * (t + 1) + .2 / t_count + (.2) / t_count * (i + 1) / output_length;
+		}
+	}
 
 	const size_t shape_length = 3;
 	size_t shape[shape_length]{ input_length, 3, output_length };
@@ -23,32 +47,31 @@ int main()
 	size_t neuron_count = 0;
 	for (size_t i = 1; i < shape_length; i++)
 	{
-		layers[i - 1] = new DenseNeuronLayer(gradient_count, shape[i], neuron_count, shape[i - 1], ActivationFunctions::sigmoid);
+		//layers[i - 1] = new DenseNeuronLayer(shape[i], neuron_count, shape[i - 1], ActivationFunctions::sigmoid);
+		layers[i - 1] = new DenseLSTMLayer(shape[i], neuron_count, shape[i - 1]);
 		gradient_count += layers[i - 1]->layer_gradient_count;
 		neuron_count += shape[i - 1];
 	}
 
-	NN n = NN(false, layers, input_length, shape_length - 1, 0);
-	for (size_t i = 0; i < 100; i++)
+	NN n = NN(true, layers, input_length, shape_length - 1, 0);
+	n.stateful = true;
+	for (size_t i = 0; i < 5000; i++)
 	{
-		for (size_t j = 0; j < input_length; j++)
-		{
-			X[j] = 1;
-			//printf("%f ", X[j]);
-		}
-		for (size_t j = 0; j < output_length; j++)
-		{
-			Y_hat[j] = .5;
-		}
 		//printf("\n\n\n");
 
 		data_t* y = 0;//n.execute(X);
-		n.supervised_train(1, X, Y_hat, true, CostFunctions::MSE, &y, true);
-		for (size_t j = 0; j < output_length; j++)
+		n.supervised_train(t_count, X, Y_hat, true, CostFunctions::MSE, .0001 / t_count, &y, true, 200000, .2);
+		for (size_t t = 0; t < t_count; t++)
 		{
-			printf("%f  ", y[j]);
+			for (size_t j = 0; j < output_length; j++)
+			{
+				printf("%f | %f  ", y[t * output_length + j], Y_hat[t * output_length + j]);
+			}
+			printf("\n-----------------------\n");
 		}
-		std::cout << std::endl;
+		std::cout << std::endl << std::endl;
+		//if (i % 100 == 0)
+		//	n.delete_memory();
 		delete[] y;
 	}
 	//n.deallocate();

@@ -23,6 +23,7 @@ public:
 	field_t* biases = 0;
 	size_t neuron_count = 0;
 	size_t connection_count = 0;
+	uint8_t contains_irregular_connections = false;
 
 	static void generate_random_values(float** pointer, size_t float_count, size_t start_i = 0);
 

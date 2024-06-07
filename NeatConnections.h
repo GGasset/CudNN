@@ -15,6 +15,8 @@ public:
     /// </summary>
     size_t* connection_counts = 0;
     
+    NeatConnections(size_t previous_layer_length, size_t previous_layer_start, size_t neuron_count);
+
     void linear_function(size_t activations_start, data_t* activations,
         data_t* execution_values, size_t execution_values_start, size_t execution_values_layer_start, size_t layer_execution_values_per_neuron
     ) override;

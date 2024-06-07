@@ -1,5 +1,35 @@
 #include "NeatConnections.h"
 
+NeatConnections::NeatConnections(size_t previous_layer_length, size_t previous_layer_start, size_t neuron_count)
+{
+	this->neuron_count = neuron_count;
+	this->connection_count = neuron_count * previous_layer_length;
+	cudaMalloc(&weights, sizeof(field_t) * connection_count);
+	cudaMalloc(&biases, sizeof(field_t) * neuron_count);
+	cudaMalloc(&connection_points, sizeof(size_t) * connection_count);
+	cudaMalloc(&connection_counts, sizeof(size_t) * neuron_count);
+	cudaDeviceSynchronize();
+
+	generate_random_values(&weights, neuron_count * previous_layer_length);
+	generate_random_values(&biases, neuron_count);
+	
+	size_t* host_connection_points = new size_t[connection_count];
+	size_t* host_connection_counts = new size_t[neuron_count];
+	for (size_t i = 0; i < neuron_count; i++)
+	{
+		for (size_t j = 0; j < previous_layer_length; j++)
+		{
+			host_connection_points[i * previous_layer_length + j] = previous_layer_start + j;
+		}
+		host_connection_counts[i] = previous_layer_length * i;
+	}
+	cudaMemcpy(connection_points, host_connection_points, sizeof(size_t) * connection_count, cudaMemcpyHostToDevice);
+	cudaMemcpy(connection_counts, host_connection_counts, sizeof(size_t) * neuron_count, cudaMemcpyHostToDevice);
+	cudaDeviceSynchronize();
+	delete[] host_connection_points;
+	delete[] host_connection_counts;
+}
+
 void NeatConnections::linear_function(
 	size_t activations_start, data_t* activations, 
 	data_t* execution_values, size_t execution_values_start, size_t execution_values_layer_start, size_t layer_execution_values_per_neuron

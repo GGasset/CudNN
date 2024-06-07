@@ -1,6 +1,7 @@
 #include "ILayer.h"
 #include "costs.cuh"
 #include "evolution_info.h"
+#include "functionality.h"
 
 #pragma once
 class NN
@@ -25,6 +26,19 @@ private:
 	//data_t* derivatives_since_memory_deletion = 0;
 	//size_t since_memory_deletion_t_count = 0;
 
+	static enum NeuronTypes
+	{
+		Neuron,
+		LSTM,
+		last_entry
+	};
+
+	static enum ConnectionTypes
+	{
+		Dense,
+		NEAT,
+		last_entry
+	};
 protected:
 	void set_fields();
 

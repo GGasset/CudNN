@@ -118,6 +118,11 @@ void NeatConnections::subtract_gradients(
 	cudaDeviceSynchronize();
 }
 
+size_t NeatConnections::get_connection_count_at(size_t neuron_i)
+{
+	return connection_counts[neuron_i];
+}
+
 void NeatConnections::add_neuron(size_t previous_layer_length, size_t previous_layer_activations_start, float previous_layer_connection_probability, size_t min_connections)
 {
 	size_t added_connection_count = 0;

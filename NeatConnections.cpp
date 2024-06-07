@@ -7,27 +7,24 @@ NeatConnections::NeatConnections(size_t previous_layer_length, size_t previous_l
 	cudaMalloc(&weights, sizeof(field_t) * connection_count);
 	cudaMalloc(&biases, sizeof(field_t) * neuron_count);
 	cudaMalloc(&connection_points, sizeof(size_t) * connection_count);
-	cudaMalloc(&connection_counts, sizeof(size_t) * neuron_count);
 	cudaDeviceSynchronize();
 
 	generate_random_values(&weights, neuron_count * previous_layer_length);
 	generate_random_values(&biases, neuron_count);
 	
 	size_t* host_connection_points = new size_t[connection_count];
-	size_t* host_connection_counts = new size_t[neuron_count];
+	connection_counts = new size_t[neuron_count];
 	for (size_t i = 0; i < neuron_count; i++)
 	{
 		for (size_t j = 0; j < previous_layer_length; j++)
 		{
 			host_connection_points[i * previous_layer_length + j] = previous_layer_start + j;
 		}
-		host_connection_counts[i] = previous_layer_length * i;
+		connection_counts[i] = previous_layer_length * i;
 	}
 	cudaMemcpy(connection_points, host_connection_points, sizeof(size_t) * connection_count, cudaMemcpyHostToDevice);
-	cudaMemcpy(connection_counts, host_connection_counts, sizeof(size_t) * neuron_count, cudaMemcpyHostToDevice);
 	cudaDeviceSynchronize();
 	delete[] host_connection_points;
-	delete[] host_connection_counts;
 }
 
 void NeatConnections::linear_function(
@@ -349,6 +346,6 @@ void NeatConnections::adjust_to_removed_neuron(size_t neuron_i, std::vector<size
 void NeatConnections::specific_deallocate()
 {
 	cudaFree(connection_points);
-	cudaFree(connection_counts);
+	delete[] connection_counts;
 }
 

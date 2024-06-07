@@ -10,5 +10,6 @@
 
 - Tensorflow-like class constructor
 - Save, Load, Cloning
+- Crossover
 - ~~Evolution~~
 - ~~Modify kernel launches to have more capacity of neurons (current max 1024)~~

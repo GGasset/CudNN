@@ -10,7 +10,7 @@ DenseNeuronLayer::DenseNeuronLayer(size_t neuron_count, size_t previous_layer_ne
 	this->activation = activation;
 	execution_values_per_neuron = 1;
 	
-	size_t neuron_gradient_i = layer_gradients_start;
+	size_t neuron_gradient_i = 0;
 	size_t* neuron_gradients_starts = new size_t[neuron_count];
 	for (size_t i = 0; i < neuron_count; i++)
 	{

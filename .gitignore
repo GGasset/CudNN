@@ -3,8 +3,7 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
-build/
-CMakeLists.txt
+build/[^t]*
 
 # User-specific files
 *.rsuser

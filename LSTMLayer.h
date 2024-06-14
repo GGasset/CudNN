@@ -7,6 +7,8 @@ public:
 	field_t* neuron_weights = 0;
 	data_t* state = 0;
 
+	LSTMLayer(IConnections* connections, size_t neuron_count);
+
 	void layer_specific_initialize_fields(size_t connection_count, size_t neuron_count) override;
 	void layer_specific_deallocate() override;
 

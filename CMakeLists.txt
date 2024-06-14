@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.28)
 
+# Add linking to stdlib
 SET(GCC_COVERAGE_COMPILE_FLAGS "-lstdc++")
 SET(GCC_COVERAGE_LINK_FLAGS    "-lstdc++")
 
@@ -11,8 +12,10 @@ set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -ccbin='g++-13'")
 
 project(NN LANGUAGES CUDA CXX)
 
+
 find_package(CUDAToolkit REQUIRED)
 include_directories("${CUDA_INCLUDE_DIRS} ${CUDAToolkit_INCLUDE_DIRS}")
+
 
 add_executable(NN
 data_type.h
@@ -46,4 +49,8 @@ NN.cu
 functionality.cpp
 )
 
+
+target_link_libraries(NN -lcurand)
 set_property(TARGET NN PROPERTY CUDA_SEPARABLE_COMPILATION ON)
+
+

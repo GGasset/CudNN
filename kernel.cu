@@ -6,8 +6,10 @@
 #include <iostream>
 
 #include "NN.h"
-#include "DenseNeuronLayer.h"
-#include "DenseLSTMLayer.h"
+#include "NeuronLayer.h"
+#include "LSTMLayer.h"
+#include "DenseConnections.h"
+#include "NEATConnections.h"
 
 static int increment_i(size_t size, int to_increment, size_t i)
 {

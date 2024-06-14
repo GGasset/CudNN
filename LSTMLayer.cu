@@ -2,10 +2,11 @@
 
 LSTMLayer::LSTMLayer(IConnections* connections, size_t neuron_count)
 {
+	this->connections = connections;
 	set_neuron_count(neuron_count);
 	execution_values_per_neuron = 10;
 	derivatives_per_neuron = 16;
-	layer_gradient_count = 7 * neuron_count + neuron_count + connections->get_connection_count();
+	layer_gradient_count = 7 * neuron_count + neuron_count + connections->connection_count;
 
 	layer_specific_initialize_fields(connections->connection_count, neuron_count);
 
@@ -21,7 +22,7 @@ LSTMLayer::LSTMLayer(IConnections* connections, size_t neuron_count)
 	}
 
 	cudaMalloc(&this->neuron_gradients_starts, sizeof(size_t) * neuron_count);
-	cudaMalloc(&this->connection_associated_neuron_counts, sizeof(size_t) * neuron_count);
+	cudaMalloc(&this->connection_associated_gradient_counts, sizeof(size_t) * neuron_count);
 	cudaDeviceSynchronize();
 
 	cudaMemcpy(this->neuron_gradients_starts, neuron_gradients_starts, sizeof(size_t) * neuron_count, cudaMemcpyHostToDevice);

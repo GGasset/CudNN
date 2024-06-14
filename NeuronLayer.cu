@@ -5,6 +5,7 @@
 
 NeuronLayer::NeuronLayer(IConnections* connections, size_t neuron_count, ActivationFunctions activation)
 {
+	this->connections = connections;
 	set_neuron_count(neuron_count);
 	this->activation = activation;
 	execution_values_per_neuron = 1;

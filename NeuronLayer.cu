@@ -11,9 +11,6 @@ NeuronLayer::NeuronLayer(IConnections* connections, size_t neuron_count, Activat
 	layer_gradient_count = connections->connection_count + neuron_count;
 
 	size_t neuron_gradient_i = 0;
-	size_t* host_connection_associated_gradient_counts = 0;
-	if (connections->contains_irregular_connections)
-		host_connection_associated_gradient_counts = new size_t[neuron_count];
 	size_t* host_neuron_gradients_starts = new size_t[neuron_count];
 	for (size_t i = 0; i < neuron_count; i++)
 	{
@@ -21,18 +18,12 @@ NeuronLayer::NeuronLayer(IConnections* connections, size_t neuron_count, Activat
 
 		size_t neuron_connection_count = connections->get_connection_count_at(i);
 		neuron_gradient_i += neuron_connection_count + 1;
-		if (host_connection_associated_gradient_counts)
-			host_connection_associated_gradient_counts[i] = neuron_connection_count + 1;
 	}
 
 	cudaMalloc(&neuron_gradients_starts, sizeof(size_t) * neuron_count);
-	if (host_connection_associated_gradient_counts)
-		cudaMalloc(&connection_associated_gradient_counts, sizeof(size_t) * neuron_count);
 	cudaDeviceSynchronize();
 	
 	cudaMemcpy(neuron_gradients_starts, host_neuron_gradients_starts, sizeof(size_t) * neuron_count, cudaMemcpyHostToDevice);
-	if (host_connection_associated_gradient_counts)
-		cudaMemcpy(connection_associated_gradient_counts, host_connection_associated_gradient_counts, sizeof(size_t) * neuron_count, cudaMemcpyHostToDevice);
 	cudaDeviceSynchronize();
 }
 

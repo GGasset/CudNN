@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "ILayer.h"
 #include "costs.cuh"
 #include "evolution_info.h"
@@ -26,18 +27,18 @@ private:
 	//data_t* derivatives_since_memory_deletion = 0;
 	//size_t since_memory_deletion_t_count = 0;
 
-	static enum NeuronTypes
+	enum NeuronTypes
 	{
 		Neuron,
 		LSTM,
-		last_entry
+		last_neuron_entry
 	};
 
-	static enum ConnectionTypes
+	enum ConnectionTypes
 	{
 		Dense,
 		NEAT,
-		last_entry
+		last_connection_entry
 	};
 protected:
 	void set_fields();

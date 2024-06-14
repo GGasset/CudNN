@@ -324,7 +324,7 @@ void NN::evolve()
 	}
 	if (evolution_values.layer_addition_probability > get_random_float())
 	{
-		NeuronTypes insert_type = (NeuronTypes)(rand() % NeuronTypes::last_entry);
+		NeuronTypes insert_type = (NeuronTypes)(rand() % NeuronTypes::last_neuron_entry);
 		size_t insert_i = rand() % (layer_count - 1);
 		switch (insert_type)
 		{

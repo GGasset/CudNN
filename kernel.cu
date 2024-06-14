@@ -9,7 +9,7 @@
 #include "NeuronLayer.h"
 #include "LSTMLayer.h"
 #include "DenseConnections.h"
-#include "NEATConnections.h"
+#include "NeatConnections.h"
 
 static int increment_i(size_t size, int to_increment, size_t i)
 {

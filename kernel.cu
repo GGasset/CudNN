@@ -43,14 +43,12 @@ int main()
 	size_t shape[shape_length]{ input_length, 3, output_length };
 	ILayer** layers = new ILayer * [shape_length - 1];
 
-	size_t gradient_count = 0;
-	size_t neuron_count = 0;
+	size_t previous_layer_start = 0;
 	for (size_t i = 1; i < shape_length; i++)
 	{
-		//layers[i - 1] = new DenseNeuronLayer(shape[i], neuron_count, shape[i - 1], ActivationFunctions::sigmoid);
-		layers[i - 1] = new DenseLSTMLayer(shape[i], neuron_count, shape[i - 1]);
-		gradient_count += layers[i - 1]->layer_gradient_count;
-		neuron_count += shape[i - 1];
+		IConnections* connections = new DenseConnections(previous_layer_start, shape[i - 1], shape[i]);
+		layers[i - 1] = new LSTMLayer(connections, shape[i]);
+		previous_layer_start += shape[i - 1];
 	}
 
 	NN n = NN(true, layers, input_length, shape_length - 1, 0);

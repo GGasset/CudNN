@@ -17,8 +17,6 @@ include_directories("${CUDA_INCLUDE_DIRS} ${CUDAToolkit_INCLUDE_DIRS}")
 add_executable(NN
 data_type.h
 DenseConnections.h
-DenseLSTMLayer.h
-DenseNeuronLayer.h
 evolution_info.h
 functionality.h
 IConnections.h
@@ -45,8 +43,6 @@ NeuronLayer.cu
 neuron_operations.cu
 NN.cu
 
-DenseLSTMLayer.cpp
-DenseNeuronLayer.cpp
 functionality.cpp
 )
 

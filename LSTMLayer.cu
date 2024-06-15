@@ -28,6 +28,9 @@ LSTMLayer::LSTMLayer(IConnections* connections, size_t neuron_count)
 	cudaMemcpy(this->neuron_gradients_starts, neuron_gradients_starts, sizeof(size_t) * neuron_count, cudaMemcpyHostToDevice);
 	cudaMemcpy(this->connection_associated_gradient_counts, connection_associated_gradient_counts, sizeof(size_t) * neuron_count, cudaMemcpyHostToDevice);
 	cudaDeviceSynchronize();
+
+	delete[] neuron_gradients_starts;
+	delete[] connection_associated_gradient_counts;
 }
 
 void LSTMLayer::layer_specific_initialize_fields(size_t connection_count, size_t neuron_count)

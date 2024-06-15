@@ -12,7 +12,6 @@ set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -ccbin='g++-13'")
 
 project(NN LANGUAGES CUDA CXX)
 
-
 find_package(CUDAToolkit REQUIRED)
 include_directories("${CUDA_INCLUDE_DIRS} ${CUDAToolkit_INCLUDE_DIRS}")
 
@@ -52,5 +51,5 @@ functionality.cpp
 
 target_link_libraries(NN -lcurand)
 set_property(TARGET NN PROPERTY CUDA_SEPARABLE_COMPILATION ON)
-
+set_target_properties(NN PROPERTIES CUDA_ARCHITECTURES "native")
 

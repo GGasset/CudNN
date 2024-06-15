@@ -117,7 +117,7 @@ void NN::calculate_supervised_output_costs_gradients(
 	switch (cost_function)
 	{
 	case MSE:
-		MSE_derivative kernel(t_count, output_length) (
+		MSE_derivative kernel(dim3(t_count, output_length / 32 + (output_length % 32 > 0)), 32) (
 			activations, neuron_count, activations_start, *output_activations_start,
 			costs, costs_start,
 			Y_hat, output_length

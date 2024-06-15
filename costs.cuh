@@ -2,6 +2,7 @@
 #include "device_launch_parameters.h"
 
 #include "data_type.h"
+#include "cuda_functionality.cuh"
 
 enum CostFunctions
 {

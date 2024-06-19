@@ -8,6 +8,7 @@
 #include "connection_gradients.cuh"
 #include "vector"
 #include "evolution_info.h"
+#include "cuda_functionality.cuh"
 
 #pragma once
 class IConnections
@@ -25,7 +26,7 @@ public:
 	size_t connection_count = 0;
 	unsigned char contains_irregular_connections = false;
 
-	static void generate_random_values(float** pointer, size_t float_count, size_t start_i = 0);
+	static void generate_random_values(float** pointer, size_t float_count, size_t start_i = 0, float value_divider = 1);
 
 	virtual void linear_function(
 		size_t activations_start, data_t* activations,

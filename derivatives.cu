@@ -6,8 +6,8 @@ __device__ data_t device_sigmoid_derivative(
 	data_t input
 )
 {
-	data_t exp_x = exp(input);
-	return (-exp_x) / (1 + exp_x * exp_x);
+	data_t exp_minus_x = exp(-input);
+	return (exp_minus_x) / ((1 +exp_minus_x) * (1 + exp_minus_x));
 }
 
 __device__ data_t device_tanh_derivative(

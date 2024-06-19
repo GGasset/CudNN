@@ -1,10 +1,10 @@
 #include "IConnections.h"
 
-void IConnections::generate_random_values(float** pointer, size_t float_count, size_t start_i)
+void IConnections::generate_random_values(float** pointer, size_t float_count, size_t start_i, float value_divider)
 {
 	curandGenerator_t generator;
 	curandCreateGenerator(&generator, CURAND_RNG_PSEUDO_XORWOW);
-	//curandSetPseudoRandomGeneratorSeed(generator, 15);
+	curandSetPseudoRandomGeneratorSeed(generator, 13);
 	curandGenerateUniform(generator, *pointer + start_i, float_count);
 }
 

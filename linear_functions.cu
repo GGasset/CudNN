@@ -8,6 +8,7 @@
 
 #include "data_type.h"
 
+
 __global__ void cud_dense_linear_function(
 	size_t previous_layer_length, field_t* weights,
 	size_t activations_start, size_t previous_layer_activations_start, data_t* activations,

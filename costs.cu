@@ -10,6 +10,9 @@ __global__ void MSE_derivative(
 	if (tid >= output_length) return;
 	size_t t = blockIdx.y;
 
-	data_t derivative = -2 * (Y_hat[output_length * t + tid] - activations[activations_start + neuron_count * t + last_layer_activations_start + tid]);
+	data_t predicted = activations[activations_start + neuron_count * t + last_layer_activations_start + tid];
+	data_t Y = Y_hat[output_length * t + tid]; 
+	//data_t derivative = -2 * (Y_hat[output_length * t + tid] - activations[activations_start + neuron_count * t + last_layer_activations_start + tid]);
+	data_t derivative = 2 * (predicted - Y);
 	costs[costs_start + t * neuron_count + last_layer_activations_start + tid] = derivative;
 }

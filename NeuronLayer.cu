@@ -2,6 +2,7 @@
 #define NEURONLAYER_DEFINITIONS
 
 #include "NeuronLayer.h"
+#include <stdio.h>
 
 NeuronLayer::NeuronLayer(IConnections* connections, size_t neuron_count, ActivationFunctions activation)
 {

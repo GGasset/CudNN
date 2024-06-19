@@ -7,7 +7,6 @@
 
 #include <cmath>
 
-
 __device__ data_t device_sigmoid_activation(
 	data_t* activations, size_t activations_start, size_t layer_activation_start, short write_activation,
 	data_t* execution_values, size_t execution_values_start, size_t execution_values_layer_start, size_t execution_values_per_neuron,

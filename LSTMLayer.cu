@@ -10,7 +10,7 @@ LSTMLayer::LSTMLayer(IConnections* connections, size_t neuron_count)
 	derivatives_per_neuron = 16;
 	layer_derivative_count = derivatives_per_neuron * neuron_count;
 	
-	layer_gradient_count = 7 * neuron_count + neuron_count + connections->connection_count;
+	layer_gradient_count = 8 * neuron_count + neuron_count + connections->connection_count;
 
 	layer_specific_initialize_fields(connections->connection_count, neuron_count);
 

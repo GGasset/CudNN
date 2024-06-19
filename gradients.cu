@@ -91,7 +91,7 @@ __global__ void neuron_gradient_calculation(
 	size_t tid = get_tid();
 	if (tid >= layer_length) return;
 
-	data_t input_gradient = -costs[costs_start + layer_costs_start + tid];
+	data_t input_gradient = costs[costs_start + layer_costs_start + tid];
 	data_t activation_input = execution_values[execution_values_start + execution_values_layer_start + tid];
 	data_t bias_gradient = input_gradient;
 	switch (activation)

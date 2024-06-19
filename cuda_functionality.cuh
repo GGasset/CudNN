@@ -5,7 +5,9 @@
 
 #include "data_type.h"
 
+__global__ void multiply_array(float* arr, size_t arr_value_count, float multiply_by_value);
 __device__ data_t device_min(data_t a, data_t b);
+__device__ data_t device_closest_to_zero(data_t a, data_t b);
 
 /// <summary>
 /// Calculates linear thread_id up to blockIdx.x [inclusive]

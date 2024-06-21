@@ -10,13 +10,15 @@ SET(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} ${GCC_COVERAGE_LINK_FLAGS
 # -rdc=true
 set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -ccbin='g++-13'")
 
+#set(CMAKE_CUDA_ARCHITECTURES "native")
+
 project(NN LANGUAGES CUDA CXX)
 
 find_package(CUDAToolkit REQUIRED)
 include_directories("${CUDA_INCLUDE_DIRS} ${CUDAToolkit_INCLUDE_DIRS}")
 
 
-add_executable(NN
+add_executable(PROJECT_NAME
 data_type.h
 DenseConnections.h
 evolution_info.h
@@ -49,7 +51,7 @@ functionality.cpp
 )
 
 
-target_link_libraries(NN -lcurand)
-set_property(TARGET NN PROPERTY CUDA_SEPARABLE_COMPILATION ON)
-set_target_properties(NN PROPERTIES CUDA_ARCHITECTURES "native")
+target_link_libraries(PROJECT_NAME -lcurand)
+set_property(TARGET PROJECT_NAME PROPERTY CUDA_SEPARABLE_COMPILATION ON)
+set_target_properties(PROJECT_NAME PROPERTIES CUDA_ARCHITECTURES "native")
 

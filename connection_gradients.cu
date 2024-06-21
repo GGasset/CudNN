@@ -79,6 +79,7 @@ __global__ void cud_NEAT_gradient_subtraction(
 	if (tid >= connection_count) return;
 
 	size_t gradient_i = gradients_start + layer_gradients_start + neuron_gradients_starts[neuron_i] + tid + 1;
+	data_t gradient = gradients[gradient_i];
 	size_t weight_i = connections_start + tid;
-	atomicAdd(weights + weight_i, -device_min(max_subtracted_gradient, gradients[gradient_i] * learning_rate * dropout[neuron_i]));
+	atomicAdd(weights + weight_i, -device_closest_to_zero(max_subtracted_gradient * (-1 + 2 * (gradient >= 0 && max_subtracted_gradient >= 0)), gradient * learning_rate * dropout[neuron_i]));
 }

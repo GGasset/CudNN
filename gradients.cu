@@ -1,5 +1,3 @@
-#pragma once
-
 #include "gradients.cuh"
 
 __global__ void LSTM_gradient_calculation(

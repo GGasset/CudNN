@@ -4,12 +4,15 @@
 #include "evolution_info.h"
 #include "functionality.h"
 
+#include "NeatConnections.h"
+#include "NeuronLayer.h"
+#include "LSTMLayer.h"
+
 #pragma once
 class NN
 {
 private:
 	ILayer **layers = 0;
-	size_t max_layer_count = 0;
 	size_t layer_count = 0;
 	size_t neuron_count = 0;
 	size_t input_length = 0;
@@ -47,7 +50,7 @@ public:
 	bool stateful = false;
 
 	~NN();
-	NN(short contains_recurrent_layers, ILayer** layers, size_t input_length, size_t layer_count, size_t max_layer_count = 0);
+	NN(short contains_recurrent_layers, ILayer** layers, size_t input_length, size_t layer_count);
 	
 	void execute(data_t* input, data_t* execution_values, data_t *activations, size_t t, data_t* output_start_pointer, short copy_output_to_host);
 	void set_up_execution_arrays(data_t** execution_values, data_t** activations, size_t t_count);

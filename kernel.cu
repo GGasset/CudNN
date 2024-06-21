@@ -55,7 +55,7 @@ int main()
 		previous_layer_start += shape[i - 1];
 	}
 
-	NN n = NN(true, layers, input_length, shape_length - 1, 0);
+	NN n = NN(true, layers, input_length, shape_length - 1);
 	n.stateful = true;
 	for (size_t i = 0; i < 5000; i++)
 	{

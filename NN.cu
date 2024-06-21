@@ -3,16 +3,12 @@
 
 #include "NN.h"
 
-NN::NN(short contains_recurrent_layers, ILayer** layers, size_t input_length, size_t layer_count, size_t max_layer_count)
+NN::NN(short contains_recurrent_layers, ILayer** layers, size_t input_length, size_t layer_count)
 {
-	// set max layer count to layer count if max_layer_count is lesser than layer count
-	max_layer_count += (layer_count - max_layer_count) * (max_layer_count < layer_count);
-	
 	this->contains_recurrent_layers = contains_recurrent_layers;
 	this->layers = layers;
 	this->input_length = input_length;
 	this->layer_count = layer_count;
-	this->max_layer_count = layer_count;
 	set_fields();
 }
 
@@ -326,17 +322,32 @@ void NN::evolve()
 	{
 		NeuronTypes insert_type = (NeuronTypes)(rand() % NeuronTypes::last_neuron_entry);
 		size_t insert_i = rand() % (layer_count - 1);
+		
+		size_t previous_layer_length = input_length;
+		size_t previous_layer_activations_start = 0;
+		if (insert_i)
+		{
+			ILayer* previous_layer = layers[insert_i];
+			previous_layer_length = previous_layer->get_neuron_count();
+			previous_layer_activations_start = previous_layer->layer_activations_start;
+		}
+		
+		IConnections* new_connections = new NeatConnections(previous_layer_length, previous_layer_activations_start, 1);
+		ILayer* new_layer = 0;
+
 		switch (insert_type)
 		{
 		case NN::Neuron:
+			new_layer = new NeuronLayer(new_connections, 1, (ActivationFunctions)(rand() % ActivationFunctions::activations_last_entry));
 			break;
 		case NN::LSTM:
+			new_layer = new LSTMLayer(new_connections, 1);
 			break;
 		default:
-			printf("Non-critical exception. Please add neuron type with ID: %i to evolve method.");
-			
+			throw "Neuron_type not added to evolve method";
 			break;
 		}
+		add_layer(insert_i, new_layer);
 	}
 	if (evolution_values.neuron_deletion_probability > get_random_float())
 	{

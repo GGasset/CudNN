@@ -7,7 +7,8 @@
 enum ActivationFunctions
 {
 	sigmoid,
-	_tanh
+	_tanh,
+	activations_last_entry
 };
 
 __global__ void sigmoid_activation(

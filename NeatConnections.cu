@@ -1,6 +1,6 @@
 #include "NeatConnections.h"
 
-NeatConnections::NeatConnections(size_t previous_layer_length, size_t previous_layer_start, size_t neuron_count)
+NeatConnections::NeatConnections(size_t previous_layer_start, size_t previous_layer_length, size_t neuron_count)
 {
 	contains_irregular_connections = true;
 	this->neuron_count = neuron_count;

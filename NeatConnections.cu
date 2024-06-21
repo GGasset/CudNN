@@ -181,7 +181,6 @@ void NeatConnections::add_neuron(size_t previous_layer_length, size_t previous_l
 	connection_count += added_connection_count;
 }
 
-// TODO: add weights to added connections
 void NeatConnections::adjust_to_added_neuron(size_t added_neuron_i, float connection_probability, std::vector<size_t>* added_connections_neuron_i)
 {
 	// Transform data to a vector

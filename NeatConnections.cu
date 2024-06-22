@@ -10,8 +10,8 @@ NeatConnections::NeatConnections(size_t previous_layer_start, size_t previous_la
 	cudaMalloc(&connection_points, sizeof(size_t) * connection_count);
 	cudaDeviceSynchronize();
 
-	generate_random_values(&weights, neuron_count * previous_layer_length);
-	generate_random_values(&biases, neuron_count);
+	generate_random_values(&weights, neuron_count * previous_layer_length, 0, previous_layer_length);
+	generate_random_values(&biases, neuron_count, 0, neuron_count);
 	
 	size_t* host_connection_points = new size_t[connection_count];
 	connection_counts = new size_t[neuron_count];
@@ -113,6 +113,10 @@ void NeatConnections::subtract_gradients(
 		);
 		connections_start += connection_count;
 	}
+	bias_gradient_subtraction kernel(neuron_count / 32 + (neuron_count % 32 > 0), 32) (
+		gradients, gradients_start, layer_gradients_start, neuron_gradients_starts,
+		biases, neuron_count, learning_rate, dropout, gradient_clip
+	);
 	cudaDeviceSynchronize();
 }
 

@@ -2,9 +2,10 @@
 
 - ~~LSTM~~
 - ~~Neuron~~
-- ~~NEAT connections~~
+- ~~NEAT connections~~ 
 	- ~~Execute~~
 	- ~~Gradients~~
+    - Optimize kernel calls
 
 ### Not to do until all Layer constructors are made:
 

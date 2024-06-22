@@ -24,7 +24,7 @@ __global__ void cud_dense_linear_function(
 	atomicAdd(execution_values + execution_values_i, current_weight * activations[connected_activation_i]);
 }
 
-__global__ void cud_NEAT_neuron_linear_function(
+__global__ void cud_NEAT_linear_function(
 	size_t neuron_i, size_t connection_count, field_t* weights, size_t* connection_points, size_t connections_start,
 	size_t activations_start, data_t* activations, 
 	size_t execution_values_start, size_t execution_values_layer_start, size_t layer_execution_values_per_neuron, data_t* execution_values

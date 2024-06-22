@@ -21,7 +21,7 @@ NeatConnections::NeatConnections(size_t previous_layer_start, size_t previous_la
 		{
 			host_connection_points[i * previous_layer_length + j] = previous_layer_start + j;
 		}
-		connection_counts[i] = previous_layer_length * i;
+		connection_counts[i] = previous_layer_length;
 	}
 	cudaMemcpy(connection_points, host_connection_points, sizeof(size_t) * connection_count, cudaMemcpyHostToDevice);
 	cudaDeviceSynchronize();
@@ -38,7 +38,7 @@ void NeatConnections::linear_function(
 	{
 		size_t connection_count = connection_counts[i];
 		dim3 gridDim = dim3(connection_count / 32 + (connection_count % 32 > 0));
-		cud_NEAT_neuron_linear_function kernel(gridDim, 32) (
+		cud_NEAT_linear_function kernel(gridDim, 32) (
 			i, connection_count, weights, connection_points, connections_start,
 			activations_start, activations,
 			execution_values_start, execution_values_layer_start, layer_execution_values_per_neuron, execution_values

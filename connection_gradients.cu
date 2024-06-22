@@ -51,7 +51,8 @@ __global__ void bias_gradient_subtraction(
 	if (tid >= layer_length) return;
 
 	size_t gradient_i = gradients_start + layer_gradients_start + neuron_gradients_starts[tid];
-	biases[tid] -= device_min(max_subtracted_gradient, gradients[gradient_i] * learning_rate * dropout[tid]);
+	data_t gradient = gradients[gradient_i];
+	biases[tid] -= device_closest_to_zero(max_subtracted_gradient * (-1 + 2 * (gradient >= 0 && max_subtracted_gradient >= 0)), gradient * learning_rate * dropout[tid]);
 }
 
 __global__ void cud_dense_gradient_subtraction(

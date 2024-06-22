@@ -6,6 +6,10 @@ void IConnections::generate_random_values(float** pointer, size_t float_count, s
 	curandCreateGenerator(&generator, CURAND_RNG_PSEUDO_XORWOW);
 	curandSetPseudoRandomGeneratorSeed(generator, 13);
 	curandGenerateUniform(generator, *pointer + start_i, float_count);
+	multiply_array kernel(float_count / 32 + (float_count % 32 > 0), 32) (
+		*pointer + start_i, float_count, 1 / value_divider
+	);
+	cudaDeviceSynchronize();
 }
 
 void IConnections::mutate_fields(evolution_metadata evolution_values)

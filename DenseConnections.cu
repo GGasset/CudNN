@@ -9,7 +9,7 @@
 
 DenseConnections::DenseConnections(size_t previous_layer_activations_start, size_t previous_layer_length, size_t neuron_count)
 {
-	this->neuron_count = neuron_count;	// WARNING: CHECK FOR BUGS
+	this->neuron_count = neuron_count;
 	this->connection_count = previous_layer_length * neuron_count;
 	this->previous_layer_activations_start = previous_layer_activations_start;
 	this->previous_layer_length = previous_layer_length;

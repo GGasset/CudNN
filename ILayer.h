@@ -37,6 +37,9 @@ public:
 
 	void initialize_fields(size_t connection_count, size_t neuron_count);
 	virtual void layer_specific_initialize_fields(size_t connection_count, size_t neuron_count);
+		
+	virtual ILayer* layer_specifc_clone() = 0;
+	void ILayerClone(ILayer* base_layer);
 
 	void deallocate();
 

@@ -24,6 +24,31 @@ void ILayer::layer_specific_initialize_fields(size_t connection_count, size_t ne
 {
 }
 
+void ILayer::ILayerClone(ILayer* base_layer)
+{
+	IConnections* cloned_connections = connections->connections_specific_clone();
+	connections->IConnections_clone(cloned_connections);
+	base_layer->connections = cloned_connections;
+
+	base_layer->set_neuron_count(get_neuron_count);
+
+	base_layer->execution_values_per_neuron = execution_values_per_neuron;
+	
+	base_layer->layer_derivative_count = layer_derivative_count;
+	base_layer->derivatives_per_neuron = derivatives_per_neuron;
+
+	base_layer->layer_gradient_count = layer_gradient_count;
+	
+	cudaMalloc(&base_layer->neuron_gradients_starts, sizeof(size_t) * get_neuron_count());
+	if (connection_associated_gradient_counts)
+		cudaMalloc(&base_layer->connection_associated_gradient_counts, sizeof(size_t) * get_neuron_count());
+	cudaDeviceSynchronize();
+
+	cudaMemcpy(base_layer->neuron_gradients_starts, neuron_gradients_starts, sizeof(size_t) * get_neuron_count(), cudaMemcpyDeviceToDevice);
+	if (connection_associated_gradient_count)
+		cudaMemcpy(base_layer->connection_associated_gradient_counts, connection_associated_gradient_counts, sizeof(size_t) * neuron_count, cudaMemcpyDeviceToDevice);
+}
+
 void ILayer::deallocate()
 {
 	connections->deallocate();

@@ -59,6 +59,15 @@ void IConnections::adjust_to_added_neuron(size_t added_neuron_i, float connectio
 {
 }
 
+void IConnections::IConnections_clone(IConnections* base)
+{
+	cudaMalloc(&base->weights, sizeof(field_t) * connection_count);
+	cudaMalloc(&base->biases, sizeof(field_t) * neuron_count);
+	base->neuron_count = neuron_count;
+	base->connection_count = connection_count;
+	base->contains_irregular_connections = contains_irregular_connections;
+}
+
 void IConnections::deallocate()
 {
 	cudaFree(weights);

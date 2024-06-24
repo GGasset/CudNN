@@ -56,6 +56,9 @@ public:
 	virtual void adjust_to_added_neuron(size_t added_neuron_i, float connection_probability, std::vector<size_t>* added_connections_neuron_i);
 	virtual void remove_neuron(size_t layer_neuron_i);
 	virtual void adjust_to_removed_neuron(size_t neuron_i, std::vector<size_t>* removed_connections_neuron_i);
+	
+	virtual void IConnections* connections_specific_clone() = 0;
+	void IConnections_clone(IConnections* base);
 
 	void deallocate();
 	virtual void specific_deallocate();

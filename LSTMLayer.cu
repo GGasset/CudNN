@@ -38,7 +38,7 @@ LSTMLayer::LSTMLayer(IConnections* connections, size_t neuron_count)
 	delete[] connection_associated_gradient_counts;
 }
 
-void LSTMLayer::LSTMLayer()
+LSTMLayer::LSTMLayer()
 {
 
 }

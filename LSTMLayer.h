@@ -12,6 +12,8 @@ public:
 	void layer_specific_initialize_fields(size_t connection_count, size_t neuron_count) override;
 	void layer_specific_deallocate() override;
 
+	ILayer* layer_specific_clone() override;
+
 	void execute(
 		data_t* activations, size_t activations_start,
 		data_t* execution_values, size_t execution_values_start

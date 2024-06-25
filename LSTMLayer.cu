@@ -47,6 +47,17 @@ void LSTMLayer::layer_specific_initialize_fields(size_t connection_count, size_t
 	cudaDeviceSynchronize();
 }
 
+ILayer* LSTMLayer::layer_specific_clone()
+{
+	LSTMLayer* layer = malloc(sizeof(LSTMLayer));
+	cudaMalloc(&layer->neuron_weights, sizeof(field_t) * neuron_count * 4);
+	cudaMalloc(&layer->state, sizeof(data_t) * neuron_count * 2);
+	cudaDeviceSynchronize();
+	cudaMemcpy(layer->neuron_weights, neuron_weights, sizeof(field_t) * neuron_count * 4, cudaMemcpyDeviceToDevice);
+	cudaMemcpy(layer->state, state, sizeof(data_t) * neuron_count * 2, cudaMemcpyDeviceToDevice);
+	return layer;
+}
+
 void LSTMLayer::execute(data_t* activations, size_t activations_start, data_t* execution_values, size_t execution_values_start)
 {
 	// neuron execution values 0

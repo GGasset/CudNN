@@ -36,6 +36,13 @@ void NeuronLayer::layer_specific_deallocate()
 		cudaFree(connection_associated_gradient_counts);
 }
 
+ILayer* NeuronLayer::layer_specific_clone()
+{
+	NeuronLayer* layer = malloc(sizeof(NeuronLayer));
+	layer->activation = activation;
+	return layer;
+}
+
 void NeuronLayer::execute(
 	data_t* activations, size_t activations_start,
 	data_t* execution_values, size_t execution_values_start

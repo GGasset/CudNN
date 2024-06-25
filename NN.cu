@@ -11,6 +11,10 @@ NN::NN(ILayer** layers, size_t input_length, size_t layer_count)
 	set_fields();
 }
 
+NN::NN()
+{
+}
+
 NN::~NN()
 {
 	deallocate();

@@ -31,6 +31,8 @@ public:
 		data_t* gradients, size_t gradients_start, size_t layer_gradients_start, size_t* neuron_gradients_starts,
 		data_t learning_rate, short* dropout, data_t gradient_clip
 	) override;
+	
+	IConnections* connections_specific_clone() override;
 
 	size_t get_connection_count_at(size_t neuron_i) override;
 };

@@ -80,6 +80,15 @@ void DenseConnections::subtract_gradients(
 		biases, neuron_count, learning_rate, dropout, gradient_clip
 	);
 }
+
+IConnections* DenseConnections::connections_specific_clone()
+{
+	DenseConnections* connections = malloc(sizeof(DenseConnections));
+	connections->previous_layer_activations_start = previous_layer_activations_start;
+	connections->previous_layer_length = previous_layer_length;
+	return connections;
+}	
+
 size_t DenseConnections::get_connection_count_at(size_t neuron_i)
 {
 	return previous_layer_length;

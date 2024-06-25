@@ -2,6 +2,8 @@
 #include "device_launch_parameters.h"
 #include <curand.h>
 
+#include <stdlib.h>
+
 #include "data_type.h"
 #include "kernel_macros.h"
 #include "linear_functions.cuh"
@@ -57,7 +59,7 @@ public:
 	virtual void remove_neuron(size_t layer_neuron_i);
 	virtual void adjust_to_removed_neuron(size_t neuron_i, std::vector<size_t>* removed_connections_neuron_i);
 	
-	virtual void IConnections* connections_specific_clone() = 0;
+	virtual IConnections* connections_specific_clone() = 0;
 	void IConnections_clone(IConnections* base);
 
 	void deallocate();

@@ -38,6 +38,8 @@ public:
     ) override;
 
     size_t get_connection_count_at(size_t neuron_i) override;
+	
+    IConnections* connections_specific_clone() override;
 
     void add_neuron(size_t previous_layer_length, size_t previous_layer_activations_start, float previous_layer_connection_probability, size_t min_connections) override;
     void adjust_to_added_neuron(size_t added_neuron_i, float connection_probability, std::vector<size_t>* added_connections_neuron_i) override;

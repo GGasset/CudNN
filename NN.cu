@@ -3,9 +3,8 @@
 
 #include "NN.h"
 
-NN::NN(short contains_recurrent_layers, ILayer** layers, size_t input_length, size_t layer_count)
+NN::NN(ILayer** layers, size_t input_length, size_t layer_count)
 {
-	this->contains_recurrent_layers = contains_recurrent_layers;
 	this->layers = layers;
 	this->input_length = input_length;
 	this->layer_count = layer_count;
@@ -25,9 +24,12 @@ void NN::set_fields()
 	size_t execution_value_count = 0;
 	size_t derivative_count = 0;
 	size_t gradient_count = 0;
+	contains_recurrent_layers = true;
 	for (size_t i = 0; i < layer_count; i++)
 	{
 		ILayer* layer = layers[i];
+		
+		contains_recurrent_layers = contains_recurrent_layers && layer->is_recurrent;
 
 		layer->layer_activations_start = neuron_count;
 		neuron_count += layer->get_neuron_count();

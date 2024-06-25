@@ -2,6 +2,7 @@
 
 LSTMLayer::LSTMLayer(IConnections* connections, size_t neuron_count)
 {
+	is_recurrent = true;
 	this->connections = connections;
 	set_neuron_count(neuron_count);
 

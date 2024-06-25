@@ -351,10 +351,10 @@ IConnections* connections_specific_clone()
 {
 	NeatConnections* connections = malloc(sizeof(NeatConnections));
 	cudaMalloc(&connections->connection_points, sizeof(size_t) * connection_count);
-	cudaMalloc(&connections->connection_counts, sizeof(size_t) * neuron_count);
+	connections->connection_counts = new size_t[neuron_count];
 	cudaDeviceSynchronize();
 	cudaMemcpy(connections->connection_points, connection_points, sizeof(size_t) * connection_count, cudaMemcpyDeviceToDevice);
-	cudaMemcpy(connections->connection_counts, connection_counts, sizeof(size_t) * neuron_count, cudaMemcpyDeviceToDevice);
+	cudaMemcpy(connections->connection_counts, connection_counts, sizeof(size_t) * neuron_count, cudaMemcpyHostToHost);
 	cudaDeviceSynchronize();
 	return connections;
 }

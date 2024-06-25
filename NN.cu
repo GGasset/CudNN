@@ -460,6 +460,26 @@ void NN::delete_memory()
 		layers[i]->delete_memory();
 }
 
+NN NN::clone()
+{
+	NN clone;
+	clone.layer_count = layer_count;
+	clone.neuron_count = neuron_count;
+	clone.input_length = input_length;
+	clone.output_length = output_length;
+	
+	clone.layers = new ILayer*[layer_count];
+	for (size_t i = 0; i < layer_count; i++)
+	{
+		clone.layers[i] = layers[i]->layer_specific_clone();
+		layers[i]->ILayerClone(clone.layers[i]);
+	}
+	clone.set_fields();
+	clone.evolution_values = evolution_values;
+	clone.contains_recurrent_layers = contains_recurrent_layers;
+	return clone;
+}
+
 void NN::deallocate()
 {
 	for (size_t i = 0; i < layer_count; i++)

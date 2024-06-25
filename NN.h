@@ -119,6 +119,8 @@ public:
 
 	void delete_memory();
 
+	NN clone();
+
 	void deallocate();
 };
 

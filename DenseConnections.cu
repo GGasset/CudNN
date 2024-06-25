@@ -21,6 +21,11 @@ DenseConnections::DenseConnections(size_t previous_layer_activations_start, size
 	cudaDeviceSynchronize();
 }
 
+DenseConnections::DenseConnections()
+{
+
+}
+
 void DenseConnections::linear_function(size_t activations_start, data_t* activations,
 	data_t* execution_values, size_t execution_values_start, size_t execution_values_layer_start, size_t layer_execution_values_per_neuron
 )

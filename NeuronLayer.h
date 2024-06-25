@@ -8,6 +8,8 @@ protected:
 
 public:
 	NeuronLayer(IConnections* connections, size_t neuron_count, ActivationFunctions activation);
+	NeuronLayer();
+	
 	void layer_specific_deallocate() override;
 
 	ILayer* layer_specific_clone() override;

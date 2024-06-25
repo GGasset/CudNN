@@ -29,6 +29,11 @@ NeuronLayer::NeuronLayer(IConnections* connections, size_t neuron_count, Activat
 	cudaDeviceSynchronize();
 }
 
+NeuronLayer::NeuronLayer()
+{
+	
+}
+
 void NeuronLayer::layer_specific_deallocate()
 {
 	cudaFree(neuron_gradients_starts);

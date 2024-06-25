@@ -38,6 +38,11 @@ LSTMLayer::LSTMLayer(IConnections* connections, size_t neuron_count)
 	delete[] connection_associated_gradient_counts;
 }
 
+void LSTMLayer::LSTMLayer()
+{
+
+}
+
 void LSTMLayer::layer_specific_initialize_fields(size_t connection_count, size_t neuron_count)
 {
 	cudaMalloc(&state, sizeof(data_t) * neuron_count * 2);

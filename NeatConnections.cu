@@ -352,7 +352,7 @@ void NeatConnections::adjust_to_removed_neuron(size_t neuron_i, std::vector<size
 	cudaDeviceSynchronize();
 }
 
-IConnections* connections_specific_clone()
+IConnections* NeatConnections::connections_specific_clone()
 {
 	NeatConnections* connections = new NeatConnections();
 	cudaMalloc(&connections->connection_points, sizeof(size_t) * connection_count);

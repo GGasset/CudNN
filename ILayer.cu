@@ -30,7 +30,7 @@ void ILayer::ILayerClone(ILayer* base_layer)
 	connections->IConnections_clone(cloned_connections);
 	base_layer->connections = cloned_connections;
 
-	base_layer->set_neuron_count(get_neuron_count);
+	base_layer->set_neuron_count(get_neuron_count());
 
 	base_layer->execution_values_per_neuron = execution_values_per_neuron;
 	

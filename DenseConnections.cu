@@ -88,7 +88,7 @@ void DenseConnections::subtract_gradients(
 
 IConnections* DenseConnections::connections_specific_clone()
 {
-	DenseConnections* connections = malloc(sizeof(DenseConnections));
+	DenseConnections* connections = new DenseConnections();
 	connections->previous_layer_activations_start = previous_layer_activations_start;
 	connections->previous_layer_length = previous_layer_length;
 	return connections;

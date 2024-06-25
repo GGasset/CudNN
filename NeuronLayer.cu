@@ -43,7 +43,7 @@ void NeuronLayer::layer_specific_deallocate()
 
 ILayer* NeuronLayer::layer_specific_clone()
 {
-	NeuronLayer* layer = malloc(sizeof(NeuronLayer));
+	NeuronLayer* layer = new NeuronLayer();
 	layer->activation = activation;
 	return layer;
 }

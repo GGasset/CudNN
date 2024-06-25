@@ -55,7 +55,7 @@ void LSTMLayer::layer_specific_initialize_fields(size_t connection_count, size_t
 
 ILayer* LSTMLayer::layer_specific_clone()
 {
-	LSTMLayer* layer = malloc(sizeof(LSTMLayer));
+	LSTMLayer* layer = new LSTMLayer();
 	cudaMalloc(&layer->neuron_weights, sizeof(field_t) * neuron_count * 4);
 	cudaMalloc(&layer->state, sizeof(data_t) * neuron_count * 2);
 	cudaDeviceSynchronize();

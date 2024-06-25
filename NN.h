@@ -43,6 +43,8 @@ private:
 		NEAT,
 		last_connection_entry
 	};
+
+	NN();
 protected:
 	void set_fields();
 
@@ -51,7 +53,6 @@ public:
 
 	~NN();
 	NN(ILayer** layers, size_t input_length, size_t layer_count);
-	NN();
 
 	void execute(data_t* input, data_t* execution_values, data_t *activations, size_t t, data_t* output_start_pointer, short copy_output_to_host);
 	void set_up_execution_arrays(data_t** execution_values, data_t** activations, size_t t_count);

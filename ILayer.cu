@@ -45,7 +45,7 @@ void ILayer::ILayerClone(ILayer* base_layer)
 	cudaDeviceSynchronize();
 
 	cudaMemcpy(base_layer->neuron_gradients_starts, neuron_gradients_starts, sizeof(size_t) * get_neuron_count(), cudaMemcpyDeviceToDevice);
-	if (connection_associated_gradient_count)
+	if (connection_associated_gradient_counts)
 		cudaMemcpy(base_layer->connection_associated_gradient_counts, connection_associated_gradient_counts, sizeof(size_t) * neuron_count, cudaMemcpyDeviceToDevice);
 }
 

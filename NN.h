@@ -22,7 +22,6 @@ private:
 	size_t derivative_count = 0;
 	short contains_recurrent_layers = 0;
 	size_t gradient_count = 0;
-	evolution_metadata evolution_values;
 
 	// Now state derivatives are 1 (variable) by default so no need to save derivatives
 	//data_t* activations_since_memory_deletion = 0;
@@ -49,6 +48,7 @@ protected:
 	void set_fields();
 
 public:
+	evolution_metadata evolution_values;
 	bool stateful = false;
 
 	~NN();

@@ -295,7 +295,7 @@ void NeatConnections::remove_neuron(size_t neuron_i)
 void NeatConnections::adjust_to_removed_neuron(size_t neuron_i, std::vector<size_t>* removed_connections_neuron_i)
 {
 	size_t* host_connection_points = new size_t[connection_count];
-	field_t* host_weights = new field_t[neuron_count];
+	field_t* host_weights = new field_t[connection_count];
 
 	cudaMemcpy(host_connection_points, connection_points, sizeof(size_t) * connection_count, cudaMemcpyDeviceToHost);
 	cudaMemcpy(host_weights, weights, sizeof(field_t) * connection_count, cudaMemcpyDeviceToHost);

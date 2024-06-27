@@ -1,10 +1,13 @@
 #pragma once
 
+#include <functional>
+
 #include "cuda_runtime.h"
 #include "device_launch_parameters.h"
 
 #include "data_type.h"
 
+__global__ template void apply_to_array<typename t>(t* array, size_t array_length, std::function<bool(t, t)> if_function, t right_if_function_parameter, std::function<t(t)> to_apply);
 __global__ void multiply_array(float* arr, size_t arr_value_count, float multiply_by_value);
 __device__ data_t device_min(data_t a, data_t b);
 __device__ data_t device_closest_to_zero(data_t a, data_t b);

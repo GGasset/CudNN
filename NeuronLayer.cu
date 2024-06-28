@@ -184,7 +184,7 @@ void NeuronLayer::adjust_to_removed_neuron(size_t neuron_i)
 			add_to_array kernel(to_modify_neuron_count / 32 + (to_modify_neuron_count % 32 > 0), 32) (
 				neuron_gradients_starts + removed_connection_neuron_i + 1, to_modify_neuron_count, -1
 			);
-		}
+	}
 }
 
 #endif

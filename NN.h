@@ -124,5 +124,7 @@ public:
 	NN clone();
 
 	void deallocate();
+
+	void print_shape();
 };
 

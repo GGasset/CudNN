@@ -1,16 +1,17 @@
 #include "cuda_functionality.cuh"
 
-__global__ template void apply_to_array<typename t>(t* array, size_t array_length, std::function<bool(t, t)> if_function, t right_if_function_parameter, std::function<t(t)> to_apply)
+/*__global__ template void apply_to_array<typename t>(t* array, size_t array_length, std::function<bool(t, t)> if_function, t right_if_function_parameter, std::function<t(t)> to_apply)
 {
 	size_t tid = get_tid();
-	if (tid > array_length) return;
+	if (tid >= array_length) return;
 
 	t value = arrray[tid];
 	if (if_function(value, right_if_function))
 		array[tid] = to_apply(value);
-}
+}*/
 
-__global__ void multiply_array(float* arr, size_t arr_value_count, float multiply_by_value)
+
+__global__ void multiply_array(field_t* arr, size_t arr_value_count, field_t multiply_by_value)
 {
 	size_t tid = get_tid();
 	if (tid >= arr_value_count) return;

@@ -290,6 +290,7 @@ void NeatConnections::remove_neuron(size_t neuron_i)
 	connection_points = tmp_connection_points;
 	weights = tmp_weights;
 	biases = tmp_biases;
+	connection_count -= to_delete_connection_count;
 }
 
 void NeatConnections::adjust_to_removed_neuron(size_t neuron_i, std::vector<size_t>* removed_connections_neuron_i)

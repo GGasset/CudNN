@@ -326,7 +326,7 @@ void NN::evolve()
 	}
 	if (evolution_values.layer_addition_probability > get_random_float())
 	{
-		//printf("Adding layer\n");
+		printf("Adding layer\n");
 		NeuronTypes insert_type = (NeuronTypes)(rand() % NeuronTypes::last_neuron_entry);
 		size_t insert_i = rand() % (layer_count - 1);
 		
@@ -339,7 +339,7 @@ void NN::evolve()
 			previous_layer_activations_start = previous_layer->layer_activations_start;
 		}
 		
-		IConnections* new_connections = new NeatConnections(previous_layer_length, previous_layer_activations_start, 1);
+		IConnections* new_connections = new NeatConnections(previous_layer_activations_start, previous_layer_length, 1);
 		ILayer* new_layer = 0;
 
 		switch (insert_type)
@@ -358,13 +358,13 @@ void NN::evolve()
 	}
 	if (evolution_values.neuron_deletion_probability > get_random_float())
 	{
-		//printf("removing neuron\n");
+		printf("removing neuron\n");
 		size_t layer_i = rand() % (layer_count - 1);
 		remove_neuron(layer_i);
 	}
 	if (evolution_values.neuron_addition_probability > get_random_float())
 	{
-		//printf("adding_neuron\n");
+		printf("adding_neuron\n");
 		size_t layer_i = rand() % (layer_count - 1);
 		add_neuron(layer_i);
 	}
@@ -396,7 +396,9 @@ void NN::add_layer(size_t insert_i, ILayer* layer)
 	size_t added_neuron_count = layer->get_neuron_count();
 	size_t added_layer_activations_start = layer->layer_activations_start;
 	for (size_t i = 0; i < added_neuron_count; i++)
+	{
 		adjust_to_added_neuron(insert_i, added_layer_activations_start + i);
+	}
 	set_fields();
 }
 

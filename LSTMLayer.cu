@@ -208,11 +208,18 @@ void LSTMLayer::adjust_to_added_neuron(size_t added_neuron_i, float connection_p
 	connections->adjust_to_added_neuron(added_neuron_i, connection_probability, &added_connections_neuron_i);
 	for (size_t i = 0; i < added_connections_neuron_i.size(); i++)
 	{
-		size_t added_neuron_i = added_connections_neuron_i[i];
 		layer_gradient_count++;
-		connection_associated_gradient_counts[added_neuron_i]++;
-		for (size_t j = added_neuron_i + 1; j < neuron_count; j++)
-			neuron_gradients_starts[j]++;
+		size_t added_connection_neuron_i = added_connections_neuron_i[i];
+		size_t remaining_neuron_count = neuron_count - added_connection_neuron_i - 1;
+		if (remaining_neuron_count)
+		{
+			add_to_array kernel(1, 1) (
+				connection_associated_gradient_counts + added_connection_neuron_i, 1, 1
+			);
+			add_to_array kernel(remaining_neuron_count / 32 + (remaining_neuron_count % 32 > 0), 32) (
+				neuron_gradients_starts + added_connection_neuron_i + 1, remaining_neuron_count, 1
+			);
+		}
 	}
 }
 

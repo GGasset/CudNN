@@ -420,17 +420,13 @@ void NN::add_input_neuron()
 void NN::add_neuron(size_t layer_i)
 {
 
-	size_t previous_layer_length = 0;
+	size_t previous_layer_length = input_length;
 	size_t previous_layer_activations_start = 0;
-	if (layer_i > 0)
+	if (layer_i)
 	{
 		ILayer *previous_layer = layers[layer_i];
 		previous_layer_length = previous_layer->get_neuron_count();
 		previous_layer_activations_start = previous_layer->layer_activations_start;
-	}
-	else
-	{
-		previous_layer_length = input_length;
 	}
 	size_t added_neuron_i = layers[layer_i]->layer_activations_start + layers[layer_i]->get_neuron_count();
 	layers[layer_i]->add_neuron(previous_layer_length, previous_layer_activations_start, 1, 0);
@@ -451,6 +447,8 @@ void NN::adjust_to_added_neuron(int layer_i, size_t neuron_i)
 
 void NN::remove_neuron(size_t layer_i)
 {
+	if (layers[layer_i]->get_neuron_count() == 1)
+		return;
 	size_t layer_neuron_count = layers[layer_i]->get_neuron_count();
 	remove_neuron(layer_i, rand() % layer_neuron_count);
 }

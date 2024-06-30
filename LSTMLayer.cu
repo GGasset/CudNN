@@ -173,10 +173,10 @@ void LSTMLayer::add_neuron(size_t previous_layer_length, size_t previous_layer_a
 	cudaMemset(tmp_state + (neuron_count - 1) * 4, 0, sizeof(data_t) * 4);
 
 	cudaMemcpy(tmp_neuron_gradients_starts, neuron_gradients_starts, sizeof(size_t) * neuron_count - 1, cudaMemcpyDeviceToHost);
-	cudaMemcpy(connection_associated_gradient_counts, connection_associated_gradient_counts, sizeof(size_t) * neuron_count - 1, cudaMemcpyDeviceToHost);
+	cudaMemcpy(tmp_connection_associated_gradient_counts, connection_associated_gradient_counts, sizeof(size_t) * neuron_count - 1, cudaMemcpyDeviceToHost);
 	cudaDeviceSynchronize();
-	tmp_neuron_gradients_starts[neuron_count - 1] = tmp_neuron_gradients_starts[neuron_count - 2] + connection_associated_gradient_counts[neuron_count - 2] + 7;
-	connection_associated_gradient_counts[neuron_count - 1] = added_connection_count;
+	tmp_neuron_gradients_starts[neuron_count - 1] = tmp_neuron_gradients_starts[neuron_count - 2] + tmp_connection_associated_gradient_counts[neuron_count - 2] + 7;
+	tmp_connection_associated_gradient_counts[neuron_count - 1] = added_connection_count;
 
 	cudaFree(state);
 	cudaFree(neuron_weights);

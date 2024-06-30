@@ -173,14 +173,13 @@ void NeatConnections::add_neuron(size_t previous_layer_length, size_t previous_l
 
 	cudaFree(weights);
 	cudaFree(biases);
-	cudaFree(connection_counts);
 	cudaFree(connection_points);
 	cudaDeviceSynchronize();
 	
 	size_t* tmp_connection_counts = new size_t[neuron_count + 1];
 	cudaMemcpy(tmp_connection_counts, connection_counts, sizeof(size_t) * neuron_count, cudaMemcpyHostToHost);
 	cudaDeviceSynchronize();
-	tmp_connections[neuron_count] = added_connection_count;
+	tmp_connection_counts[neuron_count] = added_connection_count;
 	delete[] connection_counts;
 
 	connection_counts = tmp_connection_counts;

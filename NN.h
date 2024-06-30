@@ -59,7 +59,7 @@ public:
 	data_t* execute(data_t* input, size_t t_count);
 	data_t* execute(data_t* input);
 
-	void calculate_supervised_output_costs_gradients(
+	data_t calculate_supervised_output_costs(
 		CostFunctions cost_function,
 		size_t t_count,
 		data_t* Y_hat,
@@ -67,7 +67,7 @@ public:
 		data_t* costs, size_t costs_start
 	);
 
-	double supervised_train(
+	data_t supervised_train(
 		size_t t_count, 
 		data_t* X,
 		data_t* Y_hat,

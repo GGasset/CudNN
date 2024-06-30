@@ -6,7 +6,7 @@
 	- ~~Execute~~
 	- ~~Gradients~~
 - adaptative learning rates
-    - return cost while training
+    - ~~return cost while training~~
 - reinforcement learning cost functions
 
 ### Not to do until all Layer constructors are made:

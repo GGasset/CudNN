@@ -108,7 +108,7 @@ data_t* NN::execute(data_t* input)
 	return execute(input, 1);
 }
 
-void NN::calculate_supervised_output_costs_gradients(
+data_t NN::calculate_supervised_output_costs(
 	CostFunctions cost_function,
 	size_t t_count,
 	data_t* Y_hat,
@@ -116,6 +116,11 @@ void NN::calculate_supervised_output_costs_gradients(
 	data_t* costs, size_t costs_start
 )
 {
+	data_t* cost = 0;
+	cudaMalloc(&cost, sizeof(data_t));
+	cudaDeviceSynchronize();
+	cudaMemset(cost, 0, sizeof(data_t));
+	cudaDeviceSynchronize();
 	switch (cost_function)
 	{
 	case MSE:
@@ -124,14 +129,28 @@ void NN::calculate_supervised_output_costs_gradients(
 			costs, costs_start,
 			Y_hat, output_length
 		);
+		MSE_cost kernel(dim3(output_length / 32 + (output_length % 32 > 0), t_count), 32) (
+			activations, neuron_count, activations_start, *output_activations_start,
+			Y_hat, output_length,
+			cost
+		);
 		break;
 	default:
 		break;
 	}
+	cudaDeviceSynchronize();
+	multiply_array kernel(1, 1) (
+		cost, 1, 1 / (output_length * t_count)
+	);
+	data_t host_cost = 0;
+	cudaDeviceSynchronize();
+	cudaMemcpy(&host_cost, cost, sizeof(data_t), cudaMemcpyDeviceToHost);
+	cudaDeviceSynchronize();
+	cudaFree(cost);
+	return host_cost;
 }
 
-/// <returns>TODO: return cost</returns>
-double NN::supervised_train(
+data_t NN::supervised_train(
 	size_t t_count,
 	data_t* X,
 	data_t* Y_hat,
@@ -175,7 +194,7 @@ double NN::supervised_train(
 		cudaMemcpy(temp_Y_hat, Y_hat, sizeof(data_t) * output_length * t_count, cudaMemcpyHostToDevice);
 		Y_hat = temp_Y_hat;
 	}
-	calculate_supervised_output_costs_gradients(cost_function, t_count, Y_hat, activations, 0, costs, 0);
+	data_t cost = calculate_supervised_output_costs(cost_function, t_count, Y_hat, activations, 0, costs, 0);
 	cudaDeviceSynchronize();
 
 	data_t* gradients = 0;
@@ -196,7 +215,7 @@ double NN::supervised_train(
 	cudaFree(gradients);
 	cudaDeviceSynchronize();
 
-	return 0;
+	return cost;
 }
 
 void NN::backpropagate(

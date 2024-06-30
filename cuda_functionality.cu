@@ -11,13 +11,6 @@
 }*/
 
 
-__global__ void multiply_array(field_t* arr, size_t arr_value_count, field_t multiply_by_value)
-{
-	size_t tid = get_tid();
-	if (tid >= arr_value_count) return;
-
-	arr[tid] *= multiply_by_value;
-}
 
 __device__ data_t device_abs(data_t a)
 {

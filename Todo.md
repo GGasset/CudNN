@@ -5,6 +5,7 @@
 - ~~NEAT connections~~ 
 	- ~~Execute~~
 	- ~~Gradients~~
+- reinforcement learning cost
 
 ### Not to do until all Layer constructors are made:
 
@@ -13,3 +14,10 @@
 - Crossover
 - ~~Evolution~~
 - ~~Modify kernel launches to have more capacity of neurons (current max 1024)~~
+
+# Bugs
+ - ~~device array being used as host array in NeuronLayer and LSTMLayer remove neuron~~
+ - ~~bug in add neuron~~
+ - constrain evolution
+    * if removing neuron in a layer with 1 neuron remove layer (now it won't delete the neuron)
+    * constrain weights and biases to prevent nans

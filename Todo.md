@@ -7,7 +7,7 @@
 	- ~~Gradients~~
 - adaptative learning rates
     - ~~return cost while training~~
-- reinforcement learning cost functions
+- ~~reinforcement learning cost functions~~
 
 # Bugs
  - ~~device array being used as host array in NeuronLayer and LSTMLayer remove neuron~~

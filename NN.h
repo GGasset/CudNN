@@ -59,7 +59,7 @@ public:
 	data_t* execute(data_t* input, size_t t_count);
 	data_t* execute(data_t* input);
 
-	data_t calculate_supervised_output_costs(
+	data_t calculate_output_costs(
 		CostFunctions cost_function,
 		size_t t_count,
 		data_t* Y_hat,
@@ -67,11 +67,12 @@ public:
 		data_t* costs, size_t costs_start
 	);
 
-	data_t supervised_train(
+	data_t train(
 		size_t t_count, 
 		data_t* X,
 		data_t* Y_hat,
 		bool is_Y_hat_on_host_memory,
+		size_t Y_hat_value_count,
 		CostFunctions cost_function,
 		data_t learning_rate,
 		data_t** Y, 

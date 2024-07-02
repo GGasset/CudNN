@@ -108,7 +108,7 @@ data_t* NN::execute(data_t* input)
 	return execute(input, 1);
 }
 
-data_t NN::calculate_supervised_output_costs(
+data_t NN::calculate_output_costs(
 	CostFunctions cost_function,
 	size_t t_count,
 	data_t* Y_hat,
@@ -135,6 +135,18 @@ data_t NN::calculate_supervised_output_costs(
 			cost
 		);
 		break;
+	case output_over_reward:
+		output_over_reward_derivative kernel(dim3(output_length / 32 + (output_length % 32 > 0), t_count), 32) (
+			costs, costs_start,
+			neuron_count, *output_activations_start, output_length,
+			Y_hat
+		);
+		output_over_reward_cost kernel(dim3(output_length / 32 + (output_length % 32 > 0), t_count), 32) (
+			activations, neuron_count, activations_start, *output_activations_start,
+			Y_hat, output_length,
+			cost
+		);
+		break;
 	default:
 		break;
 	}
@@ -150,15 +162,16 @@ data_t NN::calculate_supervised_output_costs(
 	return host_cost;
 }
 
-data_t NN::supervised_train(
+data_t NN::train(
 	size_t t_count,
 	data_t* X,
 	data_t* Y_hat,
 	bool is_Y_hat_on_host_memory,
+	size_t Y_hat_value_count,
 	CostFunctions cost_function,
 	data_t learning_rate,
 	data_t** Y,
-	bool copy_Y_to_host, 
+	bool copy_Y_to_host,
 	data_t gradient_clip,
 	float dropout_rate
 )
@@ -190,11 +203,11 @@ data_t NN::supervised_train(
 	if (is_Y_hat_on_host_memory)
 	{
 		data_t* temp_Y_hat = 0;
-		cudaMalloc(&temp_Y_hat, sizeof(data_t) * output_length * t_count);
-		cudaMemcpy(temp_Y_hat, Y_hat, sizeof(data_t) * output_length * t_count, cudaMemcpyHostToDevice);
+		cudaMalloc(&temp_Y_hat, sizeof(data_t) * Y_hat_value_count);
+		cudaMemcpy(temp_Y_hat, Y_hat, sizeof(data_t) * Y_hat_value_count, cudaMemcpyHostToDevice);
 		Y_hat = temp_Y_hat;
 	}
-	data_t cost = calculate_supervised_output_costs(cost_function, t_count, Y_hat, activations, 0, costs, 0);
+	data_t cost = calculate_output_costs(cost_function, t_count, Y_hat, activations, 0, costs, 0);
 	cudaDeviceSynchronize();
 
 	data_t* gradients = 0;

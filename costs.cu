@@ -34,7 +34,7 @@ __global__ void MSE_cost(
 	atomicAdd(cost_write, error);
 }
 
-__global__ void output_over_reward_cost(
+__global__ void log_likelyhood_cost(
 	data_t* activations, size_t neuron_count, size_t activations_start, size_t last_layer_activations_start,
 	data_t* rewards, size_t output_length,
 	data_t* cost
@@ -46,15 +46,15 @@ __global__ void output_over_reward_cost(
 	
 	data_t reward = rewards[t];
 	data_t prediction = activations[activations_start + neuron_count * t + last_layer_activations_start + tid];
-	data_t output = 0;
-	if (reward) output = (prediction + 3) / reward;
+	data_t output = -log(prediction) * reward;
 	
 	atomicAdd(cost, output);
 }
 
-__global__ void output_over_reward_derivative(
-	data_t* costs, size_t costs_start,
+__global__ void log_likelyhood_derivative(
+	data_t* activations, size_t activations_start,
 	size_t neuron_count, size_t last_layer_activations_start, size_t output_length,
+	data_t* costs, size_t costs_start,
 	data_t* rewards
 )
 {
@@ -63,9 +63,10 @@ __global__ void output_over_reward_derivative(
 	size_t t = blockIdx.y;
 
 	data_t reward = rewards[t];
-	data_t cost_derivative = 0;
-	if (reward) cost_derivative = 1 / reward;
-	
-	size_t cost_write = costs_start + neuron_count * t + last_layer_activations_start;
+	data_t activation = neuron_count * t + last_layer_activations_start + tid;
+	data_t cost_derivative = -(reward / activation);
+
+
+	size_t cost_write = costs_start + neuron_count * t + last_layer_activations_start + tid;
 	costs[cost_write] = cost_derivative;
 }

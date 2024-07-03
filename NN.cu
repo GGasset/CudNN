@@ -135,13 +135,14 @@ data_t NN::calculate_output_costs(
 			cost
 		);
 		break;
-	case output_over_reward:
-		output_over_reward_derivative kernel(dim3(output_length / 32 + (output_length % 32 > 0), t_count), 32) (
-			costs, costs_start,
+	case log_likelyhood:
+		log_likelyhood_derivative kernel(dim3(output_length / 32 + (output_length % 32 > 0), t_count), 32) (
+			activations, activations_start,
 			neuron_count, *output_activations_start, output_length,
+			costs, costs_start,
 			Y_hat
 		);
-		output_over_reward_cost kernel(dim3(output_length / 32 + (output_length % 32 > 0), t_count), 32) (
+		log_likelyhood_cost kernel(dim3(output_length / 32 + (output_length % 32 > 0), t_count), 32) (
 			activations, neuron_count, activations_start, *output_activations_start,
 			Y_hat, output_length,
 			cost
@@ -198,7 +199,7 @@ data_t NN::train(
 
 	for (size_t t = 0; t < t_count; t++)
 	{
-		execute(X, execution_values, activations, t, *Y, copy_Y_to_host);
+		execute(X, execution_values, activations, t, copy_Y_to_host ? *Y : 0, copy_Y_to_host);
 	}
 	if (is_Y_hat_on_host_memory)
 	{

@@ -108,6 +108,8 @@ data_t* NN::execute(data_t* input)
 	return execute(input, 1);
 }
 
+
+
 data_t NN::calculate_output_costs(
 	CostFunctions cost_function,
 	size_t t_count,
@@ -163,29 +165,22 @@ data_t NN::calculate_output_costs(
 	return host_cost;
 }
 
-data_t NN::train(
+void NN::training_execute(
 	size_t t_count,
 	data_t* X,
-	data_t* Y_hat,
-	bool is_Y_hat_on_host_memory,
-	size_t Y_hat_value_count,
-	CostFunctions cost_function,
-	data_t learning_rate,
 	data_t** Y,
 	bool copy_Y_to_host,
-	data_t gradient_clip,
-	float dropout_rate
+	data_t** execution_values,
+	data_t** activations,
+	data_t** costs
 )
 {
-	data_t* execution_values = 0;
-	data_t* activations = 0;
-	set_up_execution_arrays(&execution_values, &activations, t_count);
+	set_up_execution_arrays(execution_values, activations, t_count);
 
-	data_t* costs = 0;
-	cudaMalloc(&costs, sizeof(data_t) * neuron_count * t_count);
+	cudaMalloc(costs, sizeof(data_t) * neuron_count * t_count);
 	cudaDeviceSynchronize();
 
-	cudaMemset(costs, 0, sizeof(data_t) * neuron_count * t_count);
+	cudaMemset(*costs, 0, sizeof(data_t) * neuron_count * t_count);
 	cudaDeviceSynchronize();
 
 	if (copy_Y_to_host)
@@ -199,8 +194,25 @@ data_t NN::train(
 
 	for (size_t t = 0; t < t_count; t++)
 	{
-		execute(X, execution_values, activations, t, copy_Y_to_host ? *Y : 0, copy_Y_to_host);
+		execute(X, *execution_values, *activations, t, copy_Y_to_host ? *Y : 0, copy_Y_to_host);
 	}
+}
+
+
+data_t NN::train(
+	size_t t_count,
+	data_t* execution_values
+	data_t* activations,
+	data_t* costs,
+	data_t* Y_hat,
+	bool is_Y_hat_on_host_memory,
+	size_t Y_hat_value_count,
+	CostFunctions cost_function,
+	data_t learning_rate,
+	data_t gradient_clip,
+	float dropout_rate
+)
+{
 	if (is_Y_hat_on_host_memory)
 	{
 		data_t* temp_Y_hat = 0;
@@ -230,6 +242,47 @@ data_t NN::train(
 	cudaDeviceSynchronize();
 
 	return cost;
+}
+
+data_t NN::train(
+	size_t t_count,
+	data_t* X,
+	data_t* Y_hat,
+	bool is_Y_hat_on_host_memory,
+	size_t Y_hat_value_count,
+	CostFunctions cost_function,
+	data_t learning_rate,
+	data_t** Y,
+	bool copy_Y_to_host,
+	data_t gradient_clip,
+	float dropout_rate
+)
+{
+	data_t* execution_values = 0;
+	data_t* activations = 0;
+	data_t* costs = 0;
+	training_execute(
+		t_count,
+		X,
+		Y,
+		copy_Y_to_host,
+		&execution_values,
+		&activations,
+		&costs
+	);
+	return train(
+		t_count, 
+		execution_values,
+		activations,
+		costs,
+		Y_hat,
+		is_Y_hat_on_host_memory,
+		Y_hat_value_count,
+		cost_function,
+		learning_rate,
+		gradient_clip,
+		dropout_rate
+	);
 }
 
 void NN::backpropagate(

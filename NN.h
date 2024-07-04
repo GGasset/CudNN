@@ -67,6 +67,30 @@ public:
 		data_t* costs, size_t costs_start
 	);
 
+	void training_execute(
+		size_t t_count,
+		data_t* X,
+		data_t** Y,
+		bool copy_Y_to_host,
+		data_t** execution_values,
+		data_t** activations,
+		data_t** costs
+	);
+
+	data_t train(
+		size_t t_count,
+		data_t* execution_values
+		data_t* activations,
+		data_t* costs,
+		data_t* Y_hat,
+		bool is_Y_hat_on_host_memory,
+		size_t Y_hat_value_count,
+		CostFunctions cost_function,
+		data_t learning_rate,
+		data_t gradient_clip,
+		float dropout_rate
+	);
+
 	data_t train(
 		size_t t_count, 
 		data_t* X,

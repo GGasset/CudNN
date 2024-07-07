@@ -26,7 +26,8 @@ if (GDExtensions)
 	)
 
 	FetchContent_MakeAvailable(GDExtension)
-	
+
+	add_subdirectory(godot)
 endif()
 
 #set(CMAKE_CUDA_ARCHITECTURES "native")

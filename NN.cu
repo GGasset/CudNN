@@ -109,6 +109,44 @@ data_t* NN::execute(data_t* input)
 }
 
 
+data_t adjust_learning_rate(
+	data_t learning_rate,
+	data_t cost,
+	LearningRateAdjusters adjuster,
+	data_t max_learning_rate,
+	data_t previous_cost
+)
+{
+	data_t new_learning_rate = learning_rate;
+	if (adjuster == LearningRateAdjusters::none) return new_learning_rate;
+	if (previous_cost != 0 && cost != 0)
+		switch (adjuster) {
+			case LearningRateAdjusters::high_learning_high_learning_rate:
+				{
+					data_t learning = previous_cost / cost;
+					new_learning_rate += learning;
+				}
+				break;
+			case LearningRateAdjusters::high_learning_low_learning_rate:
+				{
+					data_t learning = previous_cost / cost;
+					new_learning_rate -= learning;
+					new_learning_rate = max(0, new_learning_rate);
+				}
+				break;
+			default:
+				break;
+		}
+	switch (adjuster) {
+		case LearningRateAdjusters::cost_times_learning_rate:
+			new_learning_rate = learning_rate * cost;
+			break;
+		default:
+			break;
+	}
+	return min(new_learning_rate, max_learning_rate);
+
+}
 
 data_t NN::calculate_output_costs(
 	CostFunctions cost_function,
@@ -201,7 +239,7 @@ void NN::training_execute(
 
 data_t NN::train(
 	size_t t_count,
-	data_t* execution_values
+	data_t* execution_values,
 	data_t* activations,
 	data_t* costs,
 	data_t* Y_hat,

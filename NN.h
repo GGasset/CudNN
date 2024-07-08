@@ -43,6 +43,14 @@ private:
 		last_connection_entry
 	};
 
+	enum LearningRateAdjusters
+	{
+		high_learning_high_learning_rate,
+		high_learning_low_learning_rate,
+		cost_times_learning_rate,
+		none
+	};
+
 	NN();
 protected:
 	void set_fields();
@@ -58,6 +66,14 @@ public:
 	void set_up_execution_arrays(data_t** execution_values, data_t** activations, size_t t_count);
 	data_t* execute(data_t* input, size_t t_count);
 	data_t* execute(data_t* input);
+
+	data_t adjust_learning_rate(
+		data_t learning_rate,
+		data_t cost,
+		LearningRateAdjusters adjuster,
+		data_t max_learning_rate,
+		data_t previous_cost = 0
+	);
 
 	data_t calculate_output_costs(
 		CostFunctions cost_function,
@@ -79,7 +95,7 @@ public:
 
 	data_t train(
 		size_t t_count,
-		data_t* execution_values
+		data_t* execution_values,
 		data_t* activations,
 		data_t* costs,
 		data_t* Y_hat,

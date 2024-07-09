@@ -210,16 +210,26 @@ void NN::training_execute(
 	bool copy_Y_to_host,
 	data_t** execution_values,
 	data_t** activations,
-	data_t** costs
+	size_t arrays_t_length
 )
 {
-	set_up_execution_arrays(execution_values, activations, t_count);
+	data_t* prev_execution_values = 0;
+	data_t* prev_activations = 0;
+	if (arrays_t_length)
+	{
+		prev_execution_values = *execution_values;
+		prev_activations = *activations;
+	}
+	set_up_execution_arrays(execution_values, activations, t_count + arrays_t_length);
+	if (arrays_t_length)
+	{
+		cudaMemcpy(*execution_values, prev_execution_values, sizeof(data_t) * execution_value_count * arrays_t_length, cudaMemcpyDeviceToDevice);
+		cudaMemcpy(*activations, prev_activations, sizeof(data_t) * neuron_count * arrays_t_length, cudaMemcpyDeviceToDevice);
+		cudaDeviceSynchronize();
+		cudaFree(prev_execution_values);
+		cudaFree(prev_activations);
+	}
 
-	cudaMalloc(costs, sizeof(data_t) * neuron_count * t_count);
-	cudaDeviceSynchronize();
-
-	cudaMemset(*costs, 0, sizeof(data_t) * neuron_count * t_count);
-	cudaDeviceSynchronize();
 
 	if (copy_Y_to_host)
 	{
@@ -241,7 +251,6 @@ data_t NN::train(
 	size_t t_count,
 	data_t* execution_values,
 	data_t* activations,
-	data_t* costs,
 	data_t* Y_hat,
 	bool is_Y_hat_on_host_memory,
 	size_t Y_hat_value_count,
@@ -251,6 +260,13 @@ data_t NN::train(
 	float dropout_rate
 )
 {
+	data_t* costs = 0;
+	cudaMalloc(&costs, sizeof(data_t) * neuron_count * t_count);
+	cudaDeviceSynchronize();
+
+	cudaMemset(costs, 0, sizeof(data_t) * neuron_count * t_count);
+	cudaDeviceSynchronize();
+	
 	if (is_Y_hat_on_host_memory)
 	{
 		data_t* temp_Y_hat = 0;
@@ -298,7 +314,6 @@ data_t NN::train(
 {
 	data_t* execution_values = 0;
 	data_t* activations = 0;
-	data_t* costs = 0;
 	training_execute(
 		t_count,
 		X,
@@ -312,7 +327,6 @@ data_t NN::train(
 		t_count, 
 		execution_values,
 		activations,
-		costs,
 		Y_hat,
 		is_Y_hat_on_host_memory,
 		Y_hat_value_count,

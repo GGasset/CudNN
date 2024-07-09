@@ -26,8 +26,6 @@ if (GDExtensions)
 	)
 
 	FetchContent_MakeAvailable(GDExtension)
-
-	add_subdirectory(godot)
 endif()
 
 #set(CMAKE_CUDA_ARCHITECTURES "native")
@@ -51,6 +49,7 @@ if (GDExtensions)
 		NeatConnections.h
 		NeuronLayer.h
 		NN.h
+		NN_constructor.h
 
 		connection_gradients.cu
 		costs.cu
@@ -60,15 +59,17 @@ if (GDExtensions)
 		gradients.cu
 		IConnections.cu
 		ILayer.cu
-		kernel.cu
 		linear_functions.cu
 		LSTMLayer.cu
 		NeatConnections.cu
 		NeuronLayer.cu
 		neuron_operations.cu
 		NN.cu
+		NN_constructor.cpp
 
 		functionality.cpp
+		
+		
 	)
 else()
 	message("-- Exe for testing added")
@@ -84,6 +85,7 @@ else()
 		NeatConnections.h
 		NeuronLayer.h
 		NN.h
+		NN_constructor.h
 
 		connection_gradients.cu
 		costs.cu
@@ -100,6 +102,7 @@ else()
 		NeuronLayer.cu
 		neuron_operations.cu
 		NN.cu
+		NN_constructor.cpp
 
 		functionality.cpp
 	)

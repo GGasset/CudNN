@@ -29,6 +29,12 @@ private:
 	//data_t* derivatives_since_memory_deletion = 0;
 	//size_t since_memory_deletion_t_count = 0;
 
+
+	NN();
+protected:
+	void set_fields();
+
+public:
 	enum NeuronTypes
 	{
 		Neuron,
@@ -51,11 +57,6 @@ private:
 		none
 	};
 
-	NN();
-protected:
-	void set_fields();
-
-public:
 	evolution_metadata evolution_values;
 	bool stateful = false;
 
@@ -167,5 +168,7 @@ public:
 	void deallocate();
 
 	void print_shape();
+
+	static void _bind_methods();
 };
 

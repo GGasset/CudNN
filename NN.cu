@@ -320,8 +320,7 @@ data_t NN::train(
 		Y,
 		copy_Y_to_host,
 		&execution_values,
-		&activations,
-		&costs
+		&activations
 	);
 	return train(
 		t_count, 

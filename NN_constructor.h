@@ -21,7 +21,7 @@ public:
 	NN_constructor();
 
 	NN_constructor append_layer(NN::ConnectionTypes connections_type, NN::NeuronTypes neurons_type, size_t neuron_count, ActivationFunctions activation = ActivationFunctions::activations_last_entry);
-	NN construct(size_t input_length);
+	NN construct(size_t input_length, bool stateful = false);
 
 	static void _bind_methods();
 };

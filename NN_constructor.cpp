@@ -15,7 +15,7 @@ NN_constructor NN_constructor::append_layer(NN::ConnectionTypes connections_type
 	return *this;
 }
 
-NN NN_constructor::construct(size_t input_length)
+NN NN_constructor::construct(size_t input_length, bool stateful)
 {
 	ILayer** layers = new ILayer*[layer_count];
 	size_t previous_layer_activations_start = 0;
@@ -52,5 +52,6 @@ NN NN_constructor::construct(size_t input_length)
 		previous_layer_activations_start += i ? layer_length : input_length;
 	}
 	NN n = NN(layers, input_length, layer_count);
+	n.stateful = stateful;
 	return n;
 }

@@ -109,7 +109,7 @@ data_t* NN::execute(data_t* input)
 }
 
 
-data_t adjust_learning_rate(
+data_t NN::adjust_learning_rate(
 	data_t learning_rate,
 	data_t cost,
 	LearningRateAdjusters adjuster,
@@ -131,7 +131,7 @@ data_t adjust_learning_rate(
 				{
 					data_t learning = previous_cost / cost;
 					new_learning_rate -= learning;
-					new_learning_rate = max(0, new_learning_rate);
+					new_learning_rate = max<data_t>(0, new_learning_rate);
 				}
 				break;
 			default:

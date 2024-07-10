@@ -76,6 +76,7 @@ if (target STREQUAL "GDExtensions")
                    "Built dll for godot")
 
 elseif(target STREQUAL "DLL")
+	message("-- DLL added")
 	add_library(${PROJECT_NAME} SHARED	
 		data_type.h
 		DenseConnections.h

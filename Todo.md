@@ -5,7 +5,7 @@
 - ~~NEAT connections~~ 
 	- ~~Execute~~
 	- ~~Gradients~~
-- adaptative learning rates
+- ~~adaptative learning rates~~
     - ~~return cost while training~~
 - ~~reinforcement learning cost functions~~
 
@@ -18,7 +18,7 @@
 
 ### Not to do until all Layer constructors are made:
 
-- Tensorflow-like class constructor
+- ~~Tensorflow-like class constructor~~
 - Save, Load, ~~Cloning~~
 - Crossover
 - ~~Evolution~~

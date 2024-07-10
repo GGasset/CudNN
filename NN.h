@@ -65,7 +65,7 @@ public:
 
 	void execute(data_t* input, data_t* execution_values, data_t *activations, size_t t, data_t* output_start_pointer, short copy_output_to_host);
 	void set_up_execution_arrays(data_t** execution_values, data_t** activations, size_t t_count);
-	data_t* execute(data_t* input, size_t t_count);
+	data_t* batch_execute(data_t* input, size_t t_count);
 	data_t* execute(data_t* input);
 
 	data_t adjust_learning_rate(
@@ -107,7 +107,7 @@ public:
 		float dropout_rate
 	);
 
-	data_t train(
+	data_t training_batch(
 		size_t t_count, 
 		data_t* X,
 		data_t* Y_hat,

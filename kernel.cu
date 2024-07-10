@@ -56,7 +56,7 @@ int main()
 	{
 		//printf("\n\n\n");
 		data_t* y = 0;
-		n.train(t_count, X, Y_hat, true, output_length * t_count, CostFunctions::MSE, .05 / t_count, &y, true, 200000, 0);
+		n.training_batch(t_count, X, Y_hat, true, output_length * t_count, CostFunctions::MSE, .05 / t_count, &y, true, 200000, 0);
 		//n.print_shape();
 		
 		// Reinforcement learning

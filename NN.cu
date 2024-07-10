@@ -80,7 +80,7 @@ void NN::set_up_execution_arrays(data_t** execution_values, data_t** activations
 	cudaDeviceSynchronize();
 }
 
-data_t* NN::execute(data_t* input, size_t t_count)
+data_t* NN::batch_execute(data_t* input, size_t t_count)
 {
 	data_t* execution_values = 0;
 	data_t* activations = 0;
@@ -105,7 +105,7 @@ data_t* NN::execute(data_t* input, size_t t_count)
 
 data_t* NN::execute(data_t* input)
 {
-	return execute(input, 1);
+	return batch_execute(input, 1);
 }
 
 
@@ -298,7 +298,7 @@ data_t NN::train(
 	return cost;
 }
 
-data_t NN::train(
+data_t NN::training_batch(
 	size_t t_count,
 	data_t* X,
 	data_t* Y_hat,

@@ -68,9 +68,12 @@ if (GDExtensions)
 		NN_constructor.cpp
 
 		functionality.cpp
-		
-		
+		./godot/register_types.cpp
 	)
+	target_link_libraries(${PROJECT_NAME} PUBLIC godot::cpp)
+	add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                   COMMAND ${CMAKE_COMMAND} -E cmake_echo_color --cyan
+                   "Built dll for godot")
 else()
 	message("-- Exe for testing added")
 	add_executable(${PROJECT_NAME}
@@ -108,7 +111,11 @@ else()
 	)
 endif()
 
-target_link_libraries(${PROJECT_NAME} -lcurand)
+target_link_libraries(${PROJECT_NAME} PUBLIC -lcurand)
 set_property(TARGET ${PROJECT_NAME} PROPERTY CUDA_SEPARABLE_COMPILATION ON)
 set_target_properties(${PROJECT_NAME} PROPERTIES CUDA_ARCHITECTURES "native")
-
+if (DEBUG)
+	add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                   COMMAND ${CMAKE_COMMAND} -E cmake_echo_color --cyan
+                   "Built debug")
+endif()

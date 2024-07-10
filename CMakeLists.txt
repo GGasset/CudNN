@@ -14,7 +14,7 @@ if (DEBUG)
 	message("-- Config debug")
 endif()
 
-if (GDExtensions)
+if (target STREQUAL "GDExtensions")
 	message("-- GDExtensions Enabled")
 	
 	include(FetchContent)
@@ -35,7 +35,7 @@ project(NN LANGUAGES CUDA CXX)
 find_package(CUDAToolkit REQUIRED)
 include_directories("${CUDA_INCLUDE_DIRS} ${CUDAToolkit_INCLUDE_DIRS}")
 
-if (GDExtensions)
+if (target STREQUAL "GDExtensions")
 	message("-- Dll for GDExtions added")
 	add_library(${PROJECT_NAME} SHARED	
 		data_type.h
@@ -74,6 +74,43 @@ if (GDExtensions)
 	add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
                    COMMAND ${CMAKE_COMMAND} -E cmake_echo_color --cyan
                    "Built dll for godot")
+
+elseif(target STREQUAL "DLL")
+	add_library(${PROJECT_NAME} SHARED	
+		data_type.h
+		DenseConnections.h
+		evolution_info.h
+		functionality.h
+		IConnections.h
+		ILayer.h
+		kernel_macros.h
+		LSTMLayer.h
+		NeatConnections.h
+		NeuronLayer.h
+		NN.h
+		NN_constructor.h
+
+		connection_gradients.cu
+		costs.cu
+		cuda_functionality.cu
+		DenseConnections.cu
+		derivatives.cu
+		gradients.cu
+		IConnections.cu
+		ILayer.cu
+		linear_functions.cu
+		LSTMLayer.cu
+		NeatConnections.cu
+		NeuronLayer.cu
+		neuron_operations.cu
+		NN.cu
+		NN_constructor.cpp
+
+		functionality.cpp
+	)
+	add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                   COMMAND ${CMAKE_COMMAND} -E cmake_echo_color --cyan
+                   "Built dll")
 else()
 	message("-- Exe for testing added")
 	add_executable(${PROJECT_NAME}

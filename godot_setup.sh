@@ -7,7 +7,5 @@ pip install scons==4.7.0
 godot --dump-extension-api
 mv ./extension_api.json ./godot-cpp/extension_api.json
 
-{
-	cd godot-cpp;
-	scons platform=linux custom_api_file=`./extension_api.json` bits=64 -j8
-}
+echo "run scons platform=<windows|linux|macos> on ./godot-cpp"
+echo "then run it on the base folder"

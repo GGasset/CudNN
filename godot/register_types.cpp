@@ -17,7 +17,7 @@ void NN_constructor::_bind_methods()
 
 void NN::_bind_methods()
 {
-	ClassDB::bind_method(D_METHOD("execute", "input"), &NN::execute)
+	ClassDB::bind_method(D_METHOD("execute", "input"), &NN::inference_execute);
 
 	ClassDB::bind_method(D_METHOD("training_execute", "t_count", "X", "Y", "get_Y", "execution_values", "activations", "old_array_length"), &NN::training_execute);
 	ClassDB::bind_method(D_METHOD("train", "t_count", "execution_values", "activations", "Y_hat", "copy_Y_hat_to_gpu", "Y_hat_value_count", "cost_function", "learning_rate", "gradient_clip", "dropout_rate"), &NN::train);

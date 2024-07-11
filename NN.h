@@ -9,8 +9,22 @@
 #include "LSTMLayer.h"
 
 #pragma once
+#ifdef GDExtensions
+//#include <godot_cpp/godot.hpp>
+//#include <variant>
+#include <godot_cpp/classes/object.hpp>
+//#include <godot_cpp/classes/node3d.hpp>
+//using namespace godot;
+namespace godot {
+class NN : public Object
+{
+	GDClass(NN, Object)
+#endif
+#ifndef GDExtensions
 class NN
 {
+#endif
+
 private:
 	ILayer **layers = 0;
 	size_t layer_count = 0;
@@ -66,7 +80,7 @@ public:
 	void execute(data_t* input, data_t* execution_values, data_t *activations, size_t t, data_t* output_start_pointer, short copy_output_to_host);
 	void set_up_execution_arrays(data_t** execution_values, data_t** activations, size_t t_count);
 	data_t* batch_execute(data_t* input, size_t t_count);
-	data_t* execute(data_t* input);
+	data_t* inference_execute(data_t* input);
 
 	data_t adjust_learning_rate(
 		data_t learning_rate,
@@ -170,4 +184,6 @@ public:
 
 	static void _bind_methods();
 };
-
+#ifdef GDExtensions
+}
+#endif

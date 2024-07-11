@@ -24,7 +24,6 @@ if (target STREQUAL "GDExtensions")
 		GIT_REPOSITORY https://github.com/godotengine/godot-cpp.git
 		GIT_TAG godot-4.2.2-stable
 	)
-
 	FetchContent_MakeAvailable(GDExtension)
 endif()
 
@@ -36,6 +35,7 @@ find_package(CUDAToolkit REQUIRED)
 include_directories("${CUDA_INCLUDE_DIRS} ${CUDAToolkit_INCLUDE_DIRS}")
 
 if (target STREQUAL "GDExtensions")
+	add_compile_definitions(GDExtensions)
 	message("-- Dll for GDExtions added")
 	add_library(${PROJECT_NAME} SHARED	
 		data_type.h

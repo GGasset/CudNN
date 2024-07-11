@@ -3,6 +3,9 @@
 
 #include "NN.h"
 
+#ifdef GDExtensions
+namespace godot {
+#endif
 NN::NN(ILayer** layers, size_t input_length, size_t layer_count)
 {
 	this->layers = layers;
@@ -103,7 +106,7 @@ data_t* NN::batch_execute(data_t* input, size_t t_count)
 	return outputs;
 }
 
-data_t* NN::execute(data_t* input)
+data_t* NN::inference_execute(data_t* input)
 {
 	return batch_execute(input, 1);
 }
@@ -643,4 +646,9 @@ void NN::print_shape()
 		printf("%i ", layers[i]->get_neuron_count());
 	printf("\n");
 }
+
+#ifdef GDExtensions
+}
+#endif
+
 #endif

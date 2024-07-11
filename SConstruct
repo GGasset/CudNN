@@ -27,7 +27,7 @@ if env["platform"] == "macos":
     )
 else:
     library = env.SharedLibrary(
-        "bin/NN{}{}".format(env["suffix"], env["SHLIBSUFFIX"]),
+        "godot_bin/NN{}{}".format(env["suffix"], env["SHLIBSUFFIX"]),
         source=sources,
     )
 

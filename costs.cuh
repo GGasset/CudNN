@@ -1,5 +1,4 @@
 #include "data_type.h"
-#include "cuda_functionality.cuh"
 
 enum CostFunctions
 {
@@ -8,6 +7,8 @@ enum CostFunctions
 };
 
 #ifndef HEADER_ONLY
+
+#include "cuda_functionality.cuh"
 #include <cmath>
 
 #include "cuda_runtime.h"

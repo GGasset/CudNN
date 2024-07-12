@@ -11,6 +11,7 @@
 
 #endif
 
+#include "neuron_operations.cuh"
 #include "evolution_info.h"
 #include "kernel_macros.h"
 

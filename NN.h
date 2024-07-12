@@ -37,16 +37,16 @@ protected:
 public:
 	enum NeuronTypes
 	{
-		Neuron,
-		LSTM,
-		last_neuron_entry
+		Neuron = 0, 
+		LSTM = 1,
+		last_neuron_entry = 2
 	};
 
 	enum ConnectionTypes
 	{
-		Dense,
-		NEAT,
-		last_connection_entry
+		Dense = 0,
+		NEAT = 1,
+		last_connection_entry = 2
 	};
 
 	enum LearningRateAdjusters
@@ -59,6 +59,9 @@ public:
 
 	evolution_metadata evolution_values;
 	bool stateful = false;
+
+	size_t get_input_length();
+	size_t get_output_length();
 
 	~NN();
 	NN(ILayer** layers, size_t input_length, size_t layer_count);
@@ -167,6 +170,4 @@ public:
 	void deallocate();
 
 	void print_shape();
-
-	static void _bind_methods();
 };

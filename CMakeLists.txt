@@ -14,19 +14,6 @@ if (DEBUG)
 	message("-- Config debug")
 endif()
 
-if (target STREQUAL "GDExtensions")
-	message("-- GDExtensions Enabled")
-	
-	include(FetchContent)
-
-	FetchContent_Declare(
-		GDExtension
-		GIT_REPOSITORY https://github.com/godotengine/godot-cpp.git
-		GIT_TAG godot-4.2.2-stable
-	)
-	FetchContent_MakeAvailable(GDExtension)
-endif()
-
 #set(CMAKE_CUDA_ARCHITECTURES "native")
 
 project(NN LANGUAGES CUDA CXX)
@@ -34,48 +21,7 @@ project(NN LANGUAGES CUDA CXX)
 find_package(CUDAToolkit REQUIRED)
 include_directories("${CUDA_INCLUDE_DIRS} ${CUDAToolkit_INCLUDE_DIRS}")
 
-if (target STREQUAL "GDExtensions")
-	add_compile_definitions(GDExtensions)
-	message("-- Dll for GDExtions added")
-	add_library(${PROJECT_NAME} SHARED	
-		data_type.h
-		DenseConnections.h
-		evolution_info.h
-		functionality.h
-		IConnections.h
-		ILayer.h
-		kernel_macros.h
-		LSTMLayer.h
-		NeatConnections.h
-		NeuronLayer.h
-		NN.h
-		NN_constructor.h
-
-		connection_gradients.cu
-		costs.cu
-		cuda_functionality.cu
-		DenseConnections.cu
-		derivatives.cu
-		gradients.cu
-		IConnections.cu
-		ILayer.cu
-		linear_functions.cu
-		LSTMLayer.cu
-		NeatConnections.cu
-		NeuronLayer.cu
-		neuron_operations.cu
-		NN.cu
-		NN_constructor.cpp
-
-		functionality.cpp
-		./godot/register_types.cpp
-	)
-	target_link_libraries(${PROJECT_NAME} PUBLIC godot::cpp)
-	add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-                   COMMAND ${CMAKE_COMMAND} -E cmake_echo_color --cyan
-                   "Built dll for godot")
-
-   elseif(target STREQUAL "static")
+if(target STREQUAL "static")
 	   message("-- Static Lib added")
 	   add_library(${PROJECT_NAME} STATIC	
 		data_type.h

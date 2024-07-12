@@ -2,14 +2,15 @@
 #define NEURON_OPERATIONS_H
 
 #include "data_type.h"
-#include "cuda_functionality.cuh"
-
 enum ActivationFunctions
 {
 	sigmoid,
 	_tanh,
 	activations_last_entry
 };
+
+#ifndef HEADER_ONLY
+#include "cuda_functionality.cuh"
 
 __global__ void sigmoid_activation(
 	data_t* activations, size_t activations_start, size_t layer_activation_start, short write_activation,
@@ -31,5 +32,5 @@ __global__ void LSTM_execution(
 	field_t* neuron_weights, data_t* state,
 	size_t layer_length
 );
-
+#endif
 #endif

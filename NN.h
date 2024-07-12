@@ -17,6 +17,8 @@
 #include "kernel_macros.h"
 
 #pragma once
+class ILayer;
+
 class NN
 {
 #ifndef HEADER_ONLY

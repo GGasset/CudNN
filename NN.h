@@ -3,7 +3,6 @@
 #include <stdio.h>
 #include "ILayer.h"
 #include "costs.cuh"
-#include "evolution_info.h"
 #include "functionality.h"
 
 #include "NeatConnections.h"
@@ -11,6 +10,10 @@
 #include "LSTMLayer.h"
 
 #endif
+
+#include "evolution_info.h"
+#include "kernel_macros.h"
+
 #pragma once
 class NN
 {

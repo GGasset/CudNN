@@ -75,7 +75,7 @@ if (target STREQUAL "GDExtensions")
                    COMMAND ${CMAKE_COMMAND} -E cmake_echo_color --cyan
                    "Built dll for godot")
 
-   elseif(target STREQUAL "StaticLib")
+   elseif(target STREQUAL "static")
 	   message("-- Static Lib added")
 	   add_library(${PROJECT_NAME} STATIC	
 		data_type.h

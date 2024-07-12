@@ -1,7 +1,7 @@
 #pragma once
 #include "data_type.h"
 
-enum CostFunctions
+enum CostFunctions : size_t
 {
 	MSE,
 	log_likelyhood

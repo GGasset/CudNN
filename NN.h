@@ -47,21 +47,21 @@ protected:
 
 public:
 	NN();
-	enum NeuronTypes
+	enum NeuronTypes : size_t
 	{
 		Neuron = 0, 
 		LSTM = 1,
 		last_neuron_entry = 2
 	};
 
-	enum ConnectionTypes
+	enum ConnectionTypes : size_t
 	{
 		Dense = 0,
 		NEAT = 1,
 		last_connection_entry = 2
 	};
 
-	enum LearningRateAdjusters
+	enum LearningRateAdjusters : size_t
 	{
 		high_learning_high_learning_rate,
 		high_learning_low_learning_rate,

@@ -2,7 +2,7 @@
 #define NEURON_OPERATIONS_H
 
 #include "data_type.h"
-enum ActivationFunctions
+enum ActivationFunctions : size_t
 {
 	sigmoid,
 	_tanh,

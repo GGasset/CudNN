@@ -41,12 +41,12 @@ private:
 	//size_t since_memory_deletion_t_count = 0;
 
 
-	NN();
 #endif
 protected:
 	void set_fields();
 
 public:
+	NN();
 	enum NeuronTypes
 	{
 		Neuron = 0, 

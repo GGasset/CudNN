@@ -3,9 +3,6 @@
 
 #include "NN.h"
 
-#ifdef GDExtensions
-namespace godot {
-#endif
 NN::NN(ILayer** layers, size_t input_length, size_t layer_count)
 {
 	this->layers = layers;
@@ -647,8 +644,5 @@ void NN::print_shape()
 	printf("\n");
 }
 
-#ifdef GDExtensions
-}
-#endif
 
 #endif

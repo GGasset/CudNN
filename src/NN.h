@@ -9,22 +9,8 @@
 #include "LSTMLayer.h"
 
 #pragma once
-#ifdef GDExtensions
-//#include <godot_cpp/godot.hpp>
-//#include <variant>
-#include <godot_cpp/classes/object.hpp>
-//#include <godot_cpp/classes/node3d.hpp>
-//using namespace godot;
-namespace godot {
-class NN : public Object
-{
-	GDClass(NN, Object)
-#endif
-#ifndef GDExtensions
 class NN
 {
-#endif
-
 private:
 	ILayer **layers = 0;
 	size_t layer_count = 0;
@@ -184,6 +170,3 @@ public:
 
 	static void _bind_methods();
 };
-#ifdef GDExtensions
-}
-#endif

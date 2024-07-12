@@ -12,15 +12,19 @@ env = SConscript("godot-cpp/SConstruct")
 # - CPPDEFINES are for pre-processor defines
 # - LINKFLAGS are for linking flags
 
-env.Replace(CC="/usr/local/cuda/bin/nvcc -ccbin='g++-13' -arch=native -rdc=true -lstdc++")
-env.Append(LIBS=['curand'])
+cuda_path = '/usr/local/cuda/'
+
+env.Replace(CC=f"{cuda_path}bin/nvcc -ccbin='g++-13' -arch=native -rdc=true -lstdc++")
+#env.Append(LIBS=['curand'])
 env.Append(CPPDEFINES=['GDExtensions'])
 env.Replace(LINKFLAGS=['-lstdc++'])
-sources = Glob("src/*.[up]")
+env.Append(CPPPATH=["src/", cuda_path + "targets/x86_64-linux/include/"])
+
+sources = Glob("src/*.*[up]")
 
 if env["platform"] == "macos":
     library = env.SharedLibrary(
-        "demo/bin/libgdexample.{}.{}.framework/libgdexample.{}.{}".format(
+        "godot_bin/NN.{}.{}.framework/libgdexample.{}.{}".format(
             env["platform"], env["target"], env["platform"], env["target"]
         ),
         source=sources,

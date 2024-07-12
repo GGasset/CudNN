@@ -75,9 +75,9 @@ if (target STREQUAL "GDExtensions")
                    COMMAND ${CMAKE_COMMAND} -E cmake_echo_color --cyan
                    "Built dll for godot")
 
-elseif(target STREQUAL "DLL")
-	message("-- DLL added")
-	add_library(${PROJECT_NAME} SHARED	
+   elseif(target STREQUAL "StaticLib")
+	   message("-- Static Lib added")
+	   add_library(${PROJECT_NAME} STATIC	
 		data_type.h
 		DenseConnections.h
 		evolution_info.h
@@ -111,7 +111,7 @@ elseif(target STREQUAL "DLL")
 	)
 	add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
                    COMMAND ${CMAKE_COMMAND} -E cmake_echo_color --cyan
-                   "Built dll")
+		   "Built Static Lib")
 else()
 	message("-- Exe for testing added")
 	add_executable(${PROJECT_NAME}

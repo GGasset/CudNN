@@ -1,10 +1,13 @@
 #pragma once
+#ifndef HEADER_ONLY
 
 #include "ILayer.h"
 #include "NeuronLayer.h"
 #include "LSTMLayer.h"
 #include "DenseConnections.h"
 #include "NeatConnections.h"
+
+#endif
 
 #include "NN.h"
 #include <vector>

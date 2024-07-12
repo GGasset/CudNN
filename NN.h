@@ -1,3 +1,5 @@
+#ifndef HEADER_ONLY
+
 #include <stdio.h>
 #include "ILayer.h"
 #include "costs.cuh"
@@ -8,9 +10,11 @@
 #include "NeuronLayer.h"
 #include "LSTMLayer.h"
 
+#endif
 #pragma once
 class NN
 {
+#ifndef HEADER_ONLY
 private:
 	ILayer **layers = 0;
 	size_t layer_count = 0;
@@ -31,6 +35,7 @@ private:
 
 
 	NN();
+#endif
 protected:
 	void set_fields();
 

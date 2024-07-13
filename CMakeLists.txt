@@ -22,6 +22,7 @@ find_package(CUDAToolkit REQUIRED)
 include_directories("${CUDA_INCLUDE_DIRS} ${CUDAToolkit_INCLUDE_DIRS}")
 
 if(target STREQUAL "static")
+	   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 	   message("-- Static Lib added")
 	   add_library(${PROJECT_NAME} STATIC	
 		data_type.h

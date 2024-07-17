@@ -8,20 +8,19 @@
 #include "NeatConnections.h"
 #include "NeuronLayer.h"
 #include "LSTMLayer.h"
+#include "kernel_macros.h"
 
 #endif
 
 #include "costs.cuh"
 #include "neuron_operations.cuh"
 #include "evolution_info.h"
-#include "kernel_macros.h"
 
 #pragma once
 class ILayer;
 
 class NN
 {
-#ifndef HEADER_ONLY
 private:
 	ILayer **layers = 0;
 	size_t layer_count = 0;
@@ -41,7 +40,6 @@ private:
 	//size_t since_memory_deletion_t_count = 0;
 
 
-#endif
 protected:
 	void set_fields();
 

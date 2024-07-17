@@ -1,4 +1,4 @@
-#ifndef HEADER_ONLY
+#ifdef INCLUDE_BACKEND
 
 #include <stdio.h>
 #include "ILayer.h"

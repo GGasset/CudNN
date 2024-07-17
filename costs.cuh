@@ -7,7 +7,7 @@ enum CostFunctions : size_t
 	log_likelyhood
 };
 
-#ifndef HEADER_ONLY
+#ifdef INCLUDE_BACKEND
 
 #include "cuda_functionality.cuh"
 #include <cmath>

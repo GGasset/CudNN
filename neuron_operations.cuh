@@ -9,7 +9,7 @@ enum ActivationFunctions : size_t
 	activations_last_entry
 };
 
-#ifndef HEADER_ONLY
+#ifdef INCLUDE_BACKEND
 #include "cuda_functionality.cuh"
 
 __global__ void sigmoid_activation(

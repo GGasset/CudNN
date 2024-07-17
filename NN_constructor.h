@@ -1,5 +1,5 @@
 #pragma once
-#ifndef HEADER_ONLY
+#ifdef INCLUDE_BACKEND
 
 #include "ILayer.h"
 #include "NeuronLayer.h"

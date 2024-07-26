@@ -1,9 +1,18 @@
 #include <vector>
 #include <stdio.h>
 
+#include "HashTable.h"
 #include "NN_constructor.h"
 
 #pragma once
+
+typedef struct {
+	size_t accumlated_training_t_count;
+	data_t* accumulated_activations;
+	data_t* accumulated_execution_values;
+	data_t* accumulated_Y_hat;
+	NN network;
+} network_container;
 
 typedef struct {
 	data_t *return_value;
@@ -15,12 +24,7 @@ class NN_manager
 {
 private:
 	size_t network_count = 0;
-	std::vector<size_t> accumulated_training_t_count;
-	std::vector<data_t*> accumulated_activations;
-	std::vector<data_t*> accumulated_execution_values;
-	std::vector<data_t*> accumulated_Y_hat;
-	std::vector<NN*> networks;
-
+	HashTable<size_t, network_container> networks;
 public:
 	enum action_enum : size_t
 	{
@@ -28,7 +32,7 @@ public:
 		last_entry
 	};
 
-	NN_manager();
+	NN_manager(size_t bucket_count);
 
 	return_specifier parse_message(void* message, size_t message_length);
 };

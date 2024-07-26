@@ -63,7 +63,7 @@ if(target STREQUAL "static")
                    COMMAND ${CMAKE_COMMAND} -E cmake_echo_color --cyan
 		   "Built Static Lib")
 elseif(target STREQUAL "socket")
-	message("-- Socket Exe added")
+	message("-- Socket config added")
 	add_executable(${PROJECT_NAME}
 		data_type.h
 		DenseConnections.h
@@ -101,10 +101,13 @@ elseif(target STREQUAL "socket")
 
 		unix_sock_interop.h
 		unix_sock_interop.cpp
+
+		HashTable.h
+		SinglyLinkedListNode.h
 	)
 	add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 	   COMMAND ${CMAKE_COMMAND} -E cmake_echo_color --cyan
-	   "Built socket executable")
+	   "Built socket config")
 else()
 	message("-- Exe for testing added")
 	add_executable(${PROJECT_NAME}

@@ -1,8 +1,8 @@
 #include "NN_socket_interpreter.h"
 
-NN_manager::NN_manager(size_t table_bucket_count)
+NN_manager::NN_manager(size_t bucket_count)
 {
-	
+	networks = new HashTable<size_t, network_container>(bucket_count);
 }
 
 return_specifier NN_manager::parse_message(void* message, size_t message_length)
@@ -18,10 +18,10 @@ return_specifier NN_manager::parse_message(void* message, size_t message_length)
 			offset += sizeof(size_t);
 			for (size_t i = 0; i < layer_count; i++)
 			{
-				NN::ConnectionTypes connections = *(NN::ConnectionTypes*)(message + offset);
+				ConnectionTypes connections = *(ConnectionTypes*)(message + offset);
 				offset += sizeof(size_t);
 
-				NN::NeuronTypes neurons = *(NN::NeuronTypes*)(message + offset);
+				NeuronTypes neurons = *(NeuronTypes*)(message + offset);
 				offset += sizeof(size_t);
 
 				size_t neuron_count = *(size_t*)(message + offset);
@@ -46,5 +46,5 @@ return_specifier NN_manager::parse_message(void* message, size_t message_length)
 			break;
 	}
 	if (offset > message_length) throw;
-	return return_specifier;
+	return output;
 }

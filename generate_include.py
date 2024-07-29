@@ -1,20 +1,14 @@
 def main():
-    files = ['NN.h', 'NN_constructor.h', 'costs.cuh', 'neuron_operations.cuh', 'data_type.h', 'evolution_info.h']
-    for file_name in files:
-        file_contents = ''
-        
-        with open('./' + file_name, 'r') as file:
-            append : bool = True
-            for line in file:
-                if '#ifdef INCLUDE_BACKEND' in line:
-                    append = False
-                if append:
-                    file_contents += line
-                if '#endif' in line:
-                    append = True
-        
-        with open('./Include/' + file_name, 'w') as file:
-            file.write(file_contents)
+    copy_directory = ['socket_client']
+    copy_filenames = ['NN_enums.h']
+    for file_name in copy_filenames:
+        content = ''
+        with open(file_name, 'r') as file:
+            content = file.read()
+        for directory in copy_directory:
+            with open(f"{directory}/{file_name}", 'w') as file:
+                file.write(content)
+    
 
 if __name__ == '__main__':
     main()

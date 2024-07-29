@@ -491,10 +491,10 @@ void NN::evolve()
 
 		switch (insert_type)
 		{
-		case NN::Neuron:
+		case NeuronTypes::Neuron:
 			new_layer = new NeuronLayer(new_connections, 1, (ActivationFunctions)(rand() % ActivationFunctions::activations_last_entry));
 			break;
-		case NN::LSTM:
+		case NeuronTypes::LSTM:
 			new_layer = new LSTMLayer(new_connections, 1);
 			break;
 		default:

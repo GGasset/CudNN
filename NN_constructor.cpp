@@ -5,7 +5,7 @@ NN_constructor::NN_constructor()
 
 }
 
-NN_constructor NN_constructor::append_layer(NN::ConnectionTypes connections_type, NN::NeuronTypes neurons_type, size_t neuron_count, ActivationFunctions activation)
+NN_constructor NN_constructor::append_layer(ConnectionTypes connections_type, NeuronTypes neurons_type, size_t neuron_count, ActivationFunctions activation)
 {
 	connection_types.push_back(connections_type);
 	neuron_types.push_back(neurons_type);
@@ -28,10 +28,10 @@ NN NN_constructor::construct(size_t input_length, bool stateful)
 		ILayer* layer = 0;
 		switch (connection_types[i])
 		{
-			case NN::ConnectionTypes::Dense:
+			case ConnectionTypes::Dense:
 				connections = new DenseConnections(previous_layer_activations_start, previous_layer_length, layer_length);
 				break;
-			case NN::ConnectionTypes::NEAT:
+			case ConnectionTypes::NEAT:
 				connections = new NeatConnections(previous_layer_activations_start, previous_layer_length, layer_length);
 				break;
 			default:
@@ -39,10 +39,10 @@ NN NN_constructor::construct(size_t input_length, bool stateful)
 		}
 		switch (neuron_types[i])
 		{
-			case NN::NeuronTypes::Neuron:
+			case NeuronTypes::Neuron:
 				layer = new NeuronLayer(connections, layer_length, activation);
 				break;
-			case NN::NeuronTypes::LSTM:
+			case NeuronTypes::LSTM:
 				layer = new LSTMLayer(connections, layer_length);
 				break;
 			default:

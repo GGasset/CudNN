@@ -1,11 +1,6 @@
 #pragma once
 #include "data_type.h"
-
-enum CostFunctions : size_t
-{
-	MSE,
-	log_likelyhood
-};
+#include "NN_enums.h"
 
 #ifdef INCLUDE_BACKEND
 

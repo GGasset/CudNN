@@ -12,6 +12,7 @@
 
 #endif
 
+#include "NN_enums.h"
 #include "costs.cuh"
 #include "neuron_operations.cuh"
 #include "evolution_info.h"
@@ -45,27 +46,6 @@ protected:
 
 public:
 	NN();
-	enum NeuronTypes : size_t
-	{
-		Neuron = 0, 
-		LSTM = 1,
-		last_neuron_entry = 2
-	};
-
-	enum ConnectionTypes : size_t
-	{
-		Dense = 0,
-		NEAT = 1,
-		last_connection_entry = 2
-	};
-
-	enum LearningRateAdjusters : size_t
-	{
-		high_learning_high_learning_rate,
-		high_learning_low_learning_rate,
-		cost_times_learning_rate,
-		none
-	};
 
 	evolution_metadata evolution_values;
 	bool stateful = false;

@@ -14,89 +14,101 @@ int main(int argc, char *argv[])
 	auto pending_messages_sizes = HashTable<int, size_t>(200);
 	auto pending_out_messages = HashTable<int, return_specifier>(200);
 	printf("Waiting for connections...\n");
-	try
+	while (true)
 	{
-		while (true)
+		fd_set read_fds;
+		fd_set write_fds;
+
+		FD_ZERO(&read_fds);
+		FD_ZERO(&write_fds);
+		
+		FD_SET(socket_fd, &read_fds); // Add fd to set
+
+		int max_fd = socket_fd;
+		for (auto it = clients.begin(); it != clients.end(); it++)
 		{
-			fd_set read_fds;
-			fd_set write_fds;
+			size_t client_fd = *it;
+			FD_SET(client_fd, &read_fds);
+			max_fd = max_fd * (max_fd >= client_fd) + client_fd * (client_fd > max_fd);
+		}
 
-			FD_ZERO(&read_fds);
-			FD_ZERO(&write_fds);
-			
-			FD_SET(socket_fd, &read_fds); // Add fd to set
+		SinglyLinkedListNode<int>* pending_messages_fds = pending_out_messages.GetKeys();
+		for (auto it = pending_messages_fds; it; it = it->next)
+			if (!FD_ISSET(it->value, &write_fds))
+				FD_SET(it->value, &write_fds);
+		pending_messages_fds->free();
 
-			fd_set set_cpy = set;
-			int max_fd = socket_fd;
-			for (auto it = clients.begin(); it != clients.end(); it++)
+		if (select(max_fd, &read_fds, &write_fds, 0, 0) < 0)
+		{
+			printf("select error\n");
+			throw;
+		}
+
+		if (FD_ISSET(socket_fd, &read_fds))
+		{
+			size_t new_client_fd = accept(socket_fd, 0, 0);
+			if (new_client_fd < 0)
 			{
-				size_t client_fd = *it;
-				FD_SET(client_fd, &read_fds);
-				max_fd = max_fd * (max_fd >= client_fd) + client_fd * (client_fd > max_fd);
-			}
-
-			SinglyLinkedListNode<size_t>* pending_messages_fds = pending_out_messages.GetKeys();
-			for (auto it = pending_messages_fds; it; it = it->next)
-				if (!FD_ISSET(it->value, &write_fds))
-					FD_SET(it->value, &write_fds);
-			pending_messages_fds->free();
-
-			if (select(max_fd, &read_fds, 0, 0, 0) < 0)
-			{
-				printf("select error\n");
+				printf("accept_error\n");
 				throw;
 			}
 
-			if (FD_ISSET(socket_fd, &read_fds))
-			{
-				size_t new_client_fd = accept(socket_fd, 0, 0);
-				if (new_client_fd < 0)
-				{
-					printf("accept_error\n");
-					throw;
-				}
+			clients.push_back(new_client_fd);
+			printf("Client connected\n");
+		}
 
-				clients.push_back(new_client_fd);
-				printf("Client connected\n");
-			}
-
-			for (auto fd_it = clients.begin(); fd_it != clients.end(); fd_it++)
+		for (auto fd_it = clients.begin(); fd_it != clients.end(); fd_it++)
+		{
+			size_t fd = *fd_it;
+			if (FD_ISSET(fd, &read_fds))
 			{
-				size_t fd = *fd_it;
-				if (FD_ISSET(fd, &read_fds))
+				bool has_sent_message_size = false;
+				size_t bytes_to_read = pending_messages_sizes.Get(fd, has_sent_message_size);
+				bytes_to_read += sizeof(size_t) * (!has_sent_message_size);
+				
+				void* message = malloc(bytes_to_read);
+				read(fd, message, bytes_to_read);
+				if (has_sent_message_size)
 				{
-					bool has_sent_message_size = false;
-					size_t bytes_to_read = pending_messages_sizes.Get(fd, has_sent_message_size);
-					bytes_to_read += sizeof(size_t) * (!has_sent_message_size);
+					pending_messages_sizes.Remove(fd);
 					
-					void* message = malloc(bytes_to_read);
-					read(fd, message, bytes_to_read);
-					if (has_sent_message_size)
-					{
-						pending_messages_sizes.Remove(fd);
-						return_specifier returned = networks.parse_message(message, bytes_to_read);
-						pending_out_messages.Add(fd, returned);
-					}
-					else
-						pending_messages_sizes.Add(*(size_t*)message);
-					
-				}
-				if (FD_ISSET(fd, &write_fds))
-				{
-					return_specifier = pending_out_messages.Get(fd);
-					write(fd, &return_specifier, sizeof(return_specifier));
-					delete return_specifier.return_value;
+					bool has_pending_out_message = false;
+					return_specifier queued_message = pending_out_messages.Get(fd, has_pending_out_message);
+					if (has_pending_out_message) delete[] queued_message.return_value;
 					pending_out_messages.Remove(fd);
+
+					return_specifier returned = networks.parse_message(message, bytes_to_read);
+					pending_out_messages.Add(fd, returned);
 				}
+				else
+				{
+					size_t message_size = *(size_t*)message;
+					if (message_size)
+					{
+						pending_messages_sizes.Add(fd, message_size);
+						continue;
+					}
+
+					// Handle client disconnect
+					close(fd);
+					pending_out_messages.Remove(fd);
+					pending_messages_sizes.Remove(fd);
+				}
+				free(message);
+			}
+			if (FD_ISSET(fd, &write_fds))
+			{
+				bool avalible_message = false;
+				return_specifier out_message = pending_out_messages.Get(fd, avalible_message);
+				if (!avalible_message) continue;
+
+
+				write(fd, &out_message + sizeof(data_t*), sizeof(return_specifier) - sizeof(data_t*));
+				write(fd, out_message.return_value, sizeof(data_t) * out_message.value_count);
+				delete[] out_message.return_value;
+				pending_out_messages.Remove(fd);
 			}
 		}
-	}
-	finally
-	{
-		close(socket_fd);
-		auto out_messages_keys = pending_out_messages.GetKeys();
-		for (SinglyLinkedListNode<return_specifier> it = out_message_keys; it; it = it->next)
-			delete[] it->value.return_value;
 	}
 }
 

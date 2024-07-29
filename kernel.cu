@@ -47,8 +47,8 @@ int main()
 
 
 	NN n = NN_constructor()
-		.append_layer(NN::ConnectionTypes::NEAT, NN::NeuronTypes::Neuron, 5, ActivationFunctions::sigmoid)
-		.append_layer(NN::ConnectionTypes::NEAT, NN::NeuronTypes::LSTM, output_length)
+		.append_layer(ConnectionTypes::NEAT, NeuronTypes::Neuron, 5, ActivationFunctions::sigmoid)
+		.append_layer(ConnectionTypes::NEAT, NeuronTypes::LSTM, output_length)
 		.construct(input_length);
 	n.stateful = true;
 	data_t *prev_y = 0;

@@ -16,7 +16,7 @@ public:
 	HashTable(int bucket_count)
 	{
 		this->bucket_count = bucket_count;
-		this->keys = (SinglyLinkedListNode<int>**)malloc(sizeof(SinglyLinkedListNode<int>*) * bucket_count);
+		this->keys = (SinglyLinkedListNode<keyT>**)malloc(sizeof(SinglyLinkedListNode<keyT>*) * bucket_count);
 		this->values = (SinglyLinkedListNode<valueT>**)malloc(sizeof(SinglyLinkedListNode<valueT>*) * bucket_count);
 		this->contains_values = (bool*)malloc(sizeof(bool) * bucket_count);
 		for (size_t i = 0; i < bucket_count && contains_values; i++)
@@ -108,9 +108,9 @@ public:
 			keys[i]->free();
 			values[i]->free();
 		}
-		free(keys);
-		free(values);
-		free(contains_values);
+		std::free(keys);
+		std::free(values);
+		std::free(contains_values);
 	}
 
 private:

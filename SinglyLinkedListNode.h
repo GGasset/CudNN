@@ -112,7 +112,7 @@ public:
 		return this->next->Reverse(new_first_node);
 	}
 
-	SinglyLinkedNode<T>* Clone()
+	SinglyLinkedListNode<T>* Clone()
 	{
 		auto new_node = new SinglyLinkedListNode<T>*();
 		if (next)

@@ -7,7 +7,11 @@
 	- ~~Gradients~~
 - ~~adaptative learning rates~~
     - ~~return cost while training~~
-- ~~reinforcement learning cost functions~~
+- ~~reinforcement learning cost function~~
+    - Proximal Policy optimization cost function
+- ~~server socket~~
+- ~~client_socket~~
+
 
 # Bugs
  - ~~device array being used as host array in NeuronLayer and LSTMLayer remove neuron~~

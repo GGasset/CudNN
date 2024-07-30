@@ -15,11 +15,6 @@ typedef struct {
 	NN* network;
 } network_container;
 
-typedef struct {
-	data_t *return_value;
-	size_t value_count;
-	size_t error;
-} return_specifier;
 
 class NN_manager
 {

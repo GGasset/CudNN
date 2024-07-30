@@ -42,4 +42,10 @@ enum action_enum : size_t
 	last_entry
 };
 
+typedef struct {
+	data_t *return_value;
+	size_t value_count;
+	size_t error;
+} return_specifier;
+
 #endif

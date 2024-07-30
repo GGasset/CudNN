@@ -46,7 +46,7 @@ int main()
 
 
 
-	NN n = NN_constructor()
+	NN* n = NN_constructor()
 		.append_layer(ConnectionTypes::NEAT, NeuronTypes::Neuron, 5, ActivationFunctions::sigmoid)
 		.append_layer(ConnectionTypes::NEAT, NeuronTypes::LSTM, output_length)
 		.construct(input_length);
@@ -56,8 +56,8 @@ int main()
 	{
 		//printf("\n\n\n");
 		data_t* y = 0;
-		n.training_batch(t_count, X, Y_hat, true, output_length * t_count, CostFunctions::MSE, .05 / t_count, &y, true, 200000, 0);
-		//n.print_shape();
+		n->training_batch(t_count, X, Y_hat, true, output_length * t_count, CostFunctions::MSE, .05 / t_count, &y, true, 200000, 0);
+		//n->print_shape();
 		
 		// Reinforcement learning
 		/*data_t* reward = new data_t[t_count];
@@ -109,5 +109,6 @@ int main()
 		//n.delete_memory();
 	}
 	delete[] prev_y;
+	delete n;
 	//n.deallocate();
 }

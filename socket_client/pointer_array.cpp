@@ -12,6 +12,11 @@ pointer_array::~pointer_array()
 	delete[] data;
 }
 
+T* pointer_array::get_raw()
+{
+	return data;
+}
+
 void pointer_array::fill(T value)
 {
 	for (size_t i = 0; i < length; i++) data[i] = value;

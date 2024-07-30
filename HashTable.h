@@ -36,9 +36,9 @@ public:
 		for (size_t i = 0; i < bucket_count; i++)
 		{
 			if (contains_values[i])
-				output.AddRange(keys[i].Clone());
+				output.AddRange(keys[i]->Clone());
 		}
-		return output->next;
+		return output.next;
 	}
 
 	size_t GetHash(keyT key)
@@ -73,10 +73,10 @@ public:
 		is_found = node_i != -1;
 		if (!is_found) return;
 
-		keys[bucket_i] = keys[bucket_i]->remove_node(node_i);
-		values[bucket_i] = values[bucket_i]->remove_node(node_i);
+		keys[bucket_i] = keys[bucket_i]->RemoveNode(node_i);
+		values[bucket_i] = values[bucket_i]->RemoveNode(node_i);
 
-		bool error = (keys[bucket_i] == 0 || values[bucket_i] == 0) && keys[bucket_i] != values[bucket_i];
+		bool error = (keys[bucket_i] == 0 || values[bucket_i] == 0) && (void*)keys[bucket_i] != (void*)values[bucket_i];
 		if (error) throw;
 
 		if (keys[bucket_i] == 0)

@@ -34,6 +34,14 @@ public:
 		return next->GetIndex(i - 1);
 	}
 
+	T max()
+	{
+		if (!next) return value;
+		
+		T foward_max = next->max();
+		return value * (value > foward_max) + foward_max * (foward_max >= value);
+	}
+
 	size_t GetLastIndex(T value)
 	{
 		int output = -1;
@@ -114,7 +122,7 @@ public:
 
 	SinglyLinkedListNode<T>* Clone()
 	{
-		auto new_node = new SinglyLinkedListNode<T>*();
+		auto new_node = new SinglyLinkedListNode<T>(value);
 		if (next)
 			new_node->next = next->Clone();
 		return new_node;

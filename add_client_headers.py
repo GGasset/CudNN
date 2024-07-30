@@ -1,6 +1,6 @@
 def main():
     copy_directory = ['socket_client']
-    copy_filenames = ['NN_enums.h']
+    copy_filenames = ['NN_enums.h', 'data_type.h']
     for file_name in copy_filenames:
         content = ''
         with open(file_name, 'r') as file:

@@ -57,6 +57,8 @@ if(target STREQUAL "static")
 		NN.cu
 		NN_constructor.cpp
 
+		NN_enums.h
+
 		functionality.cpp
 	)
 	add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
@@ -102,6 +104,8 @@ elseif(target STREQUAL "socket")
 		unix_sock_interop.h
 		unix_sock_interop.cpp
 
+		NN_enums.h
+
 		HashTable.h
 		SinglyLinkedListNode.h
 	)
@@ -140,6 +144,8 @@ else()
 		neuron_operations.cu
 		NN.cu
 		NN_constructor.cpp
+
+		NN_enums.h
 
 		functionality.cpp
 	)

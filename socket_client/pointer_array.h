@@ -1,17 +1,53 @@
+#include <stddef.h>
+
 #pragma once
 template<typename T>
 class pointer_array
 {
-pivate:
+private:
 	int length;
 	T* data;
 public:
-	pointer_array(int length);
-	~pointer_array();
+	pointer_array(int length)
+	{
+		if (length <= 0) throw;
+		this->length = length;
+		data = new T[length];
+	}
 
-	T* get_raw();
-	void fill(T value);
-	int get_length();
-	T get(int i);
-	void set(T value, int i);
-}
+
+	~pointer_array()
+	{
+		delete[] data;
+	}
+
+	T* get_raw()
+	{
+		return data;
+	}
+
+	void fill(T value)
+	{
+		for (size_t i = 0; i < length; i++) data[i] = value;
+	}
+
+	int get_length()
+	{
+		return length;
+	}
+
+	T get(int i)
+	{
+		return data[i];
+	}
+
+	void set(T value, int i)
+	{
+		data[i] = value;
+	}
+
+	void cpy(void* dst, size_t dst_copy_start_bytes)
+	{
+		for (size_t i = 0; i < length; i++) (T*)(dst + dst_copy_start_bytes + sizeof(T) * i) = data[i];
+	}
+};

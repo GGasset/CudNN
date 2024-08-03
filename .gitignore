@@ -8,6 +8,8 @@ build/[^t]*
 *.swp
 .sconsign.dblite
 godot_bin/*
+socket_client/build/*
+
 
 # User-specific files
 *.rsuser

@@ -114,8 +114,8 @@ int main(int argc, char *argv[])
 				return_specifier* out_message = pending_out_messages.Get(fd, avalible_message);
 				if (!avalible_message) continue;
 
-
-				write(fd, out_message + sizeof(data_t*), sizeof(return_specifier) - sizeof(data_t*));
+				void* raw_message = out_message;
+				write(fd, raw_message + sizeof(data_t*), sizeof(return_specifier) - sizeof(data_t*));
 				if (out_message->value_count) write(fd, out_message->return_value, sizeof(data_t) * out_message->value_count);
 				
 

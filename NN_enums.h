@@ -1,9 +1,11 @@
+#include "data_type.h"
+
 #ifndef ENUMS_H
 #define ENUMS_H
 
 enum NeuronTypes : size_t
 {
-	Neuron, 
+	Neuron,
 	LSTM,
 	last_neuron_entry
 };
@@ -39,6 +41,7 @@ enum CostFunctions : size_t
 enum action_enum : size_t
 {
 	construct,
+	destruct,
 	last_entry
 };
 

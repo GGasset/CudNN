@@ -11,6 +11,7 @@ SET(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} ${GCC_COVERAGE_LINK_FLAGS
 set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -ccbin='g++-13'")
 if (DEBUG)
 	set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -G -g")
+	add_compile_definitions("DEBUG")
 	message("-- Config debug")
 endif()
 

@@ -14,6 +14,15 @@ int main(int argc, char *argv[])
 	auto pending_messages_sizes = HashTable<int, size_t>(200);
 	auto pending_out_messages = HashTable<int, return_specifier*>(200);
 	printf("Waiting for connections...\n");
+		/*	size_t new_client_fd = accept(socket_fd, 0, 0);
+			if (new_client_fd < 0)
+			{
+				printf("Accept error\n");
+				throw;
+			}
+
+			clients.push_back(new_client_fd);
+			printf("Client connected\n");*/
 	while (true)
 	{
 		fd_set read_fds;
@@ -31,26 +40,29 @@ int main(int argc, char *argv[])
 			FD_SET(client_fd, &read_fds);
 			max_fd = max_fd * (max_fd >= client_fd) + client_fd * (client_fd > max_fd);
 		}
+		max_fd++;
 
 		SinglyLinkedListNode<int>* pending_messages_fds = pending_out_messages.GetKeys();
 		for (auto it = pending_messages_fds; it; it = it->next)
 			if (!FD_ISSET(it->value, &write_fds))
 				FD_SET(it->value, &write_fds);
-		pending_messages_fds->free();
-		delete pending_messages_fds;
+		if (pending_messages_fds) pending_messages_fds->free();
 
-		if (select(max_fd, &read_fds, &write_fds, 0, 0) < 0)
+		timeval timeout;
+		timeout.tv_sec = 1;
+		timeout.tv_usec = 0;
+		if (select(max_fd, &read_fds, &write_fds, 0, &timeout) < 0)
 		{
 			printf("select error\n");
 			throw;
 		}
 
 		if (FD_ISSET(socket_fd, &read_fds))
-		{
+	       	{
 			size_t new_client_fd = accept(socket_fd, 0, 0);
 			if (new_client_fd < 0)
 			{
-				printf("accept_error\n");
+				printf("Accept error\n");
 				throw;
 			}
 
@@ -68,7 +80,8 @@ int main(int argc, char *argv[])
 				bytes_to_read += sizeof(size_t) * (!has_sent_message_size);
 				
 				void* message = malloc(bytes_to_read);
-				read(fd, message, bytes_to_read);
+				size_t bytes_read = read(fd, message, bytes_to_read);
+				if (bytes_read < 0 || bytes_read != bytes_to_read) throw;
 				if (has_sent_message_size)
 				{
 					pending_messages_sizes.Remove(fd);
@@ -104,6 +117,7 @@ int main(int argc, char *argv[])
 					pending_out_messages.Remove(fd);
 					pending_messages_sizes.Remove(fd);
 					i--;
+					printf("Client disconnected.\n");
 					continue;
 				}
 				free(message);
@@ -143,13 +157,9 @@ int connect()
 	if (bind(socket_fd, (struct sockaddr*)&address, sizeof(address)))
 	{
 		printf("bind error\n");
-		return 0;
+		throw;
 	}
 	printf("binding to \"%s\" abstract name succesful\n", bind_path);
-	if (listen(socket_fd, 1024))
-	{
-		printf("listen error\n");
-		return 0;
-	}
+	if (listen(socket_fd, 1024)) throw;
 	return socket_fd;
 }

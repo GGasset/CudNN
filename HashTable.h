@@ -46,7 +46,7 @@ public:
 		if (typeid(keyT) == typeid(short) || typeid(keyT) == typeid(int) || typeid(keyT) == typeid(size_t) || typeid(keyT) == typeid(long) || typeid(keyT) == typeid(long long))
 		{
 			int hash = key;
-			hash = hash * (hash < bucket_count) + (bucket_count % hash) * (hash >= bucket_count);
+			if (key) hash = hash * (hash < bucket_count) + (bucket_count % hash) * (hash >= bucket_count);
 			hash -= bucket_count * (hash == bucket_count);
 
 			return hash;

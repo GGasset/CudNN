@@ -15,7 +15,7 @@ if (DEBUG)
 	message("-- Config debug")
 endif()
 
-#set(CMAKE_CUDA_ARCHITECTURES "native")
+set(CMAKE_CUDA_ARCHITECTURES "native")
 
 project(NN LANGUAGES CUDA CXX)
 

@@ -175,12 +175,8 @@ public:
 
 	void free()
 	{
-		if (!this->next)
-		{
-			std::free(this);
-			return;
-		}
-		this->next->free();
+		if (this->next) this->next->free();
+		std::free(this);
 	}
 
 	size_t GetLength(size_t i = 1)

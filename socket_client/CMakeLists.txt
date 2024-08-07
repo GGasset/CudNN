@@ -11,7 +11,10 @@ project (NN_client)
 file(GLOB sourcefiles
 	*.h
 	*.cpp
+	test_main/*.cpp
 )
+
+message("Executable for testing only")
 
 add_executable(${PROJECT_NAME}
 	${sourcefiles}

@@ -18,5 +18,6 @@ public:
 
 	void link_NN(NN_constructor_client constructor);
 
-
+private:
+	void disconnect_NN();
 };

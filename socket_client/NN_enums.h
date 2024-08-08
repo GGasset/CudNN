@@ -35,7 +35,8 @@ enum ActivationFunctions : size_t
 enum CostFunctions : size_t
 {
         MSE,
-        log_likelyhood
+        log_likelyhood,
+	PPO
 };
 
 enum action_enum : size_t

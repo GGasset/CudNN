@@ -22,10 +22,23 @@ __device__ data_t device_min(data_t a, data_t b)
 	return a * (a <= b) + b * (b < a);
 }
 
+__device__ data_t device_max(data_t a, data_t b)
+{
+	return a * (a >= b) + b * (b > a);
+}
+
 __device__ data_t device_closest_to_zero(data_t a, data_t b)
 {
 	short is_a_closer = abs(a) < abs(b);
 	return a * is_a_closer + b * !is_a_closer;
+}
+
+__device__ data_t device_clip(data_t to_clip, data_t a, data_t b)
+{
+	data_t lower_clip = device_min(a, b);
+	data_t upper_clip = device_max(a, b);
+
+	return device_max(device_min(to_clip, upper_clip), lower_clip);
 }
 
 __device__ size_t get_tid()

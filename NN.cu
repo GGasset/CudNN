@@ -173,7 +173,7 @@ data_t NN::calculate_output_costs(
 	cudaDeviceSynchronize();
 	switch (cost_function)
 	{
-	case MSE:
+	case CostFunctions::MSE:
 		MSE_derivative kernel(dim3(output_length / 32 + (output_length % 32 > 0), t_count), 32) (
 			activations, neuron_count, activations_start, *output_activations_start,
 			costs, costs_start,
@@ -185,7 +185,7 @@ data_t NN::calculate_output_costs(
 			cost
 		);
 		break;
-	case log_likelyhood:
+	case CostFunctions::log_likelyhood:
 		log_likelyhood_derivative kernel(dim3(output_length / 32 + (output_length % 32 > 0), t_count), 32) (
 			activations, activations_start,
 			neuron_count, *output_activations_start, output_length,
@@ -196,6 +196,14 @@ data_t NN::calculate_output_costs(
 			activations, neuron_count, activations_start, *output_activations_start,
 			Y_hat, output_length,
 			cost
+		);
+		break;
+	case CostFunctions::PPO:
+		PPO kernel(dim3(output_length / 32 + (output_length % 32 > 0), t_count), 32) (
+			activations, activations_start, 
+			neuron_count, *output_activations_start, output_length,
+			costs, costs_start,
+			Y_hat
 		);
 		break;
 	default:

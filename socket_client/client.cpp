@@ -10,10 +10,11 @@ socket_client::socket_client()
         const char bind_path[] = "NN_socket_client";
         const char server_bind_path[] = "NN_socket";
 
-        sockaddr_un address;
+        /*sockaddr_un address;
         address.sun_family = AF_UNIX;
         address.sun_path[0] = '\0';
         strncpy(address.sun_path + 1, bind_path, sizeof(address.sun_path) - 1);	
+	*/
 
 	sockaddr_un server_address;
 	server_address.sun_family = AF_UNIX;

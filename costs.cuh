@@ -35,7 +35,7 @@ __global__ void log_likelyhood_cost(
 	data_t* cost
 );
 
-__global__ void PPO(
+__global__ void PPO_cost(
 	data_t* activations, size_t activations_start,
 	size_t neuron_count, size_t last_layer_activations_start, size_t output_length,
 	data_t* costs, size_t costs_start,

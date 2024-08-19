@@ -305,8 +305,7 @@ data_t NN::train(
 		subtract_gradients(gradients, gradient_count * t, learning_rate, dropout_rate, gradient_clip);
 	}
 
-	if (is_Y_hat_on_host_memory)
-		cudaFree(Y_hat);
+	if (is_Y_hat_on_host_memory) cudaFree(Y_hat);
 	cudaFree(activations);
 	cudaFree(execution_values);
 	cudaFree(costs);
@@ -403,6 +402,7 @@ void NN::backpropagate(
 
 	if (!stateful && contains_recurrent_layers)
 		delete_memory();
+	if (derivative_count) cudaFree(derivatives);
 }
 
 void NN::calculate_derivatives(

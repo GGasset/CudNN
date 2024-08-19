@@ -10,6 +10,7 @@ void IConnections::generate_random_values(float** pointer, size_t float_count, s
 		*pointer + start_i, float_count, 1 / value_divider
 	);
 	cudaDeviceSynchronize();
+	curandDestroyGenerator(generator);
 }
 
 void IConnections::mutate_fields(evolution_metadata evolution_values)

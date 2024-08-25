@@ -260,7 +260,7 @@ void NN::training_execute(
 
 	for (size_t t = 0; t < t_count; t++)
 	{
-		execute(X, *execution_values, *activations, t, copy_Y_to_host ? *Y : 0, copy_Y_to_host);
+		execute(X, (*execution_values) + execution_value_count * arrays_t_length, (*activations) + neuron_count * arrays_t_length, t, copy_Y_to_host ? *Y : 0, copy_Y_to_host);
 	}
 }
 

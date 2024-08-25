@@ -11,7 +11,8 @@ NeatConnections::NeatConnections(size_t previous_layer_start, size_t previous_la
 	cudaDeviceSynchronize();
 
 	generate_random_values(&weights, neuron_count * previous_layer_length, 0, previous_layer_length);
-	generate_random_values(&biases, neuron_count, 0, neuron_count);
+	cudaMemset(biases, 0, sizeof(field_t) * neuron_count);
+	//generate_random_values(&biases, neuron_count, 0, neuron_count);
 	
 	size_t* host_connection_points = new size_t[connection_count];
 	connection_counts = new size_t[neuron_count];

@@ -5,6 +5,9 @@
 - ~~NEAT connections~~ 
 	- ~~Execute~~
 	- ~~Gradients~~
+    - Optimize
+        * ~~Various methods~~
+        * Evolution methods
 - ~~adaptative learning rates~~
     - ~~return cost while training~~
 - ~~reinforcement learning cost function~~
@@ -18,7 +21,7 @@
  - ~~bug in add neuron~~
  - constrain evolution
     * if removing neuron in a layer with 1 neuron remove layer (now it won't delete the neuron)
-    * constrain weights and biases to prevent nans
+    * constrain weights and biases to prevent nans (reset NaN weights and note it somehow)
 
 ### Not to do until all Layer constructors are made:
 

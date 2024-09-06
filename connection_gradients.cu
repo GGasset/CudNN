@@ -26,20 +26,21 @@ __global__ void cud_NEAT_gradient_calculation(
 	data_t* activations, size_t activations_start,
 	data_t* gradients, size_t gradients_start, size_t layer_gradients_start, size_t* neuron_gradients_starts,
 	data_t* costs, size_t costs_start,
-	size_t neuron_i, size_t connection_count, field_t* weights, size_t* connection_points, size_t connections_start
+	size_t connection_count, field_t* weights, size_t* connection_points, size_t* connection_neuron_i
 )
 {
 	size_t tid = get_tid();
 	if (tid >= connection_count)
 		return;
 
+	size_t neuron_i = connection_neuron_i[tid];
 	size_t input_gradient_i = gradients_start + layer_gradients_start + neuron_gradients_starts[neuron_i];
 	size_t weight_gradient_i = input_gradient_i + tid + 1;
-	size_t connection_input_i = connection_points[connections_start + tid];
+	size_t connection_input_i = connection_points[tid];
 
 	data_t input_gradient = gradients[input_gradient_i];
 	gradients[weight_gradient_i] = input_gradient * activations[activations_start + connection_input_i];
-	atomicAdd(costs + costs_start + connection_input_i, -input_gradient * weights[connections_start + tid]);
+	atomicAdd(costs + costs_start + connection_input_i, -input_gradient * weights[tid]);
 }
 
 __global__ void bias_gradient_subtraction(
@@ -72,15 +73,16 @@ __global__ void cud_dense_gradient_subtraction(
 
 __global__ void cud_NEAT_gradient_subtraction(
 	data_t* gradients, size_t gradients_start, size_t layer_gradients_start, size_t* neuron_gradients_starts,
-	size_t neuron_i, size_t connection_count, field_t* weights, size_t connections_start,
+	size_t* connection_neuron_i, size_t connection_count, 
+	field_t* weights,
 	data_t learning_rate, short* dropout, data_t max_subtracted_gradient
 )
 {
 	size_t tid = get_tid();
 	if (tid >= connection_count) return;
 
+	size_t neuron_i = connection_neuron_i[tid];
 	size_t gradient_i = gradients_start + layer_gradients_start + neuron_gradients_starts[neuron_i] + tid + 1;
 	data_t gradient = gradients[gradient_i];
-	size_t weight_i = connections_start + tid;
-	atomicAdd(weights + weight_i, -device_closest_to_zero(max_subtracted_gradient * (-1 + 2 * (gradient >= 0 && max_subtracted_gradient >= 0)), gradient * learning_rate * dropout[neuron_i]));
+	atomicAdd(weights + tid, -device_closest_to_zero(max_subtracted_gradient * (-1 + 2 * (gradient >= 0 && max_subtracted_gradient >= 0)), gradient * learning_rate * dropout[neuron_i]));
 }

@@ -13,8 +13,13 @@ public:
     /// <summary>
     /// Host array
     /// </summary>
-    size_t* connection_counts = 0;
+    //size_t* connection_counts = 0;
     
+    /// <summary>
+    /// Device array
+    /// </summary>
+    size_t* connection_neuron_i = 0;
+
     NeatConnections(size_t previous_layer_start, size_t previous_layer_length, size_t neuron_count);
     NeatConnections();
 

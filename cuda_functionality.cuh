@@ -37,6 +37,16 @@ __global__ void add_to_array(T* arr, size_t arr_value_count, t to_add)
 	arr[tid] += to_add;
 }
 
+template<typename T>
+__global__ void count_value(T value, T* array, size_t array_length, size_t* output)
+{
+	size_t tid = get_tid();
+	if (tid >= array_lenght) return;
+	if (array[tid] != value) return;
+
+	atomicAdd(output, 1);
+}
+
 __global__ void mutate_field_array(
 	field_t* array, size_t length,
 	float mutation_chance, float max_mutation,

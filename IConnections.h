@@ -3,6 +3,7 @@
 #include <curand.h>
 
 #include <stdlib.h>
+#include <stdio.h>
 
 #include "data_type.h"
 #include "kernel_macros.h"
@@ -61,6 +62,9 @@ public:
 	
 	virtual IConnections* connections_specific_clone() = 0;
 	void IConnections_clone(IConnections* base);
+
+	virtual void specific_save(FILE* file) {};
+	void save(FILE* file);
 
 	void deallocate();
 	virtual void specific_deallocate();

@@ -73,6 +73,13 @@ void IConnections::IConnections_clone(IConnections* base)
 	base->contains_irregular_connections = contains_irregular_connections;
 }
 
+void IConnections::save(FILE* file)
+{
+	
+
+	specific_save(file);
+}
+
 void IConnections::deallocate()
 {
 	cudaFree(weights);

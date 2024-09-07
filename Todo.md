@@ -13,6 +13,7 @@
 - ~~reinforcement learning cost function~~
     - Proximal Policy optimization cost function
 - ~~server socket~~
+    - Use poll instead of select
 - ~~client_socket~~
 
 

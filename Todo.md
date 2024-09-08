@@ -5,9 +5,9 @@
 - ~~NEAT connections~~ 
 	- ~~Execute~~
 	- ~~Gradients~~
-    - Optimize
+    - ~~Optimize~~
         * ~~Various methods~~
-        * Evolution methods
+        * ~~Evolution methods~~
 - ~~adaptative learning rates~~
     - ~~return cost while training~~
 - ~~reinforcement learning cost function~~

@@ -483,7 +483,7 @@ void NN::evolve()
 	{
 		printf("Adding layer\n");
 		NeuronTypes insert_type = (NeuronTypes)(rand() % NeuronTypes::last_neuron_entry);
-		size_t insert_i = rand() % (layer_count - 1);
+		size_t insert_i = layer_count > 1 ? rand() % (layer_count - 1) : 0;
 		
 		size_t previous_layer_length = input_length;
 		size_t previous_layer_activations_start = 0;
@@ -511,13 +511,13 @@ void NN::evolve()
 		}
 		add_layer(insert_i, new_layer);
 	}
-	if (evolution_values.neuron_deletion_probability > get_random_float())
+	if (evolution_values.neuron_deletion_probability > get_random_float() && layer_count > 1)
 	{
 		printf("removing neuron\n");
 		size_t layer_i = rand() % (layer_count - 1);
 		remove_neuron(layer_i);
 	}
-	if (evolution_values.neuron_addition_probability > get_random_float())
+	if (evolution_values.neuron_addition_probability > get_random_float() && layer_count > 1)
 	{
 		printf("adding_neuron\n");
 		size_t layer_i = rand() % (layer_count - 1);

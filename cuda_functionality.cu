@@ -46,6 +46,15 @@ __device__ size_t get_tid()
 	return blockIdx.x * blockDim.x + threadIdx.x;
 }
 
+__global__ void count_value(size_t value, size_t* array, size_t array_length, unsigned int* output)
+{
+	size_t tid = get_tid();
+	if (tid >= array_length) return;
+	if (array[tid] != value) return;
+
+	atomicAdd(output, 1);
+}
+
 __global__ void mutate_field_array(
 	field_t* array, size_t length, 
 	float mutation_chance, float max_mutation, 

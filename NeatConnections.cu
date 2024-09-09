@@ -19,7 +19,7 @@ NeatConnections::NeatConnections(size_t previous_layer_start, size_t previous_la
 	
 	size_t* host_connection_points = new size_t[connection_count];
 	size_t* host_connection_neuron_i = new size_t[connection_count];
-	connection_counts = new size_t[neuron_count];
+	//connection_counts = new size_t[neuron_count];
 	for (size_t i = 0; i < neuron_count; i++)
 	{
 		for (size_t j = 0; j < previous_layer_length; j++)
@@ -27,7 +27,7 @@ NeatConnections::NeatConnections(size_t previous_layer_start, size_t previous_la
 			host_connection_points[i * previous_layer_length + j] = previous_layer_start + j;
 			host_connection_neuron_i[i * previous_layer_length + j] = i;
 		}
-		connection_counts[i] = previous_layer_length;
+		//connection_counts[i] = previous_layer_length;
 	}
 	cudaMemcpy(connection_points, host_connection_points, sizeof(size_t) * connection_count, cudaMemcpyHostToDevice);
 	cudaMemcpy(connection_neuron_i, host_connection_neuron_i, sizeof(size_t) * connection_count, cudaMemcpyHostToDevice);
@@ -134,15 +134,17 @@ void NeatConnections::subtract_gradients(
 
 size_t NeatConnections::get_connection_count_at(size_t neuron_i)
 {
-  size_t *device_count = 0;
-  cudaMalloc(&device_count, sizeof(size_t));
+  unsigned int* device_count = 0;
+  cudaMalloc(&device_count, sizeof(unsigned int));
+  cudaDeviceSynchronize();
+  cudaMemset(device_count, 0, sizeof(unsigned int));
 	count_value kernel(connection_count / 32 + (connection_count % 32 > 0), 32) (neuron_i, connection_neuron_i, connection_count, device_count);
   cudaDeviceSynchronize();
-  size_t count = 0;
-  cudaMemcpy(&count, device_count, sizeof(size_t), cudaMemcpyDeviceToHost);
+  unsigned int count = 0;
+  cudaMemcpy(&count, device_count, sizeof(unsigned int), cudaMemcpyDeviceToHost);
   cudaDeviceSynchronize();
   cudaFree(device_count);
-  return count;
+  return (size_t)count;
   //return connection_counts[neuron_i];
 }
 
@@ -224,7 +226,7 @@ void NeatConnections::adjust_to_added_neuron(size_t added_neuron_i, float connec
 	
 	cudaMemcpy(host_connection_points, connection_points, sizeof(size_t) * connection_count, cudaMemcpyDeviceToHost);
 	cudaMemcpy(host_weights, weights, sizeof(field_t) * connection_count, cudaMemcpyDeviceToHost);
-	cudaMemcpy(host_connection_neuron_i, connection_neuron_i, sizeof(field_t) * connection_count, cudaMemcpyDeviceToHost);
+	cudaMemcpy(host_connection_neuron_i, connection_neuron_i, sizeof(size_t) * connection_count, cudaMemcpyDeviceToHost);
 	cudaDeviceSynchronize();
 
 	auto vector_connection_points = std::vector<size_t>();
@@ -263,7 +265,6 @@ void NeatConnections::adjust_to_added_neuron(size_t added_neuron_i, float connec
   cudaFree(connection_neuron_i);
 	cudaFree(connection_points);
 	cudaFree(weights);
-  delete[] connection_neuron_i;
 	delete[] host_connection_points;
 	delete[] host_weights;
 	cudaDeviceSynchronize();

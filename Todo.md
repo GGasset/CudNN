@@ -22,6 +22,8 @@
 - Create logging options for training in csv format
     - Add python script for plotting it
 
+- Paralelize layer derivative calculation calls
+
 
 # Bugs
  - ~~device array being used as host array in NeuronLayer and LSTMLayer remove neuron~~

@@ -19,6 +19,8 @@
         2. Bind to a file for security
         3. Use script for setup 
 - ~~client_socket~~
+- Create logging options for training in csv format
+    - Add python script for plotting it
 
 
 # Bugs

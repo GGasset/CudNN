@@ -14,6 +14,10 @@
     - Proximal Policy optimization cost function
 - ~~server socket~~
     - Use poll instead of select
+    - Improve security
+        1. Use another file for filepath 
+        2. Bind to a file for security
+        3. Use script for setup 
 - ~~client_socket~~
 
 

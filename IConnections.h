@@ -64,10 +64,12 @@ public:
 	virtual IConnections* connections_specific_clone() = 0;
 	void IConnections_clone(IConnections* base);
 
-	virtual void specific_save(FILE* file) {};
+	virtual void specific_save(FILE* file) = 0;
 	void save(FILE* file);
 
-	//IConnections* load(FILE* file); 
+	virtual void load(FILE* file) = 0; 
+	void load_neuron_metadata(FILE* file);
+	void load_IConnections_data(FILE* file);
 
 	void deallocate();
 	virtual void specific_deallocate();

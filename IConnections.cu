@@ -95,6 +95,34 @@ void IConnections::save(FILE* file)
 
 }
 
+
+void load_neuron_metadata(FILE* file)
+{
+	fread(&neuron_count, sizeof(size_t), 1, file);
+	fread(&connection_count, sizeof(size_t), 1, file);
+	fread(&contains_irregular_connection, sizeof(unsigned char), 1, file);
+}
+
+void load_IConnections_data(FILE* file)
+{
+	field_t* host_weights = new field_t[connection_count];
+	field_t* host_biases = new field_t[neuron_count];
+
+	fread(host_weights, sizeof(field_t), connection_count, file);
+	fread(host_biases, sizeof(field_t), neuron_count, file);
+
+	cudaMalloc(&weights, sizeof(field_t) * connection_count);
+	cudaMalloc(&biases, sizeof(field_t) * neuron_count);
+	cudaDeviceSynchronize();
+
+	cudaMemcpy(weights, host_weights, sizeof(field_t) * connection_count, cudaMemcpyHostToDevice);
+	cudaMemcpy(biases, host_biases, sizeof(field_t) * neuron_count, cudaMemcpyHostToDevice);
+	cudaDeviceSynchronize();
+
+	delete[] host_weights;
+	delete[] host_biases;
+}
+
 void IConnections::deallocate()
 {
 	cudaFree(weights);

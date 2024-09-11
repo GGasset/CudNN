@@ -63,7 +63,7 @@ public:
 	virtual IConnections* connections_specific_clone() = 0;
 	void IConnections_clone(IConnections* base);
 
-	virtual void specific_save(FILE* file) {};
+	virtual void specific_save(int file) {};
 	void save(int file);
 
 	void deallocate();

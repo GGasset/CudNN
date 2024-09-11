@@ -73,11 +73,13 @@ void IConnections::IConnections_clone(IConnections* base)
 	base->contains_irregular_connections = contains_irregular_connections;
 }
 
-void IConnections::save(int file)
+void IConnections::save(FILE* file)
 {
-	write(file, &neuron_count, sizeof(size_t));
-	write(file, &connection_count, sizeof(size_t));
-	write(file, &contains_irregular_connections, sizeof(unsigned char));
+	fwrite(&neuron_count, sizeof(size_t), 1, file);
+	fwrite(&connection_count, sizeof(size_t), 1, file);
+	fwrite(&contains_irregular_connections, sizeof(unsigned char), 1, file);
+
+	specific_save(file);
 
 	field_t* host_weights = new field_t[connection_count];
 	field_t* host_biases = new field_t[neuron_count];
@@ -86,12 +88,11 @@ void IConnections::save(int file)
 	cudaMemcpy(host_biases, biases, sizeof(field_t) * neuron_count, cudaMemcpyDeviceToHost);
 	cudaDeviceSynchronize();
 
-	write(file, host_weights, sizeof(field_t) * connection_count);
-	write(file, host_biases, sizeof(field_t) * neuron_count);
+	fwrite(host_weights, sizeof(field_t), connection_count, file);
+	fwrite(host_biases, sizeof(field_t), neuron_count, file);
 	delete[] host_weights;
 	delete[] host_biases;
 
-	specific_save(file);
 }
 
 void IConnections::deallocate()

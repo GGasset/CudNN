@@ -7,6 +7,7 @@
 
 #include "data_type.h"
 #include "kernel_macros.h"
+#include "NN_enums.h"
 #include "linear_functions.cuh"
 #include "connection_gradients.cuh"
 #include "vector"
@@ -63,8 +64,10 @@ public:
 	virtual IConnections* connections_specific_clone() = 0;
 	void IConnections_clone(IConnections* base);
 
-	virtual void specific_save(int file) {};
-	void save(int file);
+	virtual void specific_save(FILE* file) {};
+	void save(FILE* file);
+
+	//IConnections* load(FILE* file); 
 
 	void deallocate();
 	virtual void specific_deallocate();

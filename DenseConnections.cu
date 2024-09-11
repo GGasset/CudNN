@@ -95,10 +95,10 @@ IConnections* DenseConnections::connections_specific_clone()
 	return connections;
 }
 
-void specific_save(int file)
+void specific_save(FILE* file)
 {
-	write(file, &previous_layer_activations_start, sizeof(size_t));
-	write(file, &previous_layer_length, sizeof(size_t));
+	fwrite(&previous_layer_activations_start, sizeof(size_t), 1, file);
+	fwrite(&previous_layer_length, sizeof(size_t), 1, file);
 }
 
 size_t DenseConnections::get_connection_count_at(size_t neuron_i)

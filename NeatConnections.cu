@@ -410,7 +410,7 @@ IConnections* NeatConnections::connections_specific_clone()
 	return connections;
 }
 
-void specific_save(int file)
+void specific_save(FILE* file)
 {
 	size_t *host_connection_points, *host_connection_neuron_i;
 	host_connection_points = new size_t[connection_count];
@@ -420,8 +420,8 @@ void specific_save(int file)
 	cudaMemcpy(host_connection_neuron_i, connection_neuron_i, sizeof(size_t) * connection_count, cudaMemcpyDeviceToHost);
 	cudaDeviceSynchronize();
 	
-	write(file, host_connection_points, sizeof(size_t) * connection_count);
-	write(file, host_connection_neuron_i, sizeof(size_t) * connection_count);
+	fwrite(host_connection_points, sizeof(size_t), connection_count, file);
+	fwrite(host_connection_neuron_i, sizeof(size_t), connection_count, file);
 
 	delete[] host_connection_points;
 	delete[] host_connection_neuron_i;

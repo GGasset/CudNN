@@ -35,6 +35,8 @@ public:
 	
 	IConnections* connections_specific_clone() override;
 
+	void specific_save(int file) override;
+
 	size_t get_connection_count_at(size_t neuron_i) override;
 };
 

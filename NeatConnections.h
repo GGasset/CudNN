@@ -53,6 +53,7 @@ public:
     void adjust_to_removed_neuron(size_t neuron_i, std::vector<size_t>* removed_connections_neuron_i) override;
 
     void specific_save(FILE* file) override;
+    void load(FILE* file) override;
 
     void specific_deallocate() override;
 };

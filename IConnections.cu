@@ -96,14 +96,14 @@ void IConnections::save(FILE* file)
 }
 
 
-void load_neuron_metadata(FILE* file)
+void IConnections::load_neuron_metadata(FILE* file)
 {
 	fread(&neuron_count, sizeof(size_t), 1, file);
 	fread(&connection_count, sizeof(size_t), 1, file);
 	fread(&contains_irregular_connection, sizeof(unsigned char), 1, file);
 }
 
-void load_IConnections_data(FILE* file)
+void IConnections::load_IConnections_data(FILE* file)
 {
 	field_t* host_weights = new field_t[connection_count];
 	field_t* host_biases = new field_t[neuron_count];

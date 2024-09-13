@@ -48,6 +48,12 @@ ILayer* NeuronLayer::layer_specific_clone()
 	return layer;
 }
 
+void NeuronLayer::specific_save(FILE* file)
+{
+	size_t activation_function = (size_t)activation;
+	fwrite(&activation_function, sizeof(size_t), 1, file);
+}
+
 void NeuronLayer::execute(
 	data_t* activations, size_t activations_start,
 	data_t* execution_values, size_t execution_values_start

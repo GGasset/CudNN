@@ -14,6 +14,7 @@ public:
 	void layer_specific_deallocate() override;
 
 	ILayer* layer_specific_clone() override;
+	void specific_save(FILE* file) override;
 
 	void execute(
 		data_t* activations, size_t activations_start,

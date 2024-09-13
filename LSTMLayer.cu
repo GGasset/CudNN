@@ -64,6 +64,22 @@ ILayer* LSTMLayer::layer_specific_clone()
 	return layer;
 }
 
+void LSTMLayer::specific_save(FILE* file)
+{
+	field_t* host_neuron_weights = new field_t[neuron_count * 4];
+	data_t* host_state = new data_t[neuron_count * 2];
+
+	cudaMemcpy(host_neuron_weights, neuron_weights, sizeof(neuron_count) * 4, cudaMemcpyDeviceToHost);
+	cudaMemcpy(host_state, state, sizeof(neuron_count) * 2, cudaMemcpyDeviceToHost);
+	cudaDeviceSynchronize();
+
+	fwrite(host_neuron_weights, sizeof(field_t), neuron_count * 4, file);
+	fwrite(host_state, sizeof(data_t), neuron_count * 2, file);
+
+	delete[] host_neuron_weights;
+	delete[] host_state;
+}
+
 void LSTMLayer::execute(data_t* activations, size_t activations_start, data_t* execution_values, size_t execution_values_start)
 {
 	// neuron execution values 0

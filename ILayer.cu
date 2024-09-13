@@ -49,6 +49,30 @@ void ILayer::ILayerClone(ILayer* base_layer)
 		cudaMemcpy(base_layer->connection_associated_gradient_counts, connection_associated_gradient_counts, sizeof(size_t) * neuron_count, cudaMemcpyDeviceToDevice);
 }
 
+void ILayer::save(FILE* file)
+{
+	fwrite(&neuron_count, sizeof(size_t), 1, file);
+	fwrite(&execution_values_per_neuron, sizeof(size_t), 1, file);
+	fwrite(&layer_derivative_count, sizeof(size_t), 1, file);
+	fwrite(&derivatives_per_neuron, sizeof(size_t), 1, file);
+	fwrite(&layer_gradient_count, sizeof(size_t), 1, file);
+	
+	size_t *host_neuron_gradients_starts, *host_connection_gradient_counts;
+	host_neuron_gradients_starts = new size_t[neuron_count];
+	host_connection_gradient_counts = new size_t[neuron_count];
+
+	cudaMemcpy(host_neuron_gradients_starts, neuron_gradients_starts, sizeof(size_t) * neuron_count, cudaMemcpyDeviceToHost);
+	cudaMemcpy(host_connection_gradient_counts, connection_associated_gradients_counts, sizeof(size_t) * neuron_count, cudaMemcpyDeviceToHost);
+	cudaDeviceSynchronize();
+
+	fwrite(host_neuron_gradients_starts, sizeof(size_t), neuron_count, file);
+	fwrite(host_connection_gradient_counts, sizeof(size_t), neuron_count, file);
+	delete[] host_neuron_gradients_starts;
+	delete[] host_connection_gradient_counts;
+
+	specific_save(file);
+}
+
 void ILayer::deallocate()
 {
 	connections->deallocate();

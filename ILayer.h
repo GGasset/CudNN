@@ -42,6 +42,9 @@ public:
 	virtual ILayer* layer_specific_clone() = 0;
 	void ILayerClone(ILayer* base_layer);
 
+	void save(FILE* file);
+	virtual void specific_save(FILE* file) = 0;
+
 	void deallocate();
 
 	virtual void layer_specific_deallocate();

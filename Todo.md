@@ -17,8 +17,15 @@
     - Improve security
         1. Use another file for filepath 
         2. Bind to a file for security
-        3. Use script for setup 
+        3. Use script for file setup 
 - ~~client_socket~~
+- socket functions
+    - ~~construct -- destruct~~
+    - training execute
+    - training functions
+    - save & load
+    - evolution methods
+
 - Create logging options for training in csv format
     - Add python script for plotting it
 

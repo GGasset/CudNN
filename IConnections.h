@@ -18,6 +18,8 @@
 class IConnections
 {
 public:
+	ConnectionTypes connection_type = ConnectionTypes::last_connection_entry;
+
 	/// <summary>
 	/// Device Array
 	/// </summary>

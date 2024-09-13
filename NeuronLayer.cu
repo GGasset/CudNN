@@ -6,6 +6,8 @@
 
 NeuronLayer::NeuronLayer(IConnections* connections, size_t neuron_count, ActivationFunctions activation)
 {
+	layer_type = NeuronTypes::Neuron;
+
 	this->connections = connections;
 	set_neuron_count(neuron_count);
 	this->activation = activation;
@@ -31,7 +33,7 @@ NeuronLayer::NeuronLayer(IConnections* connections, size_t neuron_count, Activat
 
 NeuronLayer::NeuronLayer()
 {
-	
+	layer_type = NeuronTypes::Neuron;
 }
 
 void NeuronLayer::layer_specific_deallocate()

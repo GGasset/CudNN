@@ -4,6 +4,8 @@
 
 NeatConnections::NeatConnections(size_t previous_layer_start, size_t previous_layer_length, size_t neuron_count)
 {
+	connection_type = ConnectionTypes::NEAT;
+
 	contains_irregular_connections = true;
 	this->neuron_count = neuron_count;
 	this->connection_count = neuron_count * previous_layer_length;
@@ -38,7 +40,7 @@ NeatConnections::NeatConnections(size_t previous_layer_start, size_t previous_la
 
 NeatConnections::NeatConnections()
 {
-
+	connection_type = ConnectionTypes::NEAT;
 }
 
 void NeatConnections::linear_function(

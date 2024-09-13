@@ -9,6 +9,8 @@
 
 DenseConnections::DenseConnections(size_t previous_layer_activations_start, size_t previous_layer_length, size_t neuron_count)
 {
+	connection_type = ConnectionTypes::Dense;
+
 	this->neuron_count = neuron_count;
 	this->connection_count = previous_layer_length * neuron_count;
 	this->previous_layer_activations_start = previous_layer_activations_start;
@@ -24,7 +26,7 @@ DenseConnections::DenseConnections(size_t previous_layer_activations_start, size
 
 DenseConnections::DenseConnections()
 {
-
+	connection_type = ConnectionTypes::Dense;
 }
 
 void DenseConnections::linear_function(size_t activations_start, data_t* activations,

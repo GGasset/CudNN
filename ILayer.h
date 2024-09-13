@@ -16,6 +16,8 @@ protected:
 	size_t neuron_count = 0;
 
 public:
+	NeuronTypes layer_type = NeuronTypes::last_neuron_entry;
+
 	bool is_recurrent = false;
 	IConnections* connections = 0;
 

@@ -2,6 +2,8 @@
 
 LSTMLayer::LSTMLayer(IConnections* connections, size_t neuron_count)
 {
+	layer_type = NeuronTypes::LSTM;
+
 	is_recurrent = true;
 	this->connections = connections;
 	set_neuron_count(neuron_count);
@@ -40,7 +42,7 @@ LSTMLayer::LSTMLayer(IConnections* connections, size_t neuron_count)
 
 LSTMLayer::LSTMLayer()
 {
-
+	layer_type = NeuronTypes::LSTM;
 }
 
 void LSTMLayer::layer_specific_initialize_fields(size_t connection_count, size_t neuron_count)

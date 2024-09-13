@@ -80,6 +80,26 @@ void LSTMLayer::specific_save(FILE* file)
 	delete[] host_state;
 }
 
+void LSTMLayer::load(FILE* file)
+{
+	field_t* host_neuron_weights = new field_t[neuron_count * 4];
+	data_t* host_state = new data_t[neuron_count * 2];
+
+	fread(host_neuron_weights, sizeof(field_t), neuron_count * 4, file);
+	fread(host_state, sizeof(data_t), neuron_count * 2, file);
+
+	cudaMalloc(&neuron_weights, sizeof(field_t) * neuron_count * 4);
+	cudaMalloc(&state, sizeof(data_t) * neuron_count * 2);
+	cudaDeviceSynchronize();
+
+	cudaMemcpy(neuron_weights, host_neuron_weights, sizeof(field_t) * neuron_count * 4, cudaMemcpyHostToDevice);
+	cudaMemcpy(state, host_state, sizeof(data_t) * neuron_count * 2, cudaMemcpyHostToDevice);
+	cudaDeviceSynchronize();
+
+	delete[] host_neuron_weights;
+	delete[] host_state;
+}
+
 void LSTMLayer::execute(data_t* activations, size_t activations_start, data_t* execution_values, size_t execution_values_start)
 {
 	// neuron execution values 0

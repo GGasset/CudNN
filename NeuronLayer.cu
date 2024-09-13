@@ -54,6 +54,15 @@ void NeuronLayer::specific_save(FILE* file)
 	fwrite(&activation_function, sizeof(size_t), 1, file);
 }
 
+void NeuronLayer::load(FILE* file)
+{
+	ILayer_load(file);
+	
+	size_t activation_function = 0;
+	fread(&activation_function, sizeof(size_t), 1, file);
+	activation = (ActivationFunctions)activation_function;
+}
+
 void NeuronLayer::execute(
 	data_t* activations, size_t activations_start,
 	data_t* execution_values, size_t execution_values_start

@@ -45,6 +45,9 @@ public:
 	void save(FILE* file);
 	virtual void specific_save(FILE* file) = 0;
 
+	virtual void load(FILE* file) = 0;
+	void ILayer_load(FILE* file);
+
 	void deallocate();
 
 	virtual void layer_specific_deallocate();

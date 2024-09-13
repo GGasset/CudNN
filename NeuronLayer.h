@@ -15,6 +15,7 @@ public:
 	ILayer* layer_specific_clone() override;
 
 	void specific_save(FILE* file) override;
+	void load(FILE* file) override;
 
 	void execute(
 		data_t* activations, size_t activations_start,

@@ -644,6 +644,26 @@ NN NN::clone()
 	return clone;
 }
 
+void NN::save(FILE* file)
+{
+	fwrite(&layer_count, sizeof(size_t), 1, file);
+	fwrite(&input_length, sizeof(size_t), 1, file);
+	for (size_t i = 0; i < layer_count; i++)
+	{
+		size_t layer_type = (size_t)layers[i]->layer_type;
+		size_t connection_type = (size_t)layers[i]->connections->connection_type;
+
+		fwrite(&layer_type, sizeof(size_t), 1, file);
+		fwrite(&connection_type, sizeof(size_t), 1, file);
+	}
+
+	for (size_t i = 0; i < layer_count; i++)
+	{
+		layers[i]->save(file);
+		layers[i]->connections->save(file);
+	}
+}
+
 void NN::deallocate()
 {
 	for (size_t i = 0; i < layer_count; i++)

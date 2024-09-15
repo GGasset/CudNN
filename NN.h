@@ -155,7 +155,7 @@ public:
 
 	void delete_memory();
 
-	NN clone();
+	NN* clone();
 	void save(const char *pathname);
 	void save(FILE* file);
 	static NN* load(const char *pathname, bool load_state = true);

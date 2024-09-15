@@ -624,23 +624,23 @@ void NN::delete_memory()
 		layers[i]->delete_memory();
 }
 
-NN NN::clone()
+NN* NN::clone()
 {
-	NN clone;
-	clone.layer_count = layer_count;
-	clone.neuron_count = neuron_count;
-	clone.input_length = input_length;
-	clone.output_length = output_length;
+	NN* clone = new NN();
+	clone->layer_count = layer_count;
+	clone->neuron_count = neuron_count;
+	clone->input_length = input_length;
+	clone->output_length = output_length;
 	
-	clone.layers = new ILayer*[layer_count];
+	clone->layers = new ILayer*[layer_count];
 	for (size_t i = 0; i < layer_count; i++)
 	{
-		clone.layers[i] = layers[i]->layer_specific_clone();
-		layers[i]->ILayerClone(clone.layers[i]);
+		clone->layers[i] = layers[i]->layer_specific_clone();
+		layers[i]->ILayerClone(clone->layers[i]);
 	}
-	clone.set_fields();
-	clone.evolution_values = evolution_values;
-	clone.contains_recurrent_layers = contains_recurrent_layers;
+	clone->set_fields();
+	clone->evolution_values = evolution_values;
+	clone->contains_recurrent_layers = contains_recurrent_layers;
 	return clone;
 }
 
@@ -662,6 +662,11 @@ void NN::save(FILE* file)
 		layers[i]->save(file);
 		layers[i]->connections->save(file);
 	}
+}
+
+static NN* NN::load(FILE* file)
+{
+	set_fields();
 }
 
 void NN::deallocate()

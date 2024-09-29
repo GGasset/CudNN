@@ -23,7 +23,7 @@
     - ~~construct -- destruct~~
     - training execute
     - training functions
-    - save & load
+    - ~~save & load~~
     - evolution methods
 
 - Create logging options for training in csv format

@@ -100,7 +100,7 @@ void IConnections::load_neuron_metadata(FILE* file)
 {
 	fread(&neuron_count, sizeof(size_t), 1, file);
 	fread(&connection_count, sizeof(size_t), 1, file);
-	fread(&contains_irregular_connection, sizeof(unsigned char), 1, file);
+	fread(&contains_irregular_connections, sizeof(unsigned char), 1, file);
 }
 
 void IConnections::load_IConnections_data(FILE* file)

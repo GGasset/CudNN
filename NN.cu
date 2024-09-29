@@ -644,6 +644,13 @@ NN* NN::clone()
 	return clone;
 }
 
+void NN::save(const char *pathname)
+{
+	FILE *file = fopen(pathname, "wb");
+	save(file);
+	fclose(file);
+}
+
 void NN::save(FILE* file)
 {
 	fwrite(&layer_count, sizeof(size_t), 1, file);
@@ -651,9 +658,12 @@ void NN::save(FILE* file)
 	for (size_t i = 0; i < layer_count; i++)
 	{
 		size_t layer_type = (size_t)layers[i]->layer_type;
-		size_t connection_type = (size_t)layers[i]->connections->connection_type;
-
 		fwrite(&layer_type, sizeof(size_t), 1, file);
+	}
+
+	for (size_t i = 0; i < layer_count; i++)
+	{
+		size_t connection_type = (size_t)layers[i]->connections->connection_type;
 		fwrite(&connection_type, sizeof(size_t), 1, file);
 	}
 
@@ -664,9 +674,72 @@ void NN::save(FILE* file)
 	}
 }
 
-static NN* NN::load(FILE* file)
+NN* NN::load(const char *pathname, bool load_state)
 {
-	set_fields();
+	FILE *file = fopen(pathname, "rb");
+	NN *out = load(file);
+	fclose(file);
+
+	if (!load_state) out->delete_memory();
+	return out;
+}
+
+NN* NN::load(FILE* file)
+{
+	NN* output = new NN();
+
+	fread(&(output->layer_count), sizeof(size_t), 1, file);
+	fread(&(output->input_length), sizeof(size_t), 1, file);
+
+	size_t layer_count = output->layer_count;
+
+	NeuronTypes *neuron_types = new NeuronTypes[layer_count];
+	ConnectionTypes *connection_types = new ConnectionTypes[layer_count];
+
+	ILayer **output_layers = new ILayer*[layer_count];
+
+	fread(neuron_types, sizeof(NeuronTypes), layer_count, file);
+	fread(connection_types, sizeof(ConnectionTypes), layer_count, file);
+
+	for (size_t i = 0; i < layer_count; i++)
+	{
+		ILayer *layer = 0;
+		IConnections *connections = 0;
+		switch (neuron_types[i])
+		{
+			case NeuronTypes::Neuron:
+				layer = new NeuronLayer();
+				break;
+			case NeuronTypes::LSTM:
+				layer = new LSTMLayer();
+				break;
+			default:
+				break;
+		}
+		switch (connection_types[i])
+		{
+			case ConnectionTypes::Dense:
+				connections = new DenseConnections();
+				break;
+			case ConnectionTypes::NEAT:
+				connections = new NeatConnections();
+				break;
+			default:
+				break;
+		}
+		layer->load(file);
+		connections->load(file);
+
+		layer->connections = connections;
+		output_layers[i] = layer;
+	}
+
+	delete[] connection_types;
+	delete[] neuron_types;
+
+	output->layers = output_layers;
+	output->set_fields();
+	return output;
 }
 
 void NN::deallocate()

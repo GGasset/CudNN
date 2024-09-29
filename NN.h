@@ -1,16 +1,13 @@
-#ifdef INCLUDE_BACKEND
-
 #include <stdio.h>
 #include "ILayer.h"
 #include "costs.cuh"
 #include "functionality.h"
 
+#include "DenseConnections.h"
 #include "NeatConnections.h"
 #include "NeuronLayer.h"
 #include "LSTMLayer.h"
 #include "kernel_macros.h"
-
-#endif
 
 #include "NN_enums.h"
 #include "costs.cuh"
@@ -18,8 +15,6 @@
 #include "evolution_info.h"
 
 #pragma once
-class ILayer;
-
 class NN
 {
 private:

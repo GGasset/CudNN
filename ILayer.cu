@@ -62,7 +62,7 @@ void ILayer::save(FILE* file)
 	host_connection_gradient_counts = new size_t[neuron_count];
 
 	cudaMemcpy(host_neuron_gradients_starts, neuron_gradients_starts, sizeof(size_t) * neuron_count, cudaMemcpyDeviceToHost);
-	cudaMemcpy(host_connection_gradient_counts, connection_associated_gradients_counts, sizeof(size_t) * neuron_count, cudaMemcpyDeviceToHost);
+	cudaMemcpy(host_connection_gradient_counts, connection_associated_gradient_counts, sizeof(size_t) * neuron_count, cudaMemcpyDeviceToHost);
 	cudaDeviceSynchronize();
 
 	fwrite(host_neuron_gradients_starts, sizeof(size_t), neuron_count, file);

@@ -87,6 +87,7 @@ void DenseConnections::subtract_gradients(
 		gradients, gradients_start, layer_gradients_start, neuron_gradients_starts,
 		biases, neuron_count, learning_rate, dropout, gradient_clip
 	);
+	cudaDeviceSynchronize();
 }
 
 IConnections* DenseConnections::connections_specific_clone()

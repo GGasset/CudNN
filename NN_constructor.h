@@ -1,13 +1,4 @@
 #pragma once
-#ifdef INCLUDE_BACKEND
-
-#include "ILayer.h"
-#include "NeuronLayer.h"
-#include "LSTMLayer.h"
-#include "DenseConnections.h"
-#include "NeatConnections.h"
-
-#endif
 
 #include "NN.h"
 #include <vector>

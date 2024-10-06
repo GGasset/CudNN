@@ -24,6 +24,7 @@
     - training functions
     - save & load
     - evolution methods
+    - Inference
 
 - Create logging options for training in csv format
     - Add python script for plotting it

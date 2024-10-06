@@ -652,6 +652,8 @@ NN* NN::clone()
 void NN::save(const char *pathname)
 {
 	FILE *file = fopen(pathname, "wb");
+	if (!file)
+		return;
 	save(file);
 	fclose(file);
 }
@@ -682,6 +684,8 @@ void NN::save(FILE* file)
 NN* NN::load(const char *pathname, bool load_state)
 {
 	FILE *file = fopen(pathname, "rb");
+	if (!file)
+		return 0;
 	NN *out = load(file);
 	fclose(file);
 

@@ -43,6 +43,8 @@ enum action_enum : size_t
 {
 	construct,
 	destruct,
+	save,
+	load,
 	last_entry
 };
 
@@ -51,5 +53,11 @@ typedef struct {
 	size_t value_count;
 	size_t error;
 } return_specifier;
+
+enum error_values : size_t
+{
+	OK,
+	NN_not_found
+};
 
 #endif

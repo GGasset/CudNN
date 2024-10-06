@@ -8,7 +8,8 @@
 #pragma once
 
 typedef struct {
-	size_t accumulated_training_t_count;
+	size_t  batch_count;
+	size_t* accumulated_training_t_count;
 	data_t* accumulated_activations;
 	data_t* accumulated_execution_values;
 	data_t* accumulated_Y_hat;
@@ -25,4 +26,6 @@ public:
 	NN_manager(size_t bucket_count);
 
 	return_specifier* parse_message(void* message, size_t message_length);
+
+	size_t add_NN(NN *n);
 };

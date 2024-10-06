@@ -5,12 +5,36 @@ NN_manager::NN_manager(size_t bucket_count)
 	networks = new HashTable<size_t, network_container*>(bucket_count);
 }
 
-return_specifier* NN_manager::parse_message(void* message, size_t message_length)
+size_t NN_manager::add_NN(NN *n)
+{
+	auto ids = networks->GetKeys();
+	size_t network_id = 0;
+	if (ids)
+	{
+		network_id = ids->max() + 1;
+		ids->free();
+	}
+
+	network_container* network = (network_container*)malloc(sizeof(network_container));
+	network->batch_count = 0;
+	network->accumulated_training_t_count = 0;
+	network->accumulated_activations = 0;
+	network->accumulated_execution_values = 0;
+	network->accumulated_Y_hat = 0;
+
+	network->network = n;
+
+	networks->Add(network_id, network);
+	network_count++;
+	return network_id;
+}
+
+return_specifier* NN_manager::parse_message(void* message, size_t message_length, int log_fd)
 {
 	return_specifier* output = (return_specifier*)malloc(sizeof(return_specifier));
 	output->return_value = 0;
 	output->value_count = 0;
-	output->error = 0;
+	output->error = error_value::OK;
 
 	action_enum action = (action_enum)(*(size_t*)message);
 	size_t offset = sizeof(size_t);
@@ -22,7 +46,7 @@ return_specifier* NN_manager::parse_message(void* message, size_t message_length
 				size_t layer_count = *(size_t*)(message + offset);
 				offset += sizeof(size_t);
 
-				if (message_length != sizeof(size_t) * 3 + sizeof(bool) + layer_count * sizeof(size_t) * 4) throw;
+				if (!layer_count || message_length != sizeof(size_t) * 3 + sizeof(bool) + layer_count * sizeof(size_t) * 4) throw;
 
 				for (size_t i = 0; i < layer_count; i++)
 				{
@@ -45,40 +69,24 @@ return_specifier* NN_manager::parse_message(void* message, size_t message_length
 
 				bool stateful = *(bool*)(message + offset);
 				offset += sizeof(bool);
-
-				auto ids = networks->GetKeys();
-				size_t network_id = 0;
-				if (ids)
-				{
-				       	network_id = ids->max() + 1;
-					ids->free();
-				}
-
-				network_container* network = (network_container*)malloc(sizeof(network_container));
-				network->accumulated_training_t_count = 0;
-				network->accumulated_activations = 0;
-				network->accumulated_execution_values = 0;
-				network->accumulated_Y_hat = 0;
-
-				network->network = constructor.construct(input_length, stateful);
-
-				networks->Add(network_id, network);
-				network_count++;
+				
+				size_t network_id = add_NN(constructor.construct(input_length, stateful));
 
 				output->return_value = new data_t[1];
 				output->return_value[0] = network_id;
 				output->value_count = 1;
-#ifdef DEBUG
-				printf("Network created\n");
+#ifdef log_positive
+				char log[] = "Network created\n";
+				write(log_fd, log, strlen(log) * (log_fd > 0));
 #endif
 			}
 			break;
 		case destruct:
 			{
+				if (message_length != sizeof(size_t) * 2) throw;
+
 				size_t id = *(size_t*)(message + offset);
 				offset += sizeof(size_t);
-
-				if (message_length != sizeof(size_t) * 2) throw;
 
 				bool is_registered = false;
 				network_container* network = networks->Get(id, is_registered);
@@ -89,15 +97,85 @@ return_specifier* NN_manager::parse_message(void* message, size_t message_length
 					if (network->accumulated_Y_hat) cudaFree(network->accumulated_Y_hat);
 					delete network->network;
 					free(network);
-#ifdef DEBUG
-					printf("network destructed\n");
+#ifdef log_positive
+					char log[] = "Network destructed\n";
+					write(log_fd, log, strlen(log) * (log_fd > 0));
 #endif
+				}
+				else
+				{
+					char error[] = "Error: id not found while destructing";
+					output->error = error_values::NN_not_found;
 				}
 				networks->Remove(id);
 			}
 			break;
-		default:
+		case save:
+			{
+				size_t id = *(size_t *)(message + offset);
+				offset += sizeof(size_t);
+
+				size_t path_name_length = *(size_t *)(message + offset);
+				offset += sizeof(size_t);
+				if (message_length != path_name_length + sizeof(size_t) * 3) throw;
+
+				char *path_name = new char[path_name_length + 1];
+				path_name[path_name_length] = 0;
+				for (size_t i = 0; i <= path_name_length; i++)
+					path_name[i] = message[offset + i];
+				offset += path_name_length;
+
+				bool is_registered = false;
+				NN* network = network_container* network = networks->Get(id, is_registered);
+				if (!is_registered)
+				{
+					char error[] = "Error: Network not found while saving\n";
+					write(log_fd, error, strlen(error) * (log_fd > 0));
+					output->error = error_values::NN_not_found;
+					break;
+				}
+#ifdef log_positive
+				char log[] = "Tried saved network\n";
+				write(log_fd, log, strlen(log) * (log_fd > 0));
+#endif
+				network->save(path_name);
+				delete[] path_name;
+			}
 			break;
+		case load:
+			{
+				size_t path_length = *(size_t *)(message + offset);
+				offset += sizeof(size_t);
+
+				bool load_state = *(bool *)(message + offset);
+				offset++;
+
+
+				if (message_length != sizeof(size_t) + sizeof(bool) + path_length) throw;
+
+				char *path = new char[message_length + 1];
+				path[message_length] = 0;
+				for (size_t i = 0; i <= path_length; i++)
+					path_name[i] = message[offset + i];
+				offset += path_name_length;
+
+				NN *n = NN::load(path, load_state);
+				if (!NN)
+				{
+					char error[] = "Error: network not found while loading\n";
+					write(log_fd, error, strlen(error) * (log_fd > 0));
+					output->error = error_values::NN_not_found;
+					break;
+				}
+				output->return_value = new data_t[1];
+				output->value_count = 1;
+				output->return_value[0] = add_NN(n);
+			}
+			break;
+		default:
+			char error[] = "Error: Action not found\n";
+			write(log_fd, error, strlen(error) * (log_fd > 0));
+			throw;
 	}
 	if (offset > message_length) throw;
 	return output;

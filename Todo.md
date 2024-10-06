@@ -34,6 +34,7 @@
     - save & load
     - evolution methods
     - Inference
+    - delete memory
 
 - Create logging options for training in csv format
     - Add python script for plotting it

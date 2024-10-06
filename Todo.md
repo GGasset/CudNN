@@ -37,7 +37,7 @@
  - ~~bug in add neuron~~
  - constrain evolution
     * if removing neuron in a layer with 1 neuron remove layer (now it won't delete the neuron)
-    * constrain weights and biases to prevent nans (reset NaN weights and note it somehow)
+ - ~~constrain weights and biases to prevent nans (reset NaNs)~~
 
 ### Not to do until all Layer constructors are made:
 

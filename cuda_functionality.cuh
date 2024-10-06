@@ -40,6 +40,8 @@ __global__ void add_to_array(T* arr, size_t arr_value_count, t to_add)
 //template<typename T>
 __global__ void count_value(size_t value, size_t* array, size_t array_length, unsigned int* output);
 
+__global__ void reset_NaNs(field_t *array, field_t reset_value, size_t length);
+
 __global__ void mutate_field_array(
 	field_t* array, size_t length,
 	float mutation_chance, float max_mutation,

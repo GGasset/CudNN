@@ -446,6 +446,11 @@ void NN::calculate_gradients(
 
 void NN::subtract_gradients(data_t* gradients, size_t gradients_start, data_t learning_rate, float dropout_rate, data_t gradient_clip)
 {
+	reset_NaNs kernel(gradient_count / 32 + (gradient_count % 32 > 0), 32) (
+		gradients + gradients_start, 0, gradient_count
+	);
+	cudaDeviceSynchronize();
+	
 	for (size_t i = 0; i < layer_count; i++)
 	{
 		ILayer* current_layer = layers[i];

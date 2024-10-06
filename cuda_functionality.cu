@@ -55,6 +55,17 @@ __global__ void count_value(size_t value, size_t* array, size_t array_length, un
 	atomicAdd(output, 1);
 }
 
+__global__ void reset_NaNs(field_t *array, field_t reset_value, size_t length)
+{
+	size_t tid = get_tid();
+	if (tid >= length)
+		return;
+
+	field_t value = array[tid];
+	if (value != value)
+		array[tid] = reset_value;
+}
+
 __global__ void mutate_field_array(
 	field_t* array, size_t length, 
 	float mutation_chance, float max_mutation, 

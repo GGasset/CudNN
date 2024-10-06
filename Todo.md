@@ -15,9 +15,8 @@
 - ~~server socket~~
     - Use poll instead of select
     - Improve security
-        1. Use another file for filepath 
-        2. Bind to a file for security
-        3. Use script for file setup 
+        1. Bind to a file for security
+        2. Use script for file setup 
 - ~~client_socket~~
 - socket functions
     - ~~construct -- destruct~~
@@ -42,7 +41,7 @@
 ### Not to do until all Layer constructors are made:
 
 - ~~Tensorflow-like class constructor~~
-- Save, Load, ~~Cloning~~
+- ~~Save, Load, Cloning~~
 - Crossover
 - ~~Evolution~~
 - ~~Modify kernel launches to have more capacity of neurons (current max 1024)~~

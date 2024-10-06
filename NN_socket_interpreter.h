@@ -25,7 +25,7 @@ private:
 public:
 	NN_manager(size_t bucket_count);
 
-	return_specifier* parse_message(void* message, size_t message_length);
+	return_specifier* parse_message(void* message, size_t message_length, int log_fd = 0);
 
 	size_t add_NN(NN *n);
 };

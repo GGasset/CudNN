@@ -109,7 +109,7 @@ int main(int argc, char *argv[])
 					return_specifier* pending_message = pending_out_messages.Get(fd, message_exists);
 					if (pending_message)
 					{
-						if (pending_message->value_count) delete[] pending_message->return_value;
+						if (pending_message->value_count && pending_message->return_value) delete[] pending_message->return_value;
 						free(pending_message);
 					}
 

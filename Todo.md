@@ -16,7 +16,11 @@
     - Use poll instead of select
     - Improve security
         1. Bind to a file for security
-        2. Use script for file setup 
+        2. Use script for setup
+            * Create file
+            * Set chmod for server
+            * Set max open fd for server
+            * Start server
 - ~~client_socket~~
 - socket functions
     - ~~construct -- destruct~~

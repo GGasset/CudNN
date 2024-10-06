@@ -13,14 +13,18 @@
 - ~~reinforcement learning cost function~~
     - Proximal Policy optimization cost function
 - ~~server socket~~
+    - Create destructor for socket interpreter -> NN manager
     - Use poll instead of select
     - Improve security
         1. Bind to a file for security
-        2. Use script for setup
+        2. Use script for server init
             * Create file
             * Set chmod for server
             * Set max open fd for server
             * Start server
+            * with flag --strict-security or -s
+                - sudo reboot
+                    (only use sudo for this)
 - ~~client_socket~~
 - socket functions
     - ~~construct -- destruct~~

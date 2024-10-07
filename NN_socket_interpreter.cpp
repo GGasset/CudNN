@@ -135,7 +135,7 @@ return_specifier* NN_manager::parse_message(void* message, size_t message_length
 					break;
 				}
 #ifdef log_positive
-				char log[] = "Tried saved network\n";
+				char log[] = "Tried saving network\n";
 				write(log_fd, log, strlen(log) * (log_fd > 0));
 #endif
 				network->save(path_name);
@@ -170,6 +170,10 @@ return_specifier* NN_manager::parse_message(void* message, size_t message_length
 				output->return_value = new data_t[1];
 				output->value_count = 1;
 				output->return_value[0] = add_NN(n);
+#ifdef log_positive
+				char log[] = "Loaded network\n";
+				write(log_fd, log, strlen(log) * log_fd > 0);
+#endif
 			}
 			break;
 		default:

@@ -24,8 +24,8 @@
             * Set max open fd for server
             * Start server
             * with flag --strict-security or -s
-                - sudo reboot
-                    (only use sudo for this)
+                - reboot
+
 - ~~client_socket~~
 - socket functions
     - ~~construct -- destruct~~

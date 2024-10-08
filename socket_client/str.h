@@ -1,6 +1,6 @@
 #include "pointer_array.h"
 
-class str : pointer_array<char>
+class str : public pointer_array<char>
 {
 	
-}
+};

@@ -74,11 +74,11 @@ void NN_client::load(str path, bool load_state)
 	for (size_t i = 0; i < path_len + 1; i++)
 		*(char *)(message + offset + i) = path.get(i);
 
-	return_specifier response = socket.send_message(message, message_len);
+	return_specifier response = socket.send_message(message, message_length);
 
 	if (!response.return_value)
 	{
-		delete[] message;
+		delete[] (char *)message;
 		return;
 	}
 	network_id = response.return_value[0];

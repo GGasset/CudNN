@@ -14,7 +14,7 @@ public:
 		data = 0;
 	}
 
-	_init(int length)
+	void _init(int length)
 	{
 		if (length <= 0) throw;
 		this->length = length;

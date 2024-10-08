@@ -17,8 +17,8 @@ public:
 	~NN_client();
 
 	void link_NN(NN_constructor_client constructor);
-	void load(str *path, bool load_state);
-	void save(str *path);
+	void load(str path, bool load_state);
+	void save(str path);
 
 private:
 	void disconnect_NN();

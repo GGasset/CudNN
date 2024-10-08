@@ -3,9 +3,9 @@
 #include "data_type.h"
 #include "NN_enums.h"
 
-#include "pointer_array.h"
 #include "client.h"
 #include "NN_constructor_client.h"
+#include "str.h"
 
 class NN_client
 {
@@ -17,6 +17,8 @@ public:
 	~NN_client();
 
 	void link_NN(NN_constructor_client constructor);
+	void load(str *path, bool load_state);
+	void save(str *path);
 
 private:
 	void disconnect_NN();

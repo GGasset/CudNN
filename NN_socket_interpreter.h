@@ -1,5 +1,7 @@
+#include <unistd.h>
 #include <vector>
 #include <stdio.h>
+#include <cstring>
 
 #include "NN_enums.h"
 #include "HashTable.h"

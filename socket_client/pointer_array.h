@@ -8,13 +8,18 @@ private:
 	int length;
 	T* data;
 public:
-	pointer_array(int length)
+	pointer_array()
+	{
+		length = 0;
+		data = 0;
+	}
+
+	_init(int length)
 	{
 		if (length <= 0) throw;
 		this->length = length;
 		data = new T[length];
 	}
-
 
 	~pointer_array()
 	{

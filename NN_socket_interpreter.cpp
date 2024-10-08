@@ -31,10 +31,11 @@ size_t NN_manager::add_NN(NN *n)
 
 return_specifier* NN_manager::parse_message(void* message, size_t message_length, int log_fd)
 {
+	if (message_length < sizeof(size_t)) throw;
 	return_specifier* output = (return_specifier*)malloc(sizeof(return_specifier));
 	output->return_value = 0;
 	output->value_count = 0;
-	output->error = error_value::OK;
+	output->error = error_values::OK;
 
 	action_enum action = (action_enum)(*(size_t*)message);
 	size_t offset = sizeof(size_t);
@@ -122,11 +123,11 @@ return_specifier* NN_manager::parse_message(void* message, size_t message_length
 				char *path_name = new char[path_name_length + 1];
 				path_name[path_name_length] = 0;
 				for (size_t i = 0; i <= path_name_length; i++)
-					path_name[i] = message[offset + i];
+					path_name[i] = *(char *)(message + offset + i);
 				offset += path_name_length;
 
 				bool is_registered = false;
-				NN* network = network_container* network = networks->Get(id, is_registered);
+				network_container* network = networks->Get(id, is_registered);
 				if (!is_registered)
 				{
 					char error[] = "Error: Network not found while saving\n";
@@ -134,11 +135,12 @@ return_specifier* NN_manager::parse_message(void* message, size_t message_length
 					output->error = error_values::NN_not_found;
 					break;
 				}
+				NN *n = network->network;
 #ifdef log_positive
 				char log[] = "Tried saving network\n";
 				write(log_fd, log, strlen(log) * (log_fd > 0));
 #endif
-				network->save(path_name);
+				n->save(path_name);
 				delete[] path_name;
 			}
 			break;
@@ -151,16 +153,16 @@ return_specifier* NN_manager::parse_message(void* message, size_t message_length
 				offset++;
 
 
-				if (message_length != sizeof(size_t) + sizeof(bool) + path_length) throw;
+				if (message_length != sizeof(size_t) * 2 + sizeof(bool) + path_length) throw;
 
 				char *path = new char[message_length + 1];
 				path[message_length] = 0;
 				for (size_t i = 0; i <= path_length; i++)
-					path_name[i] = message[offset + i];
-				offset += path_name_length;
+					path[i] = *(char *)(message + offset + i);
+				offset += path_length;
 
 				NN *n = NN::load(path, load_state);
-				if (!NN)
+				if (!n)
 				{
 					char error[] = "Error: network not found while loading\n";
 					write(log_fd, error, strlen(error) * (log_fd > 0));

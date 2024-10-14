@@ -9,6 +9,7 @@ build/[^t]*
 .sconsign.dblite
 godot_bin/*
 socket_client/build/*
+socket_client/test_main/*[^p]
 
 
 # User-specific files

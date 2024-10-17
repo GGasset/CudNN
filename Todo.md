@@ -29,6 +29,9 @@
 - ~~client_socket~~
 - socket functions
     - ~~construct -- destruct~~
+    - Get ID of pointer to a NN
+        you pass a id and returns another id that is a reference to a existing NN
+        it has its own execution data to train in parallel
     - training execute
     - training functions
     - save & load

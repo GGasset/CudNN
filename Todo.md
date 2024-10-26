@@ -11,6 +11,7 @@
 - ~~adaptative learning rates~~
     - ~~return cost while training~~
 - ~~reinforcement learning cost function~~
+    - GAE in GPU
     - Proximal Policy optimization cost function
 - ~~server socket~~
     - Create log file

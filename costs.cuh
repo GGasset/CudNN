@@ -2,8 +2,6 @@
 #include "data_type.h"
 #include "NN_enums.h"
 
-#ifdef INCLUDE_BACKEND
-
 #include "cuda_functionality.cuh"
 #include <cmath>
 
@@ -41,5 +39,3 @@ __global__ void PPO_cost(
 	data_t* costs, size_t costs_start,
 	data_t* rewards
 );
-
-#endif

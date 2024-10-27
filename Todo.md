@@ -11,10 +11,11 @@
 - ~~adaptative learning rates~~
     - ~~return cost while training~~
 - ~~reinforcement learning cost function~~
-    - GAE in GPU
+    - ~~GAE in GPU~~
+        CPU function that given a value function estimator NN and rewards computes GAE 
     - Proximal Policy optimization cost function
 - ~~server socket~~
-    - Create log file
+    - ~~Create log file~~
     - Create destructor for socket interpreter -> NN manager
     - Use poll instead of select
     - Improve security

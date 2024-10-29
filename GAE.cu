@@ -16,7 +16,7 @@ __global__ void calculate_discounted_rewards(
 		discounted_rewards[tid] += rewards[i] * discount_factor;
 }
 
-__global__ calculate_deltas(
+__global__ void calculate_deltas(
 	size_t t_count,
 	data_t gamma,
 	data_t *rewards,
@@ -33,7 +33,7 @@ __global__ calculate_deltas(
 	deltas[tid] += gamma * value_functions[j + 1];
 }
 
-__global__ calculate_GAE_advantage(
+__global__ void calculate_GAE_advantage(
 	size_t t_count,
 	data_t gamma,
 	data_t lambda,

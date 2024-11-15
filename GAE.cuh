@@ -30,7 +30,7 @@ __global__ void calculate_GAE_advantage(
 	size_t t_count,
 	data_t gamma,
 	data_t lambda,
-	data_t *deltas
+	data_t *deltas,
 	data_t *advantages
 );
 

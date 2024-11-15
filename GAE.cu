@@ -30,14 +30,14 @@ __global__ void calculate_deltas(
 	deltas[tid] = -value_functions[tid] + rewards[tid];
 	if (tid >= t_count - 1)
 		return;
-	deltas[tid] += gamma * value_functions[j + 1];
+	deltas[tid] += gamma * value_functions[tid + 1];
 }
 
 __global__ void calculate_GAE_advantage(
 	size_t t_count,
 	data_t gamma,
 	data_t lambda,
-	data_t *deltas
+	data_t *deltas,
 	data_t *advantages
 )
 {
@@ -47,7 +47,7 @@ __global__ void calculate_GAE_advantage(
 
 	data_t gamma_lambda = gamma * lambda;
 	data_t GAE_discount = 1;
-	advatages[tid] = 0;
+	advantages[tid] = 0;
 	for (size_t i = tid; i < t_count; i++, GAE_discount *= gamma_lambda)
 		advantages[tid] += GAE_discount * deltas[i];
 }

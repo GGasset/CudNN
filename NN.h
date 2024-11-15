@@ -11,6 +11,7 @@
 
 #include "NN_enums.h"
 #include "costs.cuh"
+#include "GAE.cuh"
 #include "neuron_operations.cuh"
 #include "evolution_info.h"
 
@@ -130,6 +131,13 @@ public:
 		data_t* costs, size_t costs_start,
 		data_t* gradients, size_t gradients_start, size_t next_gradients_start,
 		data_t* derivatives, size_t derivatives_start, size_t previous_derivatives_start
+	);
+
+	data_t *calculate_GAE_advantage(
+		size_t t_count,
+		data_t gamma, data_t lambda,
+		NN *value_function_estimator, data_t *value_function_state,
+		data_t *rewards
 	);
 
 	void subtract_gradients(

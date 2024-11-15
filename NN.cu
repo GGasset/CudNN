@@ -211,7 +211,7 @@ data_t NN::calculate_output_costs(
 	}
 	cudaDeviceSynchronize();
 	multiply_array kernel(1, 1) (
-		cost, 1, 1 / (output_length * t_count)
+		cost, 1, 1.0 / (output_length * t_count)
 	);
 	data_t host_cost = 0;
 	cudaDeviceSynchronize();
@@ -442,6 +442,46 @@ void NN::calculate_gradients(
 		);
 		cudaDeviceSynchronize();
 	}
+}
+
+data_t *calculate_GAE_advantage(
+	size_t t_count,
+	data_t gamma, data_t lambda,
+	NN *value_function_estimator, data_t *value_function_state, data_t estimator_learning_rate, bool is_state_on_host, bool free_state,
+	data_t *rewards, bool is_reward_on_host, bool free_rewards
+)
+{
+	/*if (!value_function_estimator) return (0);
+
+	data_t *discounted_rewards = 0;
+	cudaMalloc(&discounted_rewards, sizeof(data_t) * t_count);
+	cudaDeviceSynchronize();
+	if (!discounted_rewards) return (0);
+
+	cudaMemset(discounted_rewards, 0, sizeof(data_t) * t_count);
+	cudaDeviceSynchronize();
+
+	calculate_discounted_rewards kernel(t_count / 32 + (t_count % 32 > 0), 32) (
+		t_count, gamma, rewards, discounted_rewards
+	);
+	cudaDeviceSynchronize();
+
+	data_t *value_functions = 0;
+	value_function_estimator->training_batch(
+		t_count,
+		value_function_state, discounted_rewards, 0, t_count,
+		CostFunctions::MSE, estimator_learning_rate,
+		&value_functions,E, estimator_learning_rate,
+	);
+
+
+	data_t *deltas = 0;
+	cudaMalloc(&deltas, sizeof(data_t) * t_count);
+	cudaDeviceSynchronize();
+	if (!deltas) return (0);
+
+	cudaMemset(deltas, 0, sizeof(data_t) * t_count);
+	cudaDeviceSynchronize();*/
 }
 
 void NN::subtract_gradients(data_t* gradients, size_t gradients_start, data_t learning_rate, float dropout_rate, data_t gradient_clip)

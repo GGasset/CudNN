@@ -1,9 +1,14 @@
 ﻿
+#include "math.h"
+#include "GAE.cuh"
+#include "IConnections.h"
 #include "cuda_runtime.h"
 #include "device_launch_parameters.h"
 
+#include <cmath>
 #include <stdio.h>
 #include <iostream>
+#include <format>
 
 #include "NN_constructor.h"
 
@@ -44,7 +49,7 @@ void output_stabilizer(data_t output, data_t *current_reward, size_t output_coun
 	*current_reward += output_reward / output_count;
 }
 
-int main()
+void GridTravellerPrototype()
 {
 	srand(101);
 	cudaSetDevice(0);
@@ -295,4 +300,137 @@ int main()
 	delete value_function;
 	cudaDeviceReset();
 	//n.deallocate();
+}
+
+void test_LSTM_cells_for_rythm_prediction()
+{
+	
+	const size_t input_length = 1;
+	const size_t output_length = 1;
+	/*
+	NN *n = NN_constructor()
+	.append_layer(ConnectionTypes::Dense, NeuronTypes::LSTM, 4)
+	.append_layer(ConnectionTypes::Dense, NeuronTypes::LSTM, 8)
+	.append_layer(ConnectionTypes::Dense, NeuronTypes::LSTM, 4)
+	.append_layer(ConnectionTypes::Dense, NeuronTypes::LSTM, 2)
+	.append_layer(ConnectionTypes::Dense, NeuronTypes::LSTM, output_length)
+	.construct(input_length);
+	*/
+	NN *n = NN_constructor()
+	.append_layer(ConnectionTypes::Dense, NeuronTypes::Neuron, 8, ActivationFunctions::sigmoid)
+	.append_layer(ConnectionTypes::Dense, NeuronTypes::Neuron, 4, ActivationFunctions::sigmoid)
+	.append_layer(ConnectionTypes::Dense, NeuronTypes::Neuron, 4, ActivationFunctions::sigmoid)
+	.append_layer(ConnectionTypes::Dense, NeuronTypes::LSTM, 2, ActivationFunctions::sigmoid)
+	.append_layer(ConnectionTypes::Dense, NeuronTypes::Neuron, output_length, ActivationFunctions::sigmoid)
+	.construct(input_length);
+
+	const bool delete_memory = false;
+	const size_t epoch_n = 100;
+	const size_t t_count = 20;
+
+	data_t X[t_count];
+	data_t Y_hat[t_count];
+	for (size_t i = 0; i < t_count; i++)
+	{
+	data_t epoch_percentage = i / (float)t_count;
+
+	X[i] = epoch_percentage;
+	Y_hat[i] = sinf(epoch_percentage) / 2 + .25;
+	//Y_hat[i] = .8;
+	}
+
+	data_t learning_rate = .1;
+	data_t costs[epoch_n];
+	for (size_t i = 0; i < epoch_n; i++)
+	{
+		data_t *Y = 0;
+		printf("%i %.4f\n", i, costs[i] = n->training_batch(
+			t_count,
+			X, Y_hat, true, output_length * t_count,
+			CostFunctions::MSE, learning_rate, &Y, true, 20000
+		));
+		for (size_t j = 0; j < t_count; j++) printf("%.2f ", Y[j]);
+		printf("\n");
+		for (size_t y = 0; y++ <= 10 && !(epoch_n - i - 1); y++)
+		{
+		    for (size_t x = 0; x < t_count * output_length; x++)
+		    {
+			int condition = ((int)(Y[x] * 10)) == y;
+			if (condition) printf("#");
+			else printf(" ");
+		    }
+		    printf("\n");
+		}
+	delete[] Y;
+	//n->delete_memory();
+	}
+
+	delete n;
+	return ;
+
+	FILE *log_file = fopen("/var/log/NNs/sine_text.csv", "wb");
+	char headers[] = "i, cost\n";
+	fwrite(headers, 1, strlen(headers), log_file);
+	for (size_t i = 0; i < epoch_n; i++)
+	{
+	std::string line = std::format("{0}, {1:.4f}\n", i, costs[i]);
+	fwrite(line.data(), 1, strlen(line.data()), log_file);
+	}
+	fclose(log_file);
+}
+
+void bug_hunting()
+{
+	const size_t input_len = 4;
+	const size_t output_len = 11;
+
+	const bool stateful = true;
+	NN *n = NN_constructor()
+		//.append_layer(ConnectionTypes::Dense, NeuronTypes::Neuron, 1, ActivationFunctions::sigmoid)
+		.append_layer(ConnectionTypes::Dense, NeuronTypes::LSTM, output_len, ActivationFunctions::sigmoid)
+		.construct(input_len, stateful);
+
+	const size_t t_count = 1;
+	data_t X[input_len * t_count];
+	for (size_t i = 0; i < input_len * t_count; i++)
+	{
+		X[i] = .3;
+	}
+
+	data_t Y_hat[output_len * t_count];
+	for (size_t i = 0; i < output_len * t_count; i++)
+	{
+		Y_hat[i] = .7;
+	}
+
+	const data_t learning_rate = .001;
+	const size_t epochs = 6000;
+	for (size_t i = 0; i < epochs; i++)
+	{
+		data_t *Y = 0;
+		n->training_batch(
+			t_count,
+			X, Y_hat, 1, output_len * t_count,
+			CostFunctions::MSE, learning_rate,
+			&Y, 1, 2000, 0
+		);
+		for (size_t j = 0; j < t_count; j++)
+		{	
+			for (size_t k = 0; k < output_len; k++) 
+			{
+				size_t output_index = j * output_len + k;
+				printf("%i: %.5f  ", k, Y[output_index]);
+			}
+			printf("| ");
+		}
+		delete[] Y;
+		printf("\n");
+	}
+}
+
+int main()
+{
+	//GridTravellerPrototype();
+	//test_LSTM_cells_for_rythm_prediction();
+	bug_hunting();
 }

@@ -80,6 +80,7 @@ int main(int argc, char *argv[])
 				bytes_to_read += sizeof(size_t) * (!has_sent_message_size);
 				
 				void* message = malloc(bytes_to_read);
+				if (!message) throw;
 				size_t bytes_read = read(fd, message, bytes_to_read);
 				if (bytes_read < 0 || bytes_read != bytes_to_read) throw;
 				if (has_sent_message_size)

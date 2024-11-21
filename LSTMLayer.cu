@@ -10,7 +10,7 @@ LSTMLayer::LSTMLayer(IConnections* connections, size_t neuron_count)
 
 	execution_values_per_neuron = 10;
 	
-	derivatives_per_neuron = 16;
+	derivatives_per_neuron = 17;
 	layer_derivative_count = derivatives_per_neuron * neuron_count;
 	
 	layer_gradient_count = 8 * neuron_count + neuron_count + connections->connection_count;
@@ -184,6 +184,7 @@ void LSTMLayer::calculate_derivatives(
 		neuron_weights,
 		neuron_count
 	);
+	cudaDeviceSynchronize();
 }
 
 void LSTMLayer::mutate_fields(evolution_metadata evolution_values)

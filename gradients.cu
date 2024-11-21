@@ -11,9 +11,12 @@ __global__ void LSTM_gradient_calculation(
 	if (tid >= layer_length) return;
 
 	size_t neuron_derivatives_start = derivatives_start + derivatives_layer_start + derivatives_per_neuron * tid;
+	
 	size_t connections_gradients_start = gradients_start + layer_gradients_start + neuron_gradients_starts[tid];
 	size_t neuron_gradients_start = connections_gradients_start + connection_associated_gradient_counts[tid];
-	size_t next_neuron_gradients_start = next_t_gradients_start + layer_gradients_start + neuron_gradients_starts[tid];
+	
+	size_t next_connections_gradients_start = next_t_gradients_start + layer_gradients_start + neuron_gradients_starts[tid];
+	size_t next_neuron_gradients_start = next_connections_gradients_start + connection_associated_gradient_counts[tid];
 
 	data_t current_gradient = costs[costs_start + layer_costs_start + tid];
 
@@ -36,7 +39,7 @@ __global__ void LSTM_gradient_calculation(
 
 	current_gradient = output_multiplication_gradient;
 	current_gradient *= derivatives[neuron_derivatives_start + 12];
-	current_gradient += next_cell_state_gradient;
+	data_t initial_cell_state_gradient = current_gradient += next_cell_state_gradient;
 
 	// Store gate
 	data_t cell_state_addition_gradient = current_gradient *= derivatives[neuron_derivatives_start + 11];
@@ -51,8 +54,8 @@ __global__ void LSTM_gradient_calculation(
 	current_gradient = cell_state_addition_gradient;
 	current_gradient *= derivatives[neuron_derivatives_start + 5];
 	gradients[neuron_gradients_start + 6] = current_gradient * derivatives[neuron_derivatives_start + 3]; // Forget weight gradient
-	gradients[neuron_gradients_start + 7] = current_gradient; // Inital cell state gradient (cell state multiplication gradient)
-
+	gradients[neuron_gradients_start + 7] = //cell_state_addition_gradient * derivatives[neuron_derivatives_start + 16]; // Inital cell state gradient (cell state multiplication gradient)
+		initial_cell_state_gradient * derivatives[neuron_derivatives_start + 10] * derivatives[neuron_derivatives_start + 16];
 	current_gradient = linear_hidden_gradient += current_gradient * derivatives[neuron_derivatives_start + 4] * derivatives[neuron_derivatives_start + 1];
 	current_gradient *= derivatives[neuron_derivatives_start];
 	gradients[connections_gradients_start] = current_gradient; // Linear Function gradient | Initial Hidden State gradient
@@ -69,13 +72,13 @@ __global__ void LSTM_gradient_subtraction(
 	if (tid >= layer_length) return;
 
 	size_t neuron_i = tid;
-	size_t neuron_gradients_start = gradients_start + layer_gradients_start + neuron_gradients_starts[tid] + connection_associated_gradient_counts[tid];
+	size_t neuron_gradients_start_i = gradients_start + layer_gradients_start + neuron_gradients_starts[tid] + connection_associated_gradient_counts[tid];
 	size_t neuron_weights_start = static_cast<size_t>(4) * tid;
 
-	neuron_weights[neuron_weights_start] -= device_min(max_subtracted_gradient, gradients[neuron_gradients_start + 6] * learning_rate * dropout[neuron_i]); // Forget weight
-	neuron_weights[neuron_weights_start + 1] -= device_min(max_subtracted_gradient, gradients[neuron_gradients_start + 3] * learning_rate * dropout[neuron_i]); // Store sigmoid weight
-	neuron_weights[neuron_weights_start + 2] -= device_min(max_subtracted_gradient, gradients[neuron_gradients_start + 2] * learning_rate * dropout[neuron_i]); // Store Tanh weight
-	neuron_weights[neuron_weights_start + 3] -= device_min(max_subtracted_gradient, gradients[neuron_gradients_start + 1] * learning_rate * dropout[neuron_i]); // Output_weight
+	neuron_weights[neuron_weights_start] -= device_closest_to_zero(max_subtracted_gradient, gradients[neuron_gradients_start_i + 6] * learning_rate * dropout[neuron_i]); // Forget weight
+	neuron_weights[neuron_weights_start + 1] -= device_closest_to_zero(max_subtracted_gradient, gradients[neuron_gradients_start_i + 3] * learning_rate * dropout[neuron_i]); // Store sigmoid weight
+	neuron_weights[neuron_weights_start + 2] -= device_closest_to_zero(max_subtracted_gradient, gradients[neuron_gradients_start_i + 2] * learning_rate * dropout[neuron_i]); // Store Tanh weight
+	neuron_weights[neuron_weights_start + 3] -= device_closest_to_zero(max_subtracted_gradient, gradients[neuron_gradients_start_i + 1] * learning_rate * dropout[neuron_i]); // Output_weight
 }
 
 __global__ void neuron_gradient_calculation(

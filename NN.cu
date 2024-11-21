@@ -363,9 +363,16 @@ void NN::backpropagate(
 {
 	data_t* derivatives = 0;
 	if (!*gradients)
+	{
 		cudaMalloc(gradients, sizeof(data_t) * t_count * gradient_count);
+		cudaMemset(*gradients, 0, sizeof(data_t) * t_count * gradient_count);
+	}
 	if (derivative_count)
+	{
 		cudaMalloc(&derivatives, sizeof(data_t) * t_count * derivative_count);
+		cudaMemset(derivatives, 0, sizeof(data_t) * t_count * derivative_count);
+	}
+	cudaDeviceSynchronize();
 
 	size_t activations_start = 0;
 	size_t execution_values_start = 0;

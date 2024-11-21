@@ -59,7 +59,7 @@ __global__ void cud_dense_linear_function_derivative(
 		return;
 	size_t activation_i = activations_start + previous_layer_activations_start + tid;
 	size_t weight_i = previous_layer_length * blockIdx.y + tid;
-	size_t connection_derivative = activations[activation_i] + weights[weight_i];
+	data_t connection_derivative = activations[activation_i] + weights[weight_i];
 
 	size_t write_i = derivatives_start + derivatives_layer_start + derivatives_per_neuron * blockIdx.y;
 	atomicAdd(derivatives + write_i, connection_derivative);

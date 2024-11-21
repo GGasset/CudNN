@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.28)
 
 # Add linking to stdlib
-SET(GCC_COVERAGE_COMPILE_FLAGS "-lm -lstdc++")
+SET(GCC_COVERAGE_COMPILE_FLAGS "-lm -lstdc++ -fanalyzer")
 SET(GCC_COVERAGE_LINK_FLAGS    "-lm -lstdc++")
 
 SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} ${GCC_COVERAGE_COMPILE_FLAGS}")

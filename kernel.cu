@@ -381,16 +381,16 @@ void test_LSTM_cells_for_rythm_prediction()
 
 void bug_hunting()
 {
-	const size_t input_len = 4;
-	const size_t output_len = 11;
+	const size_t input_len = 5;
+	const size_t output_len = 8;
 
 	const bool stateful = true;
 	NN *n = NN_constructor()
-		//.append_layer(ConnectionTypes::Dense, NeuronTypes::Neuron, 1, ActivationFunctions::sigmoid)
+		//.append_layer(ConnectionTypes::Dense, NeuronTypes::LSTM, 4, ActivationFunctions::sigmoid)
 		.append_layer(ConnectionTypes::Dense, NeuronTypes::LSTM, output_len, ActivationFunctions::sigmoid)
 		.construct(input_len, stateful);
 
-	const size_t t_count = 1;
+	const size_t t_count = 20;
 	data_t X[input_len * t_count];
 	for (size_t i = 0; i < input_len * t_count; i++)
 	{
@@ -403,8 +403,8 @@ void bug_hunting()
 		Y_hat[i] = .7;
 	}
 
-	const data_t learning_rate = .001;
-	const size_t epochs = 6000;
+	const data_t learning_rate = .1 / t_count;
+	const size_t epochs = 600;
 	for (size_t i = 0; i < epochs; i++)
 	{
 		data_t *Y = 0;
@@ -419,12 +419,12 @@ void bug_hunting()
 			for (size_t k = 0; k < output_len; k++) 
 			{
 				size_t output_index = j * output_len + k;
-				printf("%i: %.5f  ", k, Y[output_index]);
+				printf("%i: %.2f  ", k, Y[output_index]);
 			}
-			printf("| ");
+			printf("\n");
 		}
 		delete[] Y;
-		printf("\n");
+		printf("\n\n\n");
 	}
 }
 

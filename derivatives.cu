@@ -39,11 +39,11 @@ __global__ void LSTM_derivative_calculation(
 
 	data_t previous_hidden_derivative = 1;
 	data_t previous_cell_derivative = 1;
-	if (derivatives_start != 0)
+	/*if (derivatives_start != 0)
 	{
 		previous_hidden_derivative = derivatives[previous_neuron_derivatives_start + 15];
 		previous_cell_derivative = derivatives[previous_neuron_derivatives_start + 11];
-	}
+	}*/
 	
 	derivatives[neuron_derivatives_start] = linear_function_derivative + previous_hidden_derivative;
 
@@ -67,6 +67,9 @@ __global__ void LSTM_derivative_calculation(
 	data_t forget_gate_weight_multiplication = execution_values[neuron_execution_values_start + 2];
 	data_t cell_state_multiplication_derivative = derivatives[neuron_derivatives_start + 5] = 
 		previous_cell_derivative * forget_gate_weight_multiplication + forget_weight_multiplication_derivative * initial_cell_state;
+
+	derivatives[neuron_derivatives_start + 16] = // Cell state multiplication derivative with respect of the previous state
+		forget_gate_weight_multiplication; //+ //initial_cell_state * forget_weight_multiplication_derivative;
 
 	// Store gate
 	data_t store_sigmoid_weight = neuron_weights[neuron_weights_start + 1];
@@ -92,6 +95,8 @@ __global__ void LSTM_derivative_calculation(
 
 	data_t cell_state_addition_derivative = derivatives[neuron_derivatives_start + 11] =
 		store_gate_multiplication_derivative + cell_state_multiplication_derivative;
+
+	//derivatives[neuron_derivatives_start + 16] = store_gate_multiplication_derivative
 
 	// Output gate
 	data_t cell_state_tanh = execution_values[neuron_execution_values_start + 8];

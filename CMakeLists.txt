@@ -23,7 +23,9 @@ project(NN LANGUAGES CUDA CXX)
 
 find_package(CUDAToolkit REQUIRED)
 include_directories("${CUDA_INCLUDE_DIRS} ${CUDAToolkit_INCLUDE_DIRS}")
-
+if(DETERMINISTIC)
+	add_compile_definitions(DETERMINISTIC)
+endif()
 add_compile_definitions(INCLUDE_BACKEND)
 if(target STREQUAL "static")
 	   set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -fPIC")

@@ -13,6 +13,7 @@
 #include "vector"
 #include "evolution_info.h"
 #include "cuda_functionality.cuh"
+#include "functionality.h"
 
 #pragma once
 class IConnections

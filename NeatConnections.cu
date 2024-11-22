@@ -15,15 +15,15 @@ NeatConnections::NeatConnections(size_t previous_layer_start, size_t previous_la
 	cudaMalloc(&connection_neuron_i, sizeof(size_t) * connection_count);
 	cudaDeviceSynchronize();
 
-	//generate_random_values(&weights, neuron_count * previous_layer_length, 0, previous_layer_length);
+	generate_random_values(&weights, connection_count, 0, previous_layer_length);
 	//cudaMemset(biases, 0, sizeof(field_t) * neuron_count);
 	//generate_random_values(&biases, neuron_count, 0, neuron_count);
 
-	cudaMemset(weights, 0, sizeof(field_t) * connection_count);
+	//cudaMemset(weights, 0, sizeof(field_t) * connection_count);
 	cudaMemset(biases, 0, sizeof(field_t) * neuron_count);
 	cudaDeviceSynchronize();
 
-	add_to_array kernel (connection_count / 32 + (connection_count % 32 > 0), 32) (weights, connection_count, 1);
+	//add_to_array kernel (connection_count / 32 + (connection_count % 32 > 0), 32) (weights, connection_count, 1);
 	add_to_array kernel (neuron_count / 32 + (neuron_count % 32 > 0), 32) (biases, neuron_count, 1);
 	cudaDeviceSynchronize();
 	

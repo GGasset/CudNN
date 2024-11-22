@@ -386,7 +386,7 @@ void bug_hunting()
 
 	const bool stateful = true;
 	NN *n = NN_constructor()
-		//.append_layer(ConnectionTypes::Dense, NeuronTypes::LSTM, 4, ActivationFunctions::sigmoid)
+		.append_layer(ConnectionTypes::Dense, NeuronTypes::LSTM, 7, ActivationFunctions::sigmoid)
 		.append_layer(ConnectionTypes::Dense, NeuronTypes::LSTM, output_len, ActivationFunctions::sigmoid)
 		.construct(input_len, stateful);
 
@@ -403,7 +403,7 @@ void bug_hunting()
 		Y_hat[i] = .7;
 	}
 
-	const data_t learning_rate = .1 / t_count;
+	const data_t learning_rate = .01 / t_count;
 	const size_t epochs = 600;
 	for (size_t i = 0; i < epochs; i++)
 	{

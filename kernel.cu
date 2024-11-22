@@ -412,7 +412,7 @@ void bug_hunting()
 			t_count,
 			X, Y_hat, 1, output_len * t_count,
 			CostFunctions::MSE, learning_rate,
-			&Y, 1, 2000, 0
+			&Y, 1, 2000, 0.2
 		);
 		for (size_t j = 0; j < t_count; j++)
 		{	

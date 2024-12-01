@@ -4,7 +4,6 @@
 #include "data_type.h"
 #include "NN_enums.h"
 
-#ifdef INCLUDE_BACKEND
 #include "cuda_functionality.cuh"
 
 __global__ void sigmoid_activation(
@@ -27,5 +26,4 @@ __global__ void LSTM_execution(
 	field_t* neuron_weights, data_t* state,
 	size_t layer_length
 );
-#endif
 #endif

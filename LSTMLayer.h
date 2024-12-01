@@ -6,6 +6,7 @@ class LSTMLayer : public ILayer
 public:
 	field_t* neuron_weights = 0;
 	data_t* state = 0;
+	data_t* prev_state_derivatives = 0;
 
 	LSTMLayer(IConnections* connections, size_t neuron_count);
 	LSTMLayer();

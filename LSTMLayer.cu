@@ -50,8 +50,10 @@ void LSTMLayer::layer_specific_initialize_fields(size_t connection_count, size_t
 	size_t neuron_weights_count = sizeof(data_t) * neuron_count * 4;
 	cudaMalloc(&state, sizeof(data_t) * neuron_count * 2);
 	cudaMalloc(&neuron_weights, sizeof(field_t) * neuron_count * 4);
+	cudaMalloc(&prev_state_derivatives, sizeof(data_t) * neuron_count * 2);
 	cudaDeviceSynchronize();
 	cudaMemset(state, 0, sizeof(data_t) * neuron_count * 2);
+	cudaMemset(prev_state_derivatives, 0, sizeof(data_t) * neuron_count * 2);
 	IConnections::generate_random_values(&neuron_weights, neuron_count * 4);
 	
 	/*cudaMemset(neuron_weights, 0, neuron_weights_count);
@@ -179,7 +181,7 @@ void LSTMLayer::calculate_derivatives(
 	);
 	cudaDeviceSynchronize();
 	LSTM_derivative_calculation kernel(neuron_count / 32 + (neuron_count % 32 > 0), 32) (
-		derivatives, previous_derivatives_start, derivatives_start, layer_derivatives_start, derivatives_per_neuron,
+		prev_state_derivatives, derivatives, previous_derivatives_start, derivatives_start, layer_derivatives_start, derivatives_per_neuron,
 		execution_values, execution_values_start, execution_values_layer_start, execution_values_per_neuron,
 		neuron_weights,
 		neuron_count
@@ -327,11 +329,16 @@ void LSTMLayer::adjust_to_removed_neuron(size_t neuron_i)
 void LSTMLayer::delete_memory()
 {
 	cudaMemset(state, 0, sizeof(data_t) * 2 * neuron_count);
+	cudaMemset(prev_state_derivatives, 0, sizeof(data_t) * 2 * neuron_count);
 	cudaDeviceSynchronize();
 }
 
 void LSTMLayer::layer_specific_deallocate()
 {
+	cudaFree(prev_state_derivatives);
+	prev_state_derivatives = 0;
 	cudaFree(neuron_weights);
+	neuron_weights = 0;
 	cudaFree(state);
+	state = 0;
 }

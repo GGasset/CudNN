@@ -304,7 +304,7 @@ void GridTravellerPrototype()
 
 void test_LSTM_cells_for_rythm_prediction()
 {
-	const bool delete_memory = true;
+	const bool delete_memory = false;
 	const size_t epoch_n = 50000;
 	const size_t t_count = 50;
 	
@@ -322,7 +322,7 @@ void test_LSTM_cells_for_rythm_prediction()
 	NN *n = NN_constructor()
 	.append_layer(ConnectionTypes::Dense, NeuronTypes::LSTM, 10, ActivationFunctions::sigmoid)
 	//.append_layer(ConnectionTypes::Dense, NeuronTypes::LSTM, 15, ActivationFunctions::sigmoid)
-	.append_layer(ConnectionTypes::Dense, NeuronTypes::Neuron, 10, ActivationFunctions::sigmoid)
+	.append_layer(ConnectionTypes::Dense, NeuronTypes::Neuron, 5, ActivationFunctions::sigmoid)
 	//.append_layer(ConnectionTypes::Dense, NeuronTypes::LSTM, 20, ActivationFunctions::sigmoid)
 	//.append_layer(ConnectionTypes::Dense, NeuronTypes::LSTM, 10, ActivationFunctions::sigmoid)
 	.append_layer(ConnectionTypes::Dense, NeuronTypes::LSTM, output_length, ActivationFunctions::sigmoid)
@@ -343,16 +343,16 @@ void test_LSTM_cells_for_rythm_prediction()
 	for (size_t i = 0; i < t_count * output_length; i++)
 	{
 		data_t epoch_percentage = i / (float)(t_count * output_length);
-		epoch_percentage -= (long)epoch_percentage;
+		/*epoch_percentage -= (long)epoch_percentage;
 		epoch_percentage *= t_count;
 		while (epoch_percentage > t_count / 5.0)
 			epoch_percentage -= t_count / 5.0;
 		epoch_percentage /= t_count / 5.0;
-		Y_hat[i] = (epoch_percentage * .7 + .15);
-		//Y_hat[i] = sinf(epoch_percentage * 5) / 3 + .5;
+		Y_hat[i] = (epoch_percentage * .7 + .15);*/
+		Y_hat[i] = sinf(epoch_percentage * 5) / 3 + .5;
 	}
 
-	data_t learning_rate = .001 / t_count;
+	data_t learning_rate = .01 / t_count;
 	data_t costs[epoch_n];
 	for (size_t i = 0; i < epoch_n; i++)
 	{

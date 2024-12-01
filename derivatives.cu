@@ -19,7 +19,7 @@ __device__ data_t device_tanh_derivative(
 }
 
 __global__ void LSTM_derivative_calculation(
-	data_t* derivatives, size_t previous_derivatives_start, size_t derivatives_start, size_t derivatives_layer_start, size_t derivatives_per_neuron,
+	data_t* prev_state_derivatives, data_t* derivatives, size_t previous_derivatives_start, size_t derivatives_start, size_t derivatives_layer_start, size_t derivatives_per_neuron,
 	data_t* execution_values, size_t execution_values_start, size_t execution_values_layer_start, size_t execution_values_per_neuron,
 	field_t* neuron_weights, 
 	size_t layer_length
@@ -37,8 +37,8 @@ __global__ void LSTM_derivative_calculation(
 
 	data_t linear_function_derivative = derivatives[neuron_derivatives_start];
 
-	data_t previous_hidden_derivative = 1;
-	data_t previous_cell_derivative = 1;
+	data_t previous_hidden_derivative = prev_state_derivatives[tid * 2];
+	data_t previous_cell_derivative = prev_state_derivatives[tid * 2 + 1];
 	if (derivatives_start != 0)
 	{
 		previous_hidden_derivative = derivatives[previous_neuron_derivatives_start + 15];
@@ -114,5 +114,8 @@ __global__ void LSTM_derivative_calculation(
 
 	data_t output_derivative = derivatives[neuron_derivatives_start + 15] =
 		cell_state_tanh_derivative * output_weight_multiplication + cell_state_tanh * output_gate_weight_multiplication_derivative;
+
+	prev_state_derivatives[tid * 2] = output_derivative;
+	prev_state_derivatives[tid * 2 + 1] = cell_state_addition_derivative;
 }
 

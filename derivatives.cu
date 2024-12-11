@@ -44,6 +44,7 @@ __global__ void LSTM_derivative_calculation(
 		previous_hidden_derivative = derivatives[previous_neuron_derivatives_start + 15];
 		previous_cell_derivative = derivatives[previous_neuron_derivatives_start + 11];
 	}
+	derivatives[neuron_derivatives_start + 17] = previous_hidden_derivative;
 	
 	derivatives[neuron_derivatives_start] = linear_function_derivative + previous_hidden_derivative;
 

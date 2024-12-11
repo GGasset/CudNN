@@ -10,10 +10,12 @@ LSTMLayer::LSTMLayer(IConnections* connections, size_t neuron_count)
 
 	execution_values_per_neuron = 10;
 	
-	derivatives_per_neuron = 17;
+	derivatives_per_neuron = 18;
 	layer_derivative_count = derivatives_per_neuron * neuron_count;
 	
-	layer_gradient_count = 8 * neuron_count + neuron_count + connections->connection_count;
+	size_t gradients_per_neuron = 8;
+
+	layer_gradient_count = gradients_per_neuron * neuron_count + neuron_count + connections->connection_count;
 
 	layer_specific_initialize_fields(connections->connection_count, neuron_count);
 
@@ -25,7 +27,7 @@ LSTMLayer::LSTMLayer(IConnections* connections, size_t neuron_count)
 		size_t neuron_connection_count = connections->get_connection_count_at(i);
 		connection_associated_gradient_counts[i] = neuron_connection_count + 1;
 		neuron_gradients_starts[i] = gradient_count;
-		gradient_count += neuron_connection_count + 1 + 8;
+		gradient_count += neuron_connection_count + 1 + gradients_per_neuron;
 	}
 
 	cudaMalloc(&this->neuron_gradients_starts, sizeof(size_t) * neuron_count);

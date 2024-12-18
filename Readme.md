@@ -17,3 +17,7 @@ connects to "\0NN_manager"
             
             returns created network id
         
+# Technologies used
+
+ - LSTM architecture
+	![LSTM architecture](https://i.sstatic.net/RHNrZ.jpg) 

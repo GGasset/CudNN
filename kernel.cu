@@ -306,7 +306,7 @@ void test_LSTM_cells_for_rythm_prediction()
 {
 	const bool delete_memory = false;
 	const size_t epoch_n = 50000;
-	const size_t t_count = 20;
+	const size_t t_count = 100;
 	
 	const size_t input_length = 2;
 	const size_t output_length = 1;
@@ -320,7 +320,7 @@ void test_LSTM_cells_for_rythm_prediction()
 	.construct(input_length);
 	*/
 	NN *n = NN_constructor()
-	.append_layer(ConnectionTypes::Dense, NeuronTypes::LSTM, 10, ActivationFunctions::sigmoid)
+	.append_layer(ConnectionTypes::Dense, NeuronTypes::LSTM, 2, ActivationFunctions::sigmoid)
 	//.append_layer(ConnectionTypes::Dense, NeuronTypes::LSTM, 15, ActivationFunctions::sigmoid)
 	.append_layer(ConnectionTypes::Dense, NeuronTypes::Neuron, 5, ActivationFunctions::sigmoid)
 	//.append_layer(ConnectionTypes::Dense, NeuronTypes::LSTM, 20, ActivationFunctions::sigmoid)
@@ -336,20 +336,20 @@ void test_LSTM_cells_for_rythm_prediction()
 		data_t epoch_percentage = i / (float)(t_count);
 		epoch_percentage -= (long)epoch_percentage;
 
-		X[i] = epoch_percentage; //* 2 - 1 + (int)(epoch_percentage * 10) % 2;
+		X[i] = epoch_percentage + .1 * (i % 2); //* 2 - 1 + (int)(epoch_percentage * 10) % 2;
 		//X[i] -= !i;
 	}
 
 	for (size_t i = 0; i < t_count * output_length; i++)
 	{
-		data_t epoch_percentage = i / (float)(t_count * output_length);
+		data_t epoch_percentage = i / (float)(t_count * output_length / 2.);
 		/*epoch_percentage -= (long)epoch_percentage;
 		epoch_percentage *= t_count;
 		while (epoch_percentage > t_count / 5.0)
 			epoch_percentage -= t_count / 5.0;
 		epoch_percentage /= t_count / 5.0;
 		Y_hat[i] = (epoch_percentage * .7 + .15);*/
-		Y_hat[i] = sinf(epoch_percentage * 5) / 3 + .5;
+		Y_hat[i] = sinf(epoch_percentage * 5) / 10 + .45;
 		//Y_hat[i] = i % 2 ? .3 : .7;
 	}
 
@@ -377,8 +377,8 @@ void test_LSTM_cells_for_rythm_prediction()
 		    }
 		    printf("\n---\n");
 		}
-	delete[] Y;
-	//n->delete_memory();
+		delete[] Y;
+		//n->delete_memory();
 	}
 
 	delete n;

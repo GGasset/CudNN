@@ -10,10 +10,11 @@ LSTMLayer::LSTMLayer(IConnections* connections, size_t neuron_count)
 
 	execution_values_per_neuron = 10;
 	
-	derivatives_per_neuron = 18;
+	//derivatives_per_neuron = 19;
+	derivatives_per_neuron = 24;
 	layer_derivative_count = derivatives_per_neuron * neuron_count;
 	
-	size_t gradients_per_neuron = 8;
+	size_t gradients_per_neuron = 6;
 
 	layer_gradient_count = gradients_per_neuron * neuron_count + neuron_count + connections->connection_count;
 
@@ -56,13 +57,13 @@ void LSTMLayer::layer_specific_initialize_fields(size_t connection_count, size_t
 	cudaDeviceSynchronize();
 	cudaMemset(state, 0, sizeof(data_t) * neuron_count * 2);
 	cudaMemset(prev_state_derivatives, 0, sizeof(data_t) * neuron_count * 2);
-	IConnections::generate_random_values(&neuron_weights, neuron_count * 4);
-	
-	/*cudaMemset(neuron_weights, 0, neuron_weights_count);
+	cudaMemset(neuron_weights, 0, sizeof(field_t) * neuron_count * 4);
 	cudaDeviceSynchronize();
+	//IConnections::generate_random_values(&neuron_weights, neuron_count * 4);
+	
 	add_to_array kernel(neuron_weights_count / 32 + (neuron_weights_count % 32 > 0), 32) (
 		neuron_weights, neuron_weights_count, 1
-	);*/
+	);
 	cudaDeviceSynchronize();
 }
 

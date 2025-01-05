@@ -1,6 +1,3 @@
-#ifndef ILAYER_DEFINITIONS
-#define ILAYER_DEFINITIONS
-
 #include "ILayer.h"
 
 size_t ILayer::get_neuron_count()
@@ -119,5 +116,3 @@ void ILayer::mutate_fields(evolution_metadata evolution_values)
 void ILayer::delete_memory()
 {
 }
-
-#endif

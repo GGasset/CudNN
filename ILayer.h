@@ -1,12 +1,12 @@
+#ifndef ILAYER_H
+#define ILAYER_H
 #include <stdlib.h>
-#include "curand.h"
 
 #include "IConnections.h"
 #include "neuron_operations.cuh"
 #include "derivatives.cuh"
 #include "gradients.cuh"
 
-#pragma once
 class ILayer
 {
 protected:
@@ -86,3 +86,4 @@ public:
 	virtual void delete_memory();
 };
 
+#endif

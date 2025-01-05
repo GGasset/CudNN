@@ -1,3 +1,5 @@
+#pragma once
+
 #include <stdio.h>
 #include "ILayer.h"
 #include "costs.cuh"
@@ -10,12 +12,10 @@
 #include "kernel_macros.h"
 
 #include "NN_enums.h"
-#include "costs.cuh"
 #include "GAE.cuh"
 #include "neuron_operations.cuh"
 #include "evolution_info.h"
 
-#pragma once
 class NN
 {
 private:

@@ -1,7 +1,6 @@
 ﻿
 #include "math.h"
 #include "GAE.cuh"
-#include "IConnections.h"
 #include "cuda_runtime.h"
 #include "device_launch_parameters.h"
 
@@ -366,14 +365,14 @@ void test_LSTM_cells_for_rythm_prediction()
 		printf("%i %.4f\n", i, costs[i]);
 		//for (size_t j = 0; j < output_length * t_count; j++) printf("%.2f ", Y[j]);
 		printf("\n----\n");
-		for (ssize_t y = 10; y >= 0 /*&& !(epoch_n - i - 1)*/; y--)
+		for (size_t y = 11; y >= 1 /*&& !(epoch_n - i - 1)*/; y--)
 		{
 		    for (size_t x = 0; x < t_count * output_length; x++)
 		    {
-				int condition = ((int)(Y[x] * 10)) == y;
-				if (condition) 					printf("#");
-				else if (Y[x] != Y[x] && !y)	printf("0");
-				else 							printf(" ");
+				int condition = ((int)(Y[x] * 10)) == y - 1;
+				if (condition) 						printf("#");
+				else if (Y[x] != Y[x] && !(y - 1))	printf("0");
+				else 								printf(" ");
 		    }
 		    printf("\n---\n");
 		}
@@ -389,8 +388,9 @@ void test_LSTM_cells_for_rythm_prediction()
 	fwrite(headers, 1, strlen(headers), log_file);
 	for (size_t i = 0; i < epoch_n; i++)
 	{
-	std::string line = std::format("{0}, {1:.4f}\n", i, costs[i]);
-	fwrite(line.data(), 1, strlen(line.data()), log_file);
+		std::string line = "";//itoa(i);
+		//costs[i]
+		fwrite(line.data(), 1, strlen(line.data()), log_file);
 	}
 	fclose(log_file);
 }

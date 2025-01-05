@@ -1,3 +1,6 @@
+#ifndef ICONNECTIONS_H
+#define ICONNECTIONS_H
+
 #include "cuda_runtime.h"
 #include "device_launch_parameters.h"
 #include <curand.h>
@@ -15,7 +18,6 @@
 #include "cuda_functionality.cuh"
 #include "functionality.h"
 
-#pragma once
 class IConnections
 {
 public:
@@ -78,3 +80,4 @@ public:
 	virtual void specific_deallocate();
 };
 
+#endif

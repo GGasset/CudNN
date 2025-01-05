@@ -1,9 +1,9 @@
+#pragma once
 #include "cuda_runtime.h"
 #include "device_launch_parameters.h"
 
 #include "IConnections.h"
 
-#pragma once
 class DenseConnections : public IConnections
 {
 public:

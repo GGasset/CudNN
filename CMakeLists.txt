@@ -1,5 +1,8 @@
 cmake_minimum_required(VERSION 3.28)
 
+# In linux add CPP13 compilation flag. I recommend homebrew to install gcc@13
+# In windows compile inside Visual Studio.
+
 # Add linking to stdlib
 SET(GCC_COVERAGE_COMPILE_FLAGS "-lm -lstdc++ -fanalyzer")
 SET(GCC_COVERAGE_LINK_FLAGS    "-lm -lstdc++")
@@ -9,8 +12,15 @@ SET(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} ${GCC_COVERAGE_LINK_FLAGS
 
 set (CMAKE_CXX_STANDARD 20)
 
+set(CMAKE_CUDA_COMPILER "nvcc")
+#set(CMAKE_CXX_COMPILER "gcc")
+
+#set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -lcurand")
+
 # -rdc=true
-set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -ccbin='g++-13'")
+if (UNIX)
+	set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -ccbin='g++-13'")
+endif()
 if (DEBUG)
 	set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -G -g")
 	add_compile_definitions("DEBUG")
@@ -121,19 +131,6 @@ elseif(target STREQUAL "socket")
 else()
 	message("-- Exe for testing added")
 	add_executable(${PROJECT_NAME}
-		data_type.h
-		DenseConnections.h
-		evolution_info.h
-		functionality.h
-		IConnections.h
-		ILayer.h
-		kernel_macros.h
-		LSTMLayer.h
-		NeatConnections.h
-		NeuronLayer.h
-		NN.h
-		NN_constructor.h
-
 		connection_gradients.cu
 		costs.cu
 		cuda_functionality.cu
@@ -149,15 +146,14 @@ else()
 		NeuronLayer.cu
 		neuron_operations.cu
 		NN.cu
-		NN_constructor.cpp
-
-		NN_enums.h
+		NN_constructor.cu
 
 		functionality.cpp
 	)
 endif()
 
-target_link_libraries(${PROJECT_NAME} PUBLIC -lcurand)
+#target_link_libraries(${PROJECT_NAME} PUBLIC -lcurand)
+target_link_libraries(${PROJECT_NAME} PUBLIC curand)
 set_property(TARGET ${PROJECT_NAME} PROPERTY CUDA_SEPARABLE_COMPILATION ON)
 set_target_properties(${PROJECT_NAME} PROPERTIES CUDA_ARCHITECTURES "native")
 if (DEBUG)

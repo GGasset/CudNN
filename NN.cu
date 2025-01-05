@@ -38,12 +38,12 @@ void NN::set_fields()
 	size_t execution_value_count = 0;
 	size_t derivative_count = 0;
 	size_t gradient_count = 0;
-	contains_recurrent_layers = true;
+	contains_recurrent_layers = false;
 	for (size_t i = 0; i < layer_count; i++)
 	{
 		ILayer* layer = layers[i];
 		
-		contains_recurrent_layers = contains_recurrent_layers && layer->is_recurrent;
+		contains_recurrent_layers = contains_recurrent_layers || layer->is_recurrent;
 
 		layer->layer_activations_start = neuron_count;
 		neuron_count += layer->get_neuron_count();
@@ -451,6 +451,11 @@ void NN::calculate_gradients(
 	}
 }
 
+data_t* NN::calculate_GAE_advantage(size_t t_count, data_t gamma, data_t lambda, NN* value_function_estimator, data_t* value_function_state, data_t* rewards)
+{
+	return nullptr;
+}
+
 data_t *calculate_GAE_advantage(
 	size_t t_count,
 	data_t gamma, data_t lambda,
@@ -489,6 +494,7 @@ data_t *calculate_GAE_advantage(
 
 	cudaMemset(deltas, 0, sizeof(data_t) * t_count);
 	cudaDeviceSynchronize();*/
+	return 0;
 }
 
 void NN::subtract_gradients(data_t* gradients, size_t gradients_start, data_t learning_rate, float dropout_rate, data_t gradient_clip)

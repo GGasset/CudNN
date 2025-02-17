@@ -53,10 +53,10 @@ void LSTMLayer::layer_specific_initialize_fields(size_t connection_count, size_t
 	size_t neuron_weights_count = sizeof(data_t) * neuron_count * 4;
 	cudaMalloc(&state, sizeof(data_t) * neuron_count * 2);
 	cudaMalloc(&neuron_weights, sizeof(field_t) * neuron_count * 4);
-	cudaMalloc(&prev_state_derivatives, sizeof(data_t) * neuron_count * 2);
+	cudaMalloc(&prev_state_derivatives, sizeof(data_t) * neuron_count * 3);
 	cudaDeviceSynchronize();
 	cudaMemset(state, 0, sizeof(data_t) * neuron_count * 2);
-	cudaMemset(prev_state_derivatives, 0, sizeof(data_t) * neuron_count * 2);
+	cudaMemset(prev_state_derivatives, 0, sizeof(data_t) * neuron_count * 3);
 	cudaMemset(neuron_weights, 0, sizeof(field_t) * neuron_count * 4);
 	cudaDeviceSynchronize();
 	//IConnections::generate_random_values(&neuron_weights, neuron_count * 4);
@@ -332,7 +332,7 @@ void LSTMLayer::adjust_to_removed_neuron(size_t neuron_i)
 void LSTMLayer::delete_memory()
 {
 	cudaMemset(state, 0, sizeof(data_t) * 2 * neuron_count);
-	cudaMemset(prev_state_derivatives, 0, sizeof(data_t) * 2 * neuron_count);
+	cudaMemset(prev_state_derivatives, 0, sizeof(data_t) * 3 * neuron_count);
 	cudaDeviceSynchronize();
 }
 

@@ -45,6 +45,7 @@ __global__ void LSTM_gradient_calculation(
 								//  forget_weight_multiplication output
 								//  store addition partial derivative
 	previous_cell_state_gradient *= derivatives[neuron_derivatives_start + 9];
+
 								//  forget multiplication partial derivative
 	previous_cell_state_gradient *= derivatives[neuron_derivatives_start + 9];
 	gradients[neuron_gradients_start + 4] = previous_cell_state_gradient;
@@ -91,6 +92,20 @@ __global__ void LSTM_gradient_calculation(
 	store_gate_tanh_gradient *= derivatives[neuron_derivatives_start + 16];
 	store_gate_tanh_gradient *= derivatives[neuron_derivatives_start + 13];
 	store_gate_tanh_gradient *= derivatives[neuron_derivatives_start + 4];
+
+	// Forget Gate
+	//	Weight
+	data_t forget_weight_gradient = output_cell_gradient_to_cell_state;
+	forget_weight_gradient *= derivatives[neuron_derivatives_start + 7];
+	forget_weight_gradient *= derivatives[neuron_derivatives_start + 7];
+	forget_weight_gradient *= derivatives[neuron_derivatives_start + 5];
+	gradients[neuron_gradients_start] = forget_weight_gradient;
+
+	//	To linear hidden
+	data_t forget_sigmoid_gradient = output_cell_gradient_to_cell_state;
+	forget_sigmoid_gradient *= derivatives[neuron_derivatives_start + 8];
+	forget_sigmoid_gradient *= derivatives[neuron_derivatives_start + 8];
+	forget_sigmoid_gradient *= derivatives[neuron_derivatives_start + 6];
 }
 
 /*__global__ void LSTM_gradient_calculation(

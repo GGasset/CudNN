@@ -64,26 +64,33 @@ __global__ void LSTM_gradient_calculation(
 	output_gate_sigmoid_gradient *= derivatives[neuron_derivatives_start + 20];// weight to sigmoid partial derivative
 	output_gate_sigmoid_gradient *= derivatives[neuron_derivatives_start + 3]; // sigmoid_lh derivative
 
-	//	Store Gate
-	//		To candidate_weight
+	// Store Gate
+	//	To candidate_weight
 	data_t candidate_weight_gradient = output_cell_gradient_to_cell_state;
 	candidate_weight_gradient *= derivatives[neuron_derivatives_start + 17];
 	candidate_weight_gradient *= derivatives[neuron_derivatives_start + 17];
 	candidate_weight_gradient *= derivatives[neuron_derivatives_start + 12];
 	gradients[neuron_gradients_start + 2] = candidate_weight_gradient;
 
-	//		To input weight
+	//	To input weight
 	data_t input_weight_gradient = output_cell_gradient_to_cell_state;
 	input_weight_gradient *= derivatives[neuron_derivatives_start + 15];
 	input_weight_gradient *= derivatives[neuron_derivatives_start + 15];
 	input_weight_gradient *= derivatives[neuron_derivatives_start + 10];
 	gradients[neuron_gradients_start + 1] = input_weight_gradient;
 
-	//		To linear hidden
+	//	To linear hidden
 	data_t store_gate_sigmoid_gradient = output_cell_gradient_to_cell_state;
-
+	store_gate_sigmoid_gradient *= derivatives[neuron_derivatives_start + 14];
+	store_gate_sigmoid_gradient *= derivatives[neuron_derivatives_start + 14];
+	store_gate_sigmoid_gradient *= derivatives[neuron_derivatives_start + 11];
+	store_gate_sigmoid_gradient *= derivatives[neuron_derivatives_start + 3];
 
 	data_t store_gate_tanh_gradient = output_cell_gradient_to_cell_state;
+	store_gate_tanh_gradient *= derivatives[neuron_derivatives_start + 16];
+	store_gate_tanh_gradient *= derivatives[neuron_derivatives_start + 16];
+	store_gate_tanh_gradient *= derivatives[neuron_derivatives_start + 13];
+	store_gate_tanh_gradient *= derivatives[neuron_derivatives_start + 4];
 }
 
 /*__global__ void LSTM_gradient_calculation(

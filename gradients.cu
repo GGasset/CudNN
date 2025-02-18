@@ -22,7 +22,7 @@ __global__ void LSTM_gradient_calculation(
 	data_t next_cell_state_gradient = 0;
 	if (next_t_gradients_start)
 	{
-		next_hidden_state_gradient = gradients[next_neuron_gradients_start + x];
+		next_hidden_state_gradient = gradients[next_neuron_gradients_start + 5];
 		next_cell_state_gradient  = gradients[next_neuron_gradients_start + 4];
 	}
 
@@ -32,16 +32,27 @@ __global__ void LSTM_gradient_calculation(
 
 	// Output Losses
 	data_t output_gradient = costs[costs_start + layer_costs_start + tid];
-	data_t output_hidden_gradient = output_gradient - next_hidden_state_gradient;
+	data_t output_hidden_gradient_to_tanh = output_gradient 
+									- next_hidden_state_gradient * derivatives[neuron_derivatives_start + 21];
+																// output_multiplication_partial_derivative_to_tanh
+
+	data_t output_hidden_gradient_to_sigmoid = output_gradient
+									- next_hidden_state_gradient * derivatives[neuron_derivatives_start + 22];
+																// output_multiplication_partial_derivative_to_sigmoid
+	data_t output_hidden_gradient_to_weight = output_gradient 
+									- next_hidden_state_gradient * derivatives[neuron_derivatives_start + 23];
+																// output_multiplication_partial_derivative_to_weight
 
 	// To cell state
-	data_t output_cell_gradient_to_cell_state = output_gradient * derivatives[neuron_derivatives_start + 21];
+	data_t output_cell_gradient_to_cell_state = output_hidden_gradient_to_tanh * derivatives[neuron_derivatives_start + 21];
 												// output_multiplication_partial_derivative_to_tanh
+												// multiplied twice due to previous t linear hidden sum partial derivative
+
 	output_cell_gradient_to_cell_state *= derivatives[neuron_derivatives_start + 18]; // cell tanh derivative
+	output_cell_gradient_to_cell_state -= next_cell_state_gradient;
 
 	// To previous cell state
 	data_t previous_cell_state_gradient = output_cell_gradient_to_cell_state;
-	previous_cell_state_gradient -= next_cell_state_gradient;
 								//  forget_weight_multiplication output
 								//  store addition partial derivative
 	previous_cell_state_gradient *= derivatives[neuron_derivatives_start + 9];
@@ -52,14 +63,14 @@ __global__ void LSTM_gradient_calculation(
 
 
 	// output weight gradient
-	data_t output_weight_gradient = output_hidden_gradient;
+	data_t output_weight_gradient = output_hidden_gradient_to_weight;
 	output_weight_gradient *= derivatives[neuron_derivatives_start + 23];// output multiplication to weight
 	output_weight_gradient *= derivatives[neuron_derivatives_start + 19];// weight partial derivative
 	gradients[neuron_gradients_start + 3] = output_weight_gradient;
 
 
 	// Output gate to linear hidden
-	data_t output_gate_sigmoid_gradient = output_hidden_gradient;
+	data_t output_gate_sigmoid_gradient = output_hidden_gradient_to_sigmoid;
 								//  output gate multiplication to sigmoid partial derivative
 	output_gate_sigmoid_gradient *= derivatives[neuron_derivatives_start + 22];
 	output_gate_sigmoid_gradient *= derivatives[neuron_derivatives_start + 20];// weight to sigmoid partial derivative
@@ -106,6 +117,12 @@ __global__ void LSTM_gradient_calculation(
 	forget_sigmoid_gradient *= derivatives[neuron_derivatives_start + 8];
 	forget_sigmoid_gradient *= derivatives[neuron_derivatives_start + 8];
 	forget_sigmoid_gradient *= derivatives[neuron_derivatives_start + 6];
+
+	// 
+	
+	// at addition, not after
+	data_t linear_hidden_gradient;
+	gradients[neuron_gradients_start + 5] = linear_hidden_gradient;
 }
 
 /*__global__ void LSTM_gradient_calculation(

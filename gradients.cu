@@ -39,6 +39,7 @@ __global__ void LSTM_gradient_calculation(
 	data_t output_hidden_gradient_to_sigmoid = output_gradient
 									- next_hidden_state_gradient * derivatives[neuron_derivatives_start + 22];
 																// output_multiplication_partial_derivative_to_sigmoid
+
 	data_t output_hidden_gradient_to_weight = output_gradient 
 									- next_hidden_state_gradient * derivatives[neuron_derivatives_start + 23];
 																// output_multiplication_partial_derivative_to_weight
@@ -118,11 +119,14 @@ __global__ void LSTM_gradient_calculation(
 	forget_sigmoid_gradient *= derivatives[neuron_derivatives_start + 8];
 	forget_sigmoid_gradient *= derivatives[neuron_derivatives_start + 6];
 
-	// 
-	
-	// at addition, not after
-	data_t linear_hidden_gradient;
+
+	// Linear hidden
+	data_t linear_hidden_gradient = -(forget_sigmoid_gradient + store_gate_sigmoid_gradient + store_gate_tanh_gradient + output_gate_sigmoid_gradient);
 	gradients[neuron_gradients_start + 5] = linear_hidden_gradient;
+
+	data_t linear_function_gradient = linear_hidden_gradient * derivatives[neuron_derivatives_start];
+															// linear function derivative
+	gradients[connections_gradients_start] = linear_function_gradient;
 }
 
 /*__global__ void LSTM_gradient_calculation(

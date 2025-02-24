@@ -303,12 +303,20 @@ void GridTravellerPrototype()
 
 void test_LSTM_cells_for_rythm_prediction()
 {
-	const bool delete_memory = false;
+	const bool stateful = 1;
 	const size_t epoch_n = 50000;
-	const size_t t_count = 100;
+	const size_t t_count = 10;
 	
-	const size_t input_length = 2;
-	const size_t output_length = 1;
+	const size_t input_length = 1;
+	const size_t output_length = 10;
+
+	NN* n = NN_constructor()
+		.append_layer(ConnectionTypes::Dense, NeuronTypes::LSTM, 128, sigmoid)
+		.append_layer(ConnectionTypes::Dense, NeuronTypes::LSTM, 64, sigmoid)
+		.append_layer(ConnectionTypes::Dense, NeuronTypes::LSTM, 32, sigmoid)
+		.append_layer(ConnectionTypes::Dense, NeuronTypes::LSTM, output_length, sigmoid)
+		.construct(input_length, stateful);
+
 	/*
 	NN *n = NN_constructor()
 	.append_layer(ConnectionTypes::Dense, NeuronTypes::LSTM, 4)
@@ -318,41 +326,54 @@ void test_LSTM_cells_for_rythm_prediction()
 	.append_layer(ConnectionTypes::Dense, NeuronTypes::LSTM, output_length)
 	.construct(input_length);
 	*/
-	NN *n = NN_constructor()
-	.append_layer(ConnectionTypes::Dense, NeuronTypes::LSTM, 2, ActivationFunctions::sigmoid)
+	/*NN* n = NN_constructor()
+	.append_layer(ConnectionTypes::Dense, NeuronTypes::LSTM, 30, ActivationFunctions::sigmoid)
 	//.append_layer(ConnectionTypes::Dense, NeuronTypes::LSTM, 15, ActivationFunctions::sigmoid)
-	.append_layer(ConnectionTypes::Dense, NeuronTypes::Neuron, 5, ActivationFunctions::sigmoid)
+	.append_layer(ConnectionTypes::Dense, NeuronTypes::LSTM, 20, ActivationFunctions::sigmoid)
+	.append_layer(ConnectionTypes::Dense, NeuronTypes::LSTM, 30, ActivationFunctions::sigmoid)
+	.append_layer(ConnectionTypes::Dense, NeuronTypes::Neuron, 20, ActivationFunctions::sigmoid)
+	.append_layer(ConnectionTypes::Dense, NeuronTypes::LSTM, 10, ActivationFunctions::sigmoid)
 	//.append_layer(ConnectionTypes::Dense, NeuronTypes::LSTM, 20, ActivationFunctions::sigmoid)
 	//.append_layer(ConnectionTypes::Dense, NeuronTypes::LSTM, 10, ActivationFunctions::sigmoid)
-	.append_layer(ConnectionTypes::Dense, NeuronTypes::LSTM, output_length, ActivationFunctions::sigmoid)
-	.construct(input_length);
+	.append_layer(ConnectionTypes::Dense, NeuronTypes::Neuron, output_length, ActivationFunctions::sigmoid)
+	.construct(input_length, stateful);*/
 
 
 	data_t X[t_count * input_length];
 	data_t Y_hat[t_count * output_length];
-	for (size_t i = 0; i < t_count * input_length; i++)
-	{
-		data_t epoch_percentage = i / (float)(t_count);
-		epoch_percentage -= (long)epoch_percentage;
-
-		X[i] = epoch_percentage + .1 * (i % 2); //* 2 - 1 + (int)(epoch_percentage * 10) % 2;
-		//X[i] -= !i;
-	}
 
 	for (size_t i = 0; i < t_count * output_length; i++)
 	{
-		data_t epoch_percentage = i / (float)(t_count * output_length / 2.);
+		data_t epoch_percentage = (i % output_length) / (float)(output_length / 1.);
+		epoch_percentage = i / (float)(t_count * output_length / 3.);
 		/*epoch_percentage -= (long)epoch_percentage;
 		epoch_percentage *= t_count;
 		while (epoch_percentage > t_count / 5.0)
 			epoch_percentage -= t_count / 5.0;
 		epoch_percentage /= t_count / 5.0;
 		Y_hat[i] = (epoch_percentage * .7 + .15);*/
-		Y_hat[i] = sinf(epoch_percentage * 5) / 10 + .45;
+		Y_hat[i] = sinf(epoch_percentage * 5) / 8 + .15 + .55;
 		//Y_hat[i] = i % 2 ? .3 : .7;
+		printf("%.2f ", Y_hat[i]);
 	}
 
-	data_t learning_rate = .001 / t_count;
+	printf("\n\n");
+	for (size_t i = 0; i < t_count * input_length; i++)
+	{
+		data_t epoch_percentage = i / (float)(t_count * input_length);
+		//epoch_percentage -= (long)epoch_percentage;
+
+		X[i] = ((epoch_percentage + .01) * (i % 2)) / 2 + .25; //* 2 - 1 + (int)(epoch_percentage * 10) % 2;
+		//X[i] = Y_hat[i];
+		//X[i] = (i / input_length) / (float)t_count + .05;
+		printf("%.2f ", X[i]);
+		//X[i] -= !i;
+	}
+
+	std::string a;
+	std::cin >> a;
+
+	data_t learning_rate = .01;
 	data_t costs[epoch_n];
 	for (size_t i = 0; i < epoch_n; i++)
 	{
@@ -360,9 +381,9 @@ void test_LSTM_cells_for_rythm_prediction()
 		costs[i] = n->training_batch(
 			t_count,
 			X, Y_hat, true, output_length * t_count,
-			CostFunctions::MSE, learning_rate, &Y, true, 20000, 0
+			CostFunctions::MSE, learning_rate, &Y, true, 3, 0.2
 		);
-		printf("%i %.4f\n", i, costs[i]);
+		printf("%i %.15f\n", i, costs[i]);
 		//for (size_t j = 0; j < output_length * t_count; j++) printf("%.2f ", Y[j]);
 		printf("\n----\n");
 		for (size_t y = 11; y >= 1 /*&& !(epoch_n - i - 1)*/; y--)
@@ -371,7 +392,7 @@ void test_LSTM_cells_for_rythm_prediction()
 		    {
 				int condition = ((int)(Y[x] * 10)) == y - 1;
 				if (condition) 						printf("#");
-				else if (Y[x] != Y[x] && !(y - 1))	printf("0");
+				else if (Y[x] != Y[x] && !(y - 1))	printf("/");
 				else 								printf(" ");
 		    }
 		    printf("\n---\n");
@@ -398,15 +419,15 @@ void test_LSTM_cells_for_rythm_prediction()
 void bug_hunting()
 {
 	const size_t input_len = 5;
-	const size_t output_len = 8;
+	const size_t output_len = 2;
 
 	const bool stateful = true;
 	NN *n = NN_constructor()
-		.append_layer(ConnectionTypes::Dense, NeuronTypes::LSTM, 7, ActivationFunctions::sigmoid)
-		.append_layer(ConnectionTypes::Dense, NeuronTypes::LSTM, output_len, ActivationFunctions::sigmoid)
+		.append_layer(ConnectionTypes::Dense, NeuronTypes::Neuron, 5, ActivationFunctions::sigmoid)
+		.append_layer(ConnectionTypes::Dense, NeuronTypes::Neuron, output_len, ActivationFunctions::sigmoid)
 		.construct(input_len, stateful);
 
-	const size_t t_count = 20;
+	const size_t t_count = 50;
 	data_t X[input_len * t_count];
 	for (size_t i = 0; i < input_len * t_count; i++)
 	{
@@ -416,11 +437,11 @@ void bug_hunting()
 	data_t Y_hat[output_len * t_count];
 	for (size_t i = 0; i < output_len * t_count; i++)
 	{
-		Y_hat[i] = .7;
+		Y_hat[i] = .5 + .1 * (i % 2) - .1 * !(i % 2);
 	}
 
-	const data_t learning_rate = .01 / t_count;
-	const size_t epochs = 600;
+	const data_t learning_rate = .1 / t_count;
+	const size_t epochs = 6000;
 	for (size_t i = 0; i < epochs; i++)
 	{
 		data_t *Y = 0;
@@ -428,7 +449,7 @@ void bug_hunting()
 			t_count,
 			X, Y_hat, 1, output_len * t_count,
 			CostFunctions::MSE, learning_rate,
-			&Y, 1, 2000, 0.2
+			&Y, 1, 2000, 0
 		);
 		for (size_t j = 0; j < t_count; j++)
 		{	
@@ -446,6 +467,7 @@ void bug_hunting()
 
 int main()
 {
+	cudaSetDevice(0);
 	//GridTravellerPrototype();
 	test_LSTM_cells_for_rythm_prediction();
 	//bug_hunting();

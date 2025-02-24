@@ -32,16 +32,16 @@ __global__ void LSTM_gradient_calculation(
 
 	// Output Losses
 	data_t output_gradient = costs[costs_start + layer_costs_start + tid];
-	data_t output_hidden_gradient_to_tanh = -(output_gradient 
-									+ next_hidden_state_gradient * derivatives[neuron_derivatives_start + 21]);
+	data_t output_hidden_gradient_to_tanh = (output_gradient 
+									- next_hidden_state_gradient * derivatives[neuron_derivatives_start + 21]);
 																// output_multiplication_partial_derivative_to_tanh
 
-	data_t output_hidden_gradient_to_sigmoid = -(output_gradient
-									+ next_hidden_state_gradient * derivatives[neuron_derivatives_start + 22]);
+	data_t output_hidden_gradient_to_sigmoid = (output_gradient
+									- next_hidden_state_gradient * derivatives[neuron_derivatives_start + 22]);
 																// output_multiplication_partial_derivative_to_sigmoid
 
-	data_t output_hidden_gradient_to_weight = -(output_gradient
-									+ next_hidden_state_gradient * derivatives[neuron_derivatives_start + 23]);
+	data_t output_hidden_gradient_to_weight = (output_gradient
+									- next_hidden_state_gradient * derivatives[neuron_derivatives_start + 23]);
 																// output_multiplication_partial_derivative_to_weight
 
 	// To cell state

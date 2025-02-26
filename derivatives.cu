@@ -47,9 +47,9 @@ __global__ void LSTM_derivative_calculation(
 
 	data_t linear_function_derivative = derivatives[neuron_derivatives_start];
 
-	data_t previous_hidden_derivative_to_sigmoid = prev_state_derivatives[tid * 2];
-	data_t previous_hidden_derivative_to_tanh = prev_state_derivatives[tid * 2 + 1];
-	data_t previous_hidden_derivative_to_weight = prev_state_derivatives[tid * 2 + 2];
+	data_t previous_hidden_derivative_to_tanh = prev_state_derivatives[tid * 3];
+	data_t previous_hidden_derivative_to_sigmoid = prev_state_derivatives[tid * 3 + 1];
+	data_t previous_hidden_derivative_to_weight = prev_state_derivatives[tid * 3 + 2];
 	if (derivatives_start != 0)
 	{
 		previous_hidden_derivative_to_tanh = derivatives[previous_neuron_derivatives_start + 21];
@@ -137,6 +137,9 @@ __global__ void LSTM_derivative_calculation(
 	derivatives[neuron_derivatives_start + 21] = output_multiplication_partial_derivative_to_tanh;
 	derivatives[neuron_derivatives_start + 22] = output_multiplication_partial_derivative_to_sigmoid;
 	derivatives[neuron_derivatives_start + 23] = output_multiplication_partial_derivative_to_weight;
+	prev_state_derivatives[tid * 3] = output_multiplication_partial_derivative_to_tanh;
+	prev_state_derivatives[tid * 3 + 1] = output_multiplication_partial_derivative_to_sigmoid;
+	prev_state_derivatives[tid * 3 + 2] = output_multiplication_partial_derivative_to_weight;
 }
 
 /*__global__ void LSTM_derivative_calculation(

@@ -3,6 +3,39 @@ cmake_minimum_required(VERSION 3.28)
 # In linux add CPP13 compilation flag. I recommend homebrew to install gcc@13
 # In windows compile inside Visual Studio.
 
+# Add files for compilation
+SET(COMPILATION_FILES 
+		connection_gradients.cu 
+		costs.cu
+		cuda_functionality.cu
+		DenseConnections.cu
+		derivatives.cu
+		gradients.cu
+		IConnections.cu
+		ILayer.cu
+		linear_functions.cu
+		LSTMLayer.cu
+		NeatConnections.cu
+		NeuronLayer.cu
+		neuron_operations.cu
+		NN.cu
+		NN_constructor.cu
+		GAE.cu
+
+		functionality.cpp
+	)
+SET(SOCKET_FILES
+	
+		NN_socket_interpreter.cpp
+
+		unix_sock_interop.cpp
+
+		NN_enums.h
+
+		HashTable.h
+		SinglyLinkedListNode.h
+	)
+
 # Add linking to stdlib
 SET(GCC_COVERAGE_COMPILE_FLAGS "-lm -lstdc++ -fanalyzer")
 SET(GCC_COVERAGE_LINK_FLAGS    "-lm -lstdc++")
@@ -43,113 +76,19 @@ if(target STREQUAL "static")
 	   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 	   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fPIC")
 	   message("-- Static Lib added")
-	   add_library(${PROJECT_NAME} STATIC	
-		data_type.h
-		DenseConnections.h
-		evolution_info.h
-		functionality.h
-		IConnections.h
-		ILayer.h
-		kernel_macros.h
-		LSTMLayer.h
-		NeatConnections.h
-		NeuronLayer.h
-		NN.h
-		NN_constructor.h
-
-		connection_gradients.cu
-		costs.cu
-		cuda_functionality.cu
-		DenseConnections.cu
-		derivatives.cu
-		gradients.cu
-		IConnections.cu
-		ILayer.cu
-		linear_functions.cu
-		LSTMLayer.cu
-		NeatConnections.cu
-		NeuronLayer.cu
-		neuron_operations.cu
-		NN.cu
-		NN_constructor.cpp
-
-		NN_enums.h
-
-		functionality.cpp
-	)
+	   add_library(${PROJECT_NAME} STATIC ${COMPILATION_FILES})
 	add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
                    COMMAND ${CMAKE_COMMAND} -E cmake_echo_color --cyan
 		   "Built Static Lib")
 elseif(target STREQUAL "socket")
 	message("-- Socket config added")
-	add_executable(${PROJECT_NAME}
-		data_type.h
-		DenseConnections.h
-		evolution_info.h
-		functionality.h
-		IConnections.h
-		ILayer.h
-		kernel_macros.h
-		LSTMLayer.h
-		NeatConnections.h
-		NeuronLayer.h
-		NN.h
-		NN_constructor.h
-
-		connection_gradients.cu
-		costs.cu
-		cuda_functionality.cu
-		DenseConnections.cu
-		derivatives.cu
-		gradients.cu
-		IConnections.cu
-		ILayer.cu
-		linear_functions.cu
-		LSTMLayer.cu
-		NeatConnections.cu
-		NeuronLayer.cu
-		neuron_operations.cu
-		NN.cu
-		NN_constructor.cpp
-
-		functionality.cpp
-
-		NN_socket_interpreter.h
-		NN_socket_interpreter.cpp
-
-		unix_sock_interop.h
-		unix_sock_interop.cpp
-
-		NN_enums.h
-
-		HashTable.h
-		SinglyLinkedListNode.h
-	)
+	add_executable(${PROJECT_NAME} ${COMPILATION_FILES} ${SOCKET_FILES})
 	add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 	   COMMAND ${CMAKE_COMMAND} -E cmake_echo_color --cyan
 	   "Built socket config")
 else()
 	message("-- Exe for testing added")
-	add_executable(${PROJECT_NAME}
-		connection_gradients.cu
-		costs.cu
-		cuda_functionality.cu
-		DenseConnections.cu
-		derivatives.cu
-		gradients.cu
-		IConnections.cu
-		ILayer.cu
-		kernel.cu
-		linear_functions.cu
-		LSTMLayer.cu
-		NeatConnections.cu
-		NeuronLayer.cu
-		neuron_operations.cu
-		NN.cu
-		NN_constructor.cu
-
-		functionality.cpp
-	)
+	add_executable(${PROJECT_NAME} ${COMPILATION_FILES})
 endif()
 
 #target_link_libraries(${PROJECT_NAME} PUBLIC -lcurand)

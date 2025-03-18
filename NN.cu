@@ -101,9 +101,9 @@ data_t* NN::batch_execute(data_t* input, size_t t_count)
 	{
 		outputs[i] = 0;
 	}
-	for (size_t i = 0; i < t_count; i++)
+	for (size_t t = 0; t < t_count; t++)
 	{
-		execute(input, execution_values, activations, i, outputs, 1);
+		execute(input, execution_values, activations, t, outputs, 1);
 	}
 
 
@@ -451,19 +451,19 @@ void NN::calculate_gradients(
 	}
 }
 
-data_t* NN::calculate_GAE_advantage(size_t t_count, data_t gamma, data_t lambda, NN* value_function_estimator, data_t* value_function_state, data_t* rewards)
+/*data_t* NN::calculate_GAE_advantage(size_t t_count, data_t gamma, data_t lambda, NN* value_function_estimator, data_t* value_function_state, data_t* rewards)
 {
 	return nullptr;
-}
+}*/
 
 data_t *calculate_GAE_advantage(
 	size_t t_count,
 	data_t gamma, data_t lambda,
-	NN *value_function_estimator, data_t *value_function_state, data_t estimator_learning_rate, bool is_state_on_host, bool free_state,
+	NN *value_function_estimator, data_t *value_function_state, data_t estimator_learning_rate, data_t estimator_gradient_clip, data_t estimator_dropout_rate, bool is_state_on_host, bool free_state,
 	data_t *rewards, bool is_reward_on_host, bool free_rewards
 )
 {
-	/*if (!value_function_estimator) return (0);
+	if (!value_function_estimator) return (0);
 
 	data_t *discounted_rewards = 0;
 	cudaMalloc(&discounted_rewards, sizeof(data_t) * t_count);
@@ -478,14 +478,19 @@ data_t *calculate_GAE_advantage(
 	);
 	cudaDeviceSynchronize();
 
-	data_t *value_functions = 0;
+	data_t *host_value_functions = 0;
 	value_function_estimator->training_batch(
 		t_count,
 		value_function_state, discounted_rewards, 0, t_count,
 		CostFunctions::MSE, estimator_learning_rate,
-		&value_functions,E, estimator_learning_rate,
+		&host_value_functions, 1, estimator_gradient_clip, estimator_dropout_rate
 	);
 
+	data_t* value_functions = 0;
+	cudaMalloc(&value_functions, sizeof(data_t) * value_function_estimator->get_output_length() * t_count);
+	cudaDeviceSynchronize();
+	if (!value_functions || !host_value_functions)
+		return 0;
 
 	data_t *deltas = 0;
 	cudaMalloc(&deltas, sizeof(data_t) * t_count);
@@ -493,7 +498,37 @@ data_t *calculate_GAE_advantage(
 	if (!deltas) return (0);
 
 	cudaMemset(deltas, 0, sizeof(data_t) * t_count);
-	cudaDeviceSynchronize();*/
+	cudaDeviceSynchronize();
+
+	calculate_deltas kernel(t_count / 32 + (t_count % 32 > 0), 32) (
+		t_count, 
+		gamma, 
+		rewards, 
+		value_functions, 
+		deltas
+	);
+	cudaDeviceSynchronize();
+
+	data_t* advantages = 0;
+	cudaMalloc(&advantages, sizeof(data_t) * t_count);
+	cudaDeviceSynchronize();
+	if (!advantages) return 0;
+
+	cudaMemset(advantages, 0, sizeof(data_t) * t_count);
+	cudaDeviceSynchronize();
+
+	parallel_calculate_GAE_advantage kernel(t_count / 32 + (t_count % 32 > 0), 32) (
+		t_count,
+		gamma, lambda,
+		deltas, advantages
+	);
+	cudaDeviceSynchronize();
+
+	cudaFree(deltas);
+	cudaFree(discounted_rewards);
+	cudaFree(value_functions);
+	delete[] value_functions;
+
 	return 0;
 }
 

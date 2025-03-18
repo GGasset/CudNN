@@ -33,7 +33,7 @@ __global__ void calculate_deltas(
 	deltas[tid] += gamma * value_functions[tid + 1];
 }
 
-__global__ void calculate_GAE_advantage(
+__global__ void parallel_calculate_GAE_advantage(
 	size_t t_count,
 	data_t gamma,
 	data_t lambda,

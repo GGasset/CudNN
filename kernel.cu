@@ -7,7 +7,7 @@
 #include <cmath>
 #include <stdio.h>
 #include <iostream>
-#include <format>
+#include <sstream>
 
 #include "NN_constructor.h"
 
@@ -301,20 +301,22 @@ void GridTravellerPrototype()
 	//n.deallocate();
 }
 
+
 void test_LSTM_cells_for_rythm_prediction()
 {
 	const bool stateful = 1;
-	const size_t epoch_n = 50000;
-	const size_t t_count = 10;
+	const size_t epoch_n = 10000;
+	const size_t t_count = 20;
 	
 	const size_t input_length = 1;
-	const size_t output_length = 10;
+	const size_t output_length = 1;
 
 	NN* n = NN_constructor()
-		.append_layer(ConnectionTypes::Dense, NeuronTypes::LSTM, 128, sigmoid)
-		.append_layer(ConnectionTypes::Dense, NeuronTypes::LSTM, 64, sigmoid)
-		.append_layer(ConnectionTypes::Dense, NeuronTypes::LSTM, 32, sigmoid)
-		.append_layer(ConnectionTypes::Dense, NeuronTypes::LSTM, output_length, sigmoid)
+		.append_layer(ConnectionTypes::Dense, NeuronTypes::Neuron, 256, sigmoid)
+		//.append_layer(ConnectionTypes::Dense, NeuronTypes::LSTM, 512, sigmoid)
+		//.append_layer(ConnectionTypes::Dense, NeuronTypes::Neuron, 256, sigmoid)
+		.append_layer(ConnectionTypes::Dense, NeuronTypes::Neuron, 256, sigmoid)
+		.append_layer(ConnectionTypes::Dense, NeuronTypes::Neuron, output_length, sigmoid)
 		.construct(input_length, stateful);
 
 	/*
@@ -344,16 +346,18 @@ void test_LSTM_cells_for_rythm_prediction()
 
 	for (size_t i = 0; i < t_count * output_length; i++)
 	{
-		data_t epoch_percentage = (i % output_length) / (float)(output_length / 1.);
-		epoch_percentage = i / (float)(t_count * output_length / 3.);
+		data_t epoch_percentage = i / (float)(t_count * output_length);
 		/*epoch_percentage -= (long)epoch_percentage;
 		epoch_percentage *= t_count;
 		while (epoch_percentage > t_count / 5.0)
 			epoch_percentage -= t_count / 5.0;
 		epoch_percentage /= t_count / 5.0;
 		Y_hat[i] = (epoch_percentage * .7 + .15);*/
-		Y_hat[i] = sinf(epoch_percentage * 5) / 8 + .15 + .55;
-		//Y_hat[i] = i % 2 ? .3 : .7;
+		//Y_hat[i] = sinf(epoch_percentage * 5) / 8 + .15 + .55;
+		//Y_hat[i] = sinf(epoch_percentage * 3);
+		//Y_hat[i] = epoch_percentage;
+		//Y_hat[i] = .7;
+		Y_hat[i] = i % 2 ? -.5 : .5;
 		printf("%.2f ", Y_hat[i]);
 	}
 
@@ -363,9 +367,14 @@ void test_LSTM_cells_for_rythm_prediction()
 		data_t epoch_percentage = i / (float)(t_count * input_length);
 		//epoch_percentage -= (long)epoch_percentage;
 
-		X[i] = ((epoch_percentage + .01) * (i % 2)) / 2 + .25; //* 2 - 1 + (int)(epoch_percentage * 10) % 2;
+		//X[i] = ((epoch_percentage + .01) * (i % 2)) / 2 + .25; //* 2 - 1 + (int)(epoch_percentage * 10) % 2;
+		//X[i] = !(i / input_length) + .0 - (i / input_length);
 		//X[i] = Y_hat[i];
 		//X[i] = (i / input_length) / (float)t_count + .05;
+		//X[i] = sinf(epoch_percentage);
+		//if (i % t_count == 0 && i && 1) X[i] = -1;
+		if ((i % 2) && 1) X[i] = -1; else X[i] = 1;
+
 		printf("%.2f ", X[i]);
 		//X[i] -= !i;
 	}
@@ -378,79 +387,94 @@ void test_LSTM_cells_for_rythm_prediction()
 	for (size_t i = 0; i < epoch_n; i++)
 	{
 		data_t *Y = 0;
-		costs[i] = n->training_batch(
-			t_count,
-			X, Y_hat, true, output_length * t_count,
-			CostFunctions::MSE, learning_rate, &Y, true, 3, 0.2
-		);
-		printf("%i %.15f\n", i, costs[i]);
-		//for (size_t j = 0; j < output_length * t_count; j++) printf("%.2f ", Y[j]);
-		printf("\n----\n");
-		for (size_t y = 11; y >= 1 /*&& !(epoch_n - i - 1)*/; y--)
+		if (1)
+			costs[i] = n->training_batch(
+				t_count,
+				X, Y_hat, true, output_length * t_count,
+				CostFunctions::MSE, learning_rate, &Y, true, 3, 0
+			);
+		else
+		{
+			costs[i] = 0;
+			Y = n->batch_execute(X, t_count);
+		}
+		if (i % 10 == 0)
+			std::cout << i << " " << costs[i] << std::endl;
+		for (size_t j = 0; j < output_length * t_count; j++) printf("%.2f ", Y[j]); printf("\n\n");
+		//std::cout << std::endl << "----" << std::endl;
+		size_t x = 10;
+		for (size_t y = x + 1; y >= 1 && 0 /*&& !(epoch_n - i - 1)*/; y--)
 		{
 		    for (size_t x = 0; x < t_count * output_length; x++)
 		    {
-				int condition = ((int)(Y[x] * 10)) == y - 1;
-				if (condition) 						printf("#");
-				else if (Y[x] != Y[x] && !(y - 1))	printf("/");
-				else 								printf(" ");
+				int condition = ((int)(Y[x] * x)) == y - 1;
+				//if (!(x % output_length))			std::cout << "|";
+				if (condition) 						std::cout << "#";
+				else if (Y[x] != Y[x] && !(y - 1))	std::cout << "/";
+				else 								std::cout << " ";
 		    }
-		    printf("\n---\n");
+			//std::cout << std::endl << "---" << std::endl;
+			std::cout << std::endl;
 		}
 		delete[] Y;
 		//n->delete_memory();
 	}
 
 	delete n;
-	return ;
+	//return ;
 
-	FILE *log_file = fopen("/var/log/NNs/sine_text.csv", "wb");
-	char headers[] = "i, cost\n";
+	FILE *log_file = fopen("E:\\Code\\sine_text.csv", "wb");
+	char headers[] = "cost\n";
 	fwrite(headers, 1, strlen(headers), log_file);
 	for (size_t i = 0; i < epoch_n; i++)
 	{
-		std::string line = "";//itoa(i);
-		//costs[i]
-		fwrite(line.data(), 1, strlen(line.data()), log_file);
+		std::stringstream sline("");
+		//sline << i << ", ";
+		sline << costs[i] << "\n";
+		std::string line = sline.str();
+		fwrite(line.data(), 1, line.length(), log_file);
 	}
 	fclose(log_file);
 }
 
 void bug_hunting()
 {
-	const size_t input_len = 5;
+	const size_t input_len = 1;
 	const size_t output_len = 2;
 
-	const bool stateful = true;
+	const bool stateful = false;
 	NN *n = NN_constructor()
-		.append_layer(ConnectionTypes::Dense, NeuronTypes::Neuron, 5, ActivationFunctions::sigmoid)
+		.append_layer(ConnectionTypes::Dense, NeuronTypes::Neuron, 64, ActivationFunctions::sigmoid)
+		.append_layer(ConnectionTypes::Dense, NeuronTypes::Neuron, 32, ActivationFunctions::sigmoid)
 		.append_layer(ConnectionTypes::Dense, NeuronTypes::Neuron, output_len, ActivationFunctions::sigmoid)
 		.construct(input_len, stateful);
 
-	const size_t t_count = 50;
+	const size_t t_count = 2;
 	data_t X[input_len * t_count];
-	for (size_t i = 0; i < input_len * t_count; i++)
+	for (size_t i = 0; i < t_count; i++)
 	{
-		X[i] = .3;
+		X[i] = i % 2 ? -.5 : .5;
 	}
 
 	data_t Y_hat[output_len * t_count];
-	for (size_t i = 0; i < output_len * t_count; i++)
+	for (size_t i = 0; i < t_count; i++)
 	{
-		Y_hat[i] = .5 + .1 * (i % 2) - .1 * !(i % 2);
+		int odd = i % 2;
+		Y_hat[i * output_len] = !odd ? .75 : .25;
+		Y_hat[i * output_len + 1] = !odd ? .25 : .75;
 	}
 
-	const data_t learning_rate = .1 / t_count;
+	const data_t learning_rate = .1;
 	const size_t epochs = 6000;
-	for (size_t i = 0; i < epochs; i++)
+	for (size_t i = 0; i < epochs || 1; i++)
 	{
 		data_t *Y = 0;
-		n->training_batch(
+		printf("%i %.4f\n", i, n->training_batch(
 			t_count,
 			X, Y_hat, 1, output_len * t_count,
 			CostFunctions::MSE, learning_rate,
-			&Y, 1, 2000, 0
-		);
+			&Y, 1, 3.5, 0
+		));
 		for (size_t j = 0; j < t_count; j++)
 		{	
 			for (size_t k = 0; k < output_len; k++) 
@@ -465,10 +489,77 @@ void bug_hunting()
 	}
 }
 
+// Test for LSTM neuron which consists in giving a positive or negative first input 
+//		and testing its long term dependency of that input.
+void test_LSTM()
+{
+	const data_t learning_rate = .1;
+	const data_t dropout_rate = 0;
+
+	const size_t in_len = 1;
+	const size_t out_len = 2;
+
+	NN* n = NN_constructor()
+		.append_layer(ConnectionTypes::Dense, NeuronTypes::LSTM, 64)
+		.append_layer(ConnectionTypes::Dense, NeuronTypes::LSTM, 32)
+		.append_layer(ConnectionTypes::Dense, NeuronTypes::LSTM, 16)
+		.append_layer(ConnectionTypes::Dense, NeuronTypes::Neuron, 4, ActivationFunctions::sigmoid)
+		.append_layer(ConnectionTypes::Dense, NeuronTypes::Neuron, out_len, ActivationFunctions::sigmoid)
+		.construct(in_len, 0);
+
+
+	const size_t t_count = 2;
+	data_t X[in_len * t_count * 2] {};
+	data_t Y_hat[out_len * t_count * 2] {};
+
+	for (size_t i = 0; i < in_len * t_count; i++)
+		X[i] = !i ? -.5 : 0;
+	for (size_t i = 0; i < in_len * t_count; i++)
+		X[out_len * t_count + i] = !i ? .5 : 0;
+
+	for (size_t i = 0; i < t_count; i++)
+	{
+		Y_hat[out_len * i] = .75;
+		Y_hat[out_len * i + 1] = .25;
+	}
+	for (size_t i = 0; i < t_count; i++)
+	{
+		Y_hat[out_len * t_count + out_len * i] = .25;
+		Y_hat[out_len * t_count + out_len * i + 1] = .75;
+	}
+
+	const size_t epoch_n = 5000;
+	for (size_t i = 0; i < epoch_n; i++)
+	{
+		data_t* Y = 0;
+		data_t* activations = 0;
+		data_t* execution_values = 0;
+		for (size_t j = 0; j < 2; j++)
+		{
+			n->training_execute(
+				t_count, 
+				X + in_len * t_count * j, &Y, true,
+				&execution_values, &activations
+			);
+			data_t cost = n->train(
+				t_count,
+				execution_values, activations, Y_hat + out_len * t_count * j, true, out_len * t_count,
+				CostFunctions::MSE, learning_rate, 1, dropout_rate
+			);
+
+			if (i % 10 == 0)
+				printf("%i | %.4f | %.4f, %.4f\n", i, cost, Y[out_len * t_count - 2], Y[out_len * t_count - 1]);
+
+			delete[] Y;
+		}
+	}
+}
+
 int main()
 {
-	cudaSetDevice(0);
+	//cudaSetDevice(0);
 	//GridTravellerPrototype();
-	test_LSTM_cells_for_rythm_prediction();
+	//test_LSTM_cells_for_rythm_prediction();
 	//bug_hunting();
+	test_LSTM();
 }

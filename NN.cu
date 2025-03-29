@@ -479,7 +479,7 @@ data_t *calculate_GAE_advantage(
 	cudaDeviceSynchronize();
 
 	data_t *host_value_functions = 0;
-	value_function_estimator->training_batch(
+	value_function_estimator->training_batch( // TODO Returns a pointer to host memory and then copies it. Slow!
 		t_count,
 		value_function_state, discounted_rewards, 0, t_count,
 		CostFunctions::MSE, estimator_learning_rate,
@@ -491,6 +491,9 @@ data_t *calculate_GAE_advantage(
 	cudaDeviceSynchronize();
 	if (!value_functions || !host_value_functions)
 		return 0;
+	cudaMemcpy(value_functions, host_value_functions, sizeof(data_t) * value_function_estimator->get_output_length() * t_count, cudaMemcpyHostToDevice);
+	cudaDeviceSynchronize();
+	delete[] host_value_functions;
 
 	data_t *deltas = 0;
 	cudaMalloc(&deltas, sizeof(data_t) * t_count);

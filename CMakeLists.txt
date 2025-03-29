@@ -88,7 +88,7 @@ elseif(target STREQUAL "socket")
 	   "Built socket config")
 else()
 	message("-- Exe for testing added")
-	add_executable(${PROJECT_NAME} ${COMPILATION_FILES})
+	add_executable(${PROJECT_NAME} kernel.cu ${COMPILATION_FILES})
 endif()
 
 #target_link_libraries(${PROJECT_NAME} PUBLIC -lcurand)

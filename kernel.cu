@@ -500,15 +500,16 @@ void test_LSTM()
 	const size_t out_len = 2;
 
 	NN* n = NN_constructor()
+		.append_layer(ConnectionTypes::Dense, NeuronTypes::LSTM, 128, ActivationFunctions::sigmoid)
 		.append_layer(ConnectionTypes::Dense, NeuronTypes::LSTM, 64)
+		.append_layer(ConnectionTypes::Dense, NeuronTypes::LSTM, 48)
 		.append_layer(ConnectionTypes::Dense, NeuronTypes::LSTM, 32)
-		.append_layer(ConnectionTypes::Dense, NeuronTypes::LSTM, 16)
-		.append_layer(ConnectionTypes::Dense, NeuronTypes::Neuron, 4, ActivationFunctions::sigmoid)
+		.append_layer(ConnectionTypes::Dense, NeuronTypes::Neuron, 32, ActivationFunctions::sigmoid)
 		.append_layer(ConnectionTypes::Dense, NeuronTypes::Neuron, out_len, ActivationFunctions::sigmoid)
 		.construct(in_len, 0);
 
 
-	const size_t t_count = 2;
+	const size_t t_count = 3;
 	data_t X[in_len * t_count * 2] {};
 	data_t Y_hat[out_len * t_count * 2] {};
 

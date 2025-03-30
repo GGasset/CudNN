@@ -17,7 +17,7 @@
 ## Why?
 * CudNN trades inference efficiency for model structure flexibility.
 	* That means that continous training using evolution methods is faster on CudNN than it is on Tensorflow.
-		* As per my knowledge, to add neurons on Tensorflow in realtime during training, to, lets say, find an optimal model size, you would need to:
+		* As per my knowledge, to add neurons on Tensorflow in realtime during training, to, lets say, find the most efficient model size for a given task, you would need to:
     		1. Save the model on disk
     		2. Load it as text
     		4. Modify it

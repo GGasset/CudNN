@@ -14,6 +14,11 @@
  - LSTM architecture
 	![LSTM architecture](https://i.sstatic.net/RHNrZ.jpg) 
 
+## How?
+* It has been my 7th iteration on an AI framework, and I wouldn't say I've learnt a lot otherwise, I've learnt a lot.
+	* I've learnt how to create scalable solutions with trial-error (Sadly and proudly).
+	* Conditioning is optional, Conditions are controlled, Consistency is key.
+
 ## Why?
 * CudNN trades inference efficiency for model structure flexibility.
 	* That means that continous training using evolution methods is faster on CudNN than it is on Tensorflow.
@@ -25,9 +30,5 @@
     		6. Load into a model (Class).
 * CudNN has a WIP client API which doesn't require CUDA compilation, being useful for use with common game engines wich make hard compiling Cuda.
 * In the future, it will feature godot bindings for its socket client, Unity is not planned for c# bindings, UE uses c++.
-* It has been my 7th iteration on an AI framework, and I wouldn't say I've learnt a lot otherwise, I've learnt a lot.
-	* I've learnt how to create scalable solutions with trial-error (Sadly and proudly).
-	* Conditioning is optional, Conditions are controlled, Consistency is key.
-
 
 #### Godspeed

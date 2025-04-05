@@ -14,7 +14,7 @@
 #include "linear_functions.cuh"
 #include "connection_gradients.cuh"
 #include "vector"
-#include "evolution_info.h"
+#include "evolution.h"
 #include "cuda_functionality.cuh"
 #include "functionality.h"
 

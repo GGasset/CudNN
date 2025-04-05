@@ -1,7 +1,6 @@
 #pragma once
 
 #include <stdio.h>
-#include "ILayer.h"
 #include "costs.cuh"
 #include "functionality.h"
 
@@ -14,7 +13,6 @@
 #include "NN_enums.h"
 #include "GAE.cuh"
 #include "neuron_operations.cuh"
-#include "evolution_info.h"
 
 class NN
 {

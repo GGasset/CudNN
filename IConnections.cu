@@ -6,8 +6,7 @@ void IConnections::generate_random_values(float** pointer, size_t float_count, s
 	curandCreateGenerator(&generator, CURAND_RNG_PSEUDO_XORWOW);
 #ifdef DETERMINISTIC
 	curandSetPseudoRandomGeneratorSeed(generator, 13);
-#endif
-#ifndef DETERMINISTIC
+#else
 	curandSetPseudoRandomGeneratorSeed(generator, get_arbitrary_number());
 #endif
 	curandGenerateUniform(generator, *pointer + start_i, float_count);

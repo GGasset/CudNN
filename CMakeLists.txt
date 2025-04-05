@@ -29,11 +29,6 @@ SET(SOCKET_FILES
 		NN_socket_interpreter.cpp
 
 		unix_sock_interop.cpp
-
-		NN_enums.h
-
-		HashTable.h
-		SinglyLinkedListNode.h
 	)
 
 # Add linking to stdlib

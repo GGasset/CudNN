@@ -7,6 +7,8 @@
 
 ## Technologies used
 ### Planned-WIP
+ - L1, L2 regularization
+ - Adam optimizer
  - [PPO](https://arxiv.org/abs/1707.06347) Reinforcement Learning Policy Gradient Method used in ChatGPT
 
 ### Working

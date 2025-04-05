@@ -1,22 +1,5 @@
 #include "IConnections.h"
 
-void IConnections::generate_random_values(float** pointer, size_t float_count, size_t start_i, float value_divider)
-{
-	curandGenerator_t generator;
-	curandCreateGenerator(&generator, CURAND_RNG_PSEUDO_XORWOW);
-#ifdef DETERMINISTIC
-	curandSetPseudoRandomGeneratorSeed(generator, 13);
-#else
-	curandSetPseudoRandomGeneratorSeed(generator, get_arbitrary_number());
-#endif
-	curandGenerateUniform(generator, *pointer + start_i, float_count);
-	multiply_array kernel(float_count / 32 + (float_count % 32 > 0), 32) (
-		*pointer + start_i, float_count, 1 / value_divider
-	);
-	cudaDeviceSynchronize();
-	curandDestroyGenerator(generator);
-}
-
 void IConnections::mutate_fields(evolution_metadata evolution_values)
 {
 	float* arr0 = 0;

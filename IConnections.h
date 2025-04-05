@@ -35,7 +35,29 @@ public:
 	size_t connection_count = 0;
 	unsigned char contains_irregular_connections = false;
 
-	static void generate_random_values(float** pointer, size_t float_count, size_t start_i = 0, float value_divider = 1);
+	template<typename T>
+	static void generate_random_values(T** pointer, size_t value_count, size_t start_i = 0, T value_divider = 1)
+	{
+		if (!pointer || !*pointer)
+			return;
+		curandGenerator_t generator;
+		curandCreateGenerator(&generator, CURAND_RNG_PSEUDO_XORWOW);
+#ifdef DETERMINISTIC
+		curandSetPseudoRandomGeneratorSeed(generator, 13);
+#else
+		curandSetPseudoRandomGeneratorSeed(generator, get_arbitrary_number());
+#endif
+		float* arr = 0;
+		cudaMalloc(&arr, sizeof(float) * value_count);
+		curandGenerateUniform(generator, arr, value_count);
+		multiply_array kernel(value_count / 32 + (value_count % 32 > 0), 32) (
+			arr, value_count, 1.0 / value_divider
+			);
+		cudaDeviceSynchronize();
+		cudaMemcpy(*pointer + start_i, arr, value_count, cudaMemcpyDeviceToDevice);
+		curandDestroyGenerator(generator);
+		cudaDeviceSynchronize();
+	}
 
 	virtual void linear_function(
 		size_t activations_start, data_t* activations,

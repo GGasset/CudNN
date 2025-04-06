@@ -7,9 +7,11 @@
 
 ## Technologies used
 ### Planned-WIP
- - L1, L2 regularization
- - Adam optimizer
- - [PPO](https://arxiv.org/abs/1707.06347) Reinforcement Learning Policy Gradient Method used in ChatGPT
+ - L1, L2 regularization (Planned)
+ - Adam optimizer (Planned)
+ - C++ Socket bindings (WIP)
+ - [PPO](https://arxiv.org/abs/1707.06347) Reinforcement Learning Policy Gradient Method used in ChatGPT (Planned)
+ - [MinLSTM](https://arxiv.org/abs/2410.01201) Simpler versions of LSTM
 
 ### Working
  - [GAE](https://arxiv.org/abs/1506.02438) Generalized Advantage Estimator
@@ -23,7 +25,7 @@
 
 ## Why?
 * CudNN trades inference efficiency for model structure flexibility.
-	* That means that continous training using evolution methods is faster on CudNN than it is on Tensorflow.
+	* That means that continous training and also using evolution methods is faster on CudNN than it is on Tensorflow.
 		* As per my knowledge, to add neurons on Tensorflow in realtime during training, to, lets say, find the most efficient model size for a given task, you would need to:
     		1. Save the model on disk
     		2. Load it as text

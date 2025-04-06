@@ -1,5 +1,11 @@
 # Todo
 
+## High priority
+
+- Improve scalability for evolution methods, modularize it, current state is not modularized at all.
+
+## Normal cycle
+
 - ~~LSTM~~
 - ~~Neuron~~
 - ~~NEAT connections~~ 
@@ -12,7 +18,8 @@
     - ~~return cost while training~~
 - ~~reinforcement learning cost function~~
     - ~~GAE in GPU~~
-        CPU function that given a value function estimator NN and rewards, computes GAE 
+        - ~~CPU function that given a value function estimator NN and rewards, computes GAE~~
+            - Add execution with output to GPU to optimize this
     - Proximal Policy optimization cost function
 - ~~server socket~~
     - ~~Create log file~~
@@ -44,7 +51,7 @@
 - Create logging options for training in csv format
     - Add python script for plotting it
 
-- Paralelize layer derivative calculation calls
+- Paralelize layer derivative calculation calls withing CPU
 
 
 # Bugs

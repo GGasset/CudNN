@@ -20,7 +20,7 @@
 
 ## How?
 * It has been my 7th iteration on an AI framework, and I wouldn't say I've learnt a lot otherwise, I've learnt a lot.
-	* I've learnt how to create scalable solutions with trial-error (Sadly and proudly).
+	* I've learnt how to create scalable solutions thanks to trial-error (Sadly and Proudly).
 	* Conditioning is optional, Conditions are controlled, Consistency is key.
 
 ## Why?
@@ -33,6 +33,6 @@
     		5. Save it
     		6. Load into a model (Class).
 * CudNN has a WIP client API which doesn't require CUDA compilation, being useful for use with common game engines wich make hard compiling Cuda.
-* In the future, it will feature godot bindings for its socket client, Unity is not planned for c# bindings, UE uses c++.
+* In the future, it will feature godot bindings for its socket client, C# bindings for Unity are not planned, UE already uses c++.
 
 #### Godspeed

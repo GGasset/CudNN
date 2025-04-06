@@ -554,7 +554,7 @@ void NN::subtract_gradients(data_t* gradients, size_t gradients_start, data_t le
 		cudaDeviceSynchronize();
 		
 		cudaMemset(dropout, 0, sizeof(short) * layer_length);
-		IConnections::generate_random_values(&normalized_random_samples, layer_length);
+		IConnections::generate_random_values(&normalized_random_samples, layer_length, 0, 1);
 		cudaDeviceSynchronize();
 		cud_set_dropout kernel(layer_length / 32 +  (layer_length % 32 > 0), 32) (dropout_rate, normalized_random_samples, dropout, layer_length);
 		cudaDeviceSynchronize();

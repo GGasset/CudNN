@@ -35,8 +35,8 @@ public:
 	size_t connection_count = 0;
 	unsigned char contains_irregular_connections = false;
 
-	template<typename T>
-	static void generate_random_values(T** pointer, size_t value_count, size_t start_i = 0, T value_divider = 1)
+	template<typename T, typename t>
+	static void generate_random_values(T** pointer, size_t value_count, size_t start_i = 0, t value_divider = 1)
 	{
 		if (!pointer || !*pointer)
 			return;

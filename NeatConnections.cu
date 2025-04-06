@@ -206,8 +206,8 @@ void NeatConnections::add_neuron(size_t previous_layer_length, size_t previous_l
 	cudaDeviceSynchronize();
 
   add_to_array kernel(added_connection_count / 32 + (added_connection_count % 32 > 0), 32) (tmp_connections_neuron_i + connection_count, added_connection_count, neuron_count);
-	generate_random_values(&device_tmp_biases, 1, neuron_count);
-	generate_random_values(&device_tmp_weights, added_connection_count, connection_count);
+	generate_random_values(&device_tmp_biases, 1, neuron_count, 1);
+	generate_random_values(&device_tmp_weights, added_connection_count, connection_count, 1);
 
 	cudaFree(weights);
 	cudaFree(biases);

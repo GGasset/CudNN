@@ -47,3 +47,14 @@ __global__ void mutate_field_array(
 	float mutation_chance, float max_mutation,
 	float* triple_length_normalized_random_arr
 );
+
+template<typename T>
+__host__ T* cuda_realloc(T* old, size_t old_len, size_t new_len, bool free_old)
+{
+	T* out = 0;
+	cudaMalloc(&out, sizeof(T) * new_len);
+	cudaMemcpy(out, old, sizeof(T) * min(old_len, new_len), cudaMemcpyDeviceToDevice);
+	if (free_old)
+		cudaFree(old);
+	return out;
+}

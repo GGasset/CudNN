@@ -22,6 +22,7 @@
             - Add execution with output to GPU to optimize this
     - Proximal Policy optimization cost function
 - ~~server socket~~
+    - Add windows compatibility (Just easy change in header)
     - ~~Create log file~~
     - Create destructor for socket interpreter -> NN manager
     - Use poll instead of select

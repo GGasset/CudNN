@@ -113,6 +113,46 @@ void ILayer::mutate_fields(evolution_metadata evolution_values)
 {
 }
 
+void ILayer::add_neuron(size_t previous_layer_length, size_t previous_layer_activations_start, float previous_layer_connection_probability, size_t min_connections)
+{
+	size_t added_connection_count = connections->connection_count;
+	connections->add_neuron(previous_layer_length, previous_layer_activations_start, previous_layer_connection_probability, min_connections);
+	added_connection_count = connections->connection_count - added_connection_count;
+	set_neuron_count(neuron_count + 1);
+
+	if (connection_associated_gradient_counts)
+	{
+		size_t* tmp_connection_associated_gradient_counts = new size_t[neuron_count];
+		cudaMemcpy(tmp_connection_associated_gradient_counts, connection_associated_gradient_counts, sizeof(size_t) * neuron_count - 1, cudaMemcpyDeviceToHost);
+		tmp_connection_associated_gradient_counts[neuron_count - 1] = added_connection_count;
+		cudaFree(connection_associated_gradient_counts);
+		cudaMalloc(&connection_associated_gradient_counts, sizeof(size_t) * neuron_count);
+		cudaMemcpy(connection_associated_gradient_counts, tmp_connection_associated_gradient_counts, sizeof(size_t) * neuron_count, cudaMemcpyHostToDevice);
+		delete[] tmp_connection_associated_gradient_counts;
+	}
+
+	if (neuron_gradients_starts)
+	{
+		size_t* tmp_neuron_gradients_starts = new size_t[neuron_count];
+		cudaMemcpy(tmp_neuron_gradients_starts, neuron_gradients_starts, sizeof(size_t) * neuron_count - 1, cudaMemcpyDeviceToHost);
+		tmp_neuron_gradients_starts[neuron_count - 1] = tmp_neuron_gradients_starts[neuron_count - 2] + added_connection_count + gradients_per_neuron;
+		cudaFree(neuron_gradients_starts);
+		cudaMalloc(&neuron_gradients_starts, sizeof(size_t) * neuron_count);
+		cudaMemcpy(neuron_gradients_starts, tmp_neuron_gradients_starts, sizeof(size_t) * neuron_count, cudaMemcpyHostToDevice);
+		delete[] tmp_neuron_gradients_starts;
+	}
+
+	layer_derivative_count += derivatives_per_neuron;
+	layer_gradient_count += added_connection_count + gradients_per_neuron + 1;
+
+	layer_specific_add_neuron();
+}
+
+void ILayer::layer_specific_add_neuron()
+{
+
+}
+
 void ILayer::adjust_to_added_neuron(size_t added_neuron_i, float connection_probability)
 {
 	auto added_connections_neuron_i = std::vector<size_t>();

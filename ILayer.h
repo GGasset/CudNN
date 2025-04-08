@@ -30,6 +30,7 @@ public:
 	size_t layer_derivatives_start = 0;
 	size_t derivatives_per_neuron = 0;
 	
+	size_t gradients_per_neuron = 0;
 	size_t layer_gradient_count = 0;
 	size_t layer_gradients_start = 0;
 	size_t* neuron_gradients_starts = 0;
@@ -78,7 +79,8 @@ public:
 	) = 0;
 
 	virtual void mutate_fields(evolution_metadata evolution_values);
-	virtual void add_neuron(size_t previous_layer_length, size_t previous_layer_activations_start, float previous_layer_connection_probability, size_t min_connections) = 0;
+	void add_neuron(size_t previous_layer_length, size_t previous_layer_activations_start, float previous_layer_connection_probability, size_t min_connections);
+	virtual void layer_specific_add_neuron();
 	virtual void adjust_to_added_neuron(size_t added_neuron_i, float connection_probability);
 	virtual void remove_neuron(size_t layer_neuron_i) = 0;
 	virtual void adjust_to_removed_neuron(size_t neuron_i);

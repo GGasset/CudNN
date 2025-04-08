@@ -32,7 +32,7 @@
     		4. Modify it
     		5. Save it
     		6. Load into a model (Class).
-* CudNN has a WIP client API which doesn't require CUDA compilation, being useful for use with common game engines wich make hard compiling Cuda.
+* CudNN has a WIP client API which doesn't require CUDA compilation, being useful for use with common game engines in which is hard to compile with Cuda.
 * In the future, it will feature godot bindings for its socket client, C# bindings for Unity are not planned, UE already uses c++.
 
 #### Godspeed

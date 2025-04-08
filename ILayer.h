@@ -81,7 +81,7 @@ public:
 	virtual void add_neuron(size_t previous_layer_length, size_t previous_layer_activations_start, float previous_layer_connection_probability, size_t min_connections) = 0;
 	virtual void adjust_to_added_neuron(size_t added_neuron_i, float connection_probability) = 0;
 	virtual void remove_neuron(size_t layer_neuron_i) = 0;
-	virtual void adjust_to_removed_neuron(size_t neuron_i) = 0;
+	virtual void adjust_to_removed_neuron(size_t neuron_i);
 
 	virtual void delete_memory();
 };

@@ -191,20 +191,4 @@ void NeuronLayer::remove_neuron(size_t layer_neuron_i)
 	neuron_gradients_starts = tmp_neuron_gradients_starts;
 }
 
-void NeuronLayer::adjust_to_removed_neuron(size_t neuron_i)
-{
-	auto deleted_connections_neuron_i = std::vector<size_t>();
-	connections->adjust_to_removed_neuron(neuron_i, &deleted_connections_neuron_i);
-	for (size_t i = 0; i < deleted_connections_neuron_i.size(); i++)
-	{
-		layer_gradient_count--;
-		size_t removed_connection_neuron_i = deleted_connections_neuron_i[i];
-		size_t to_modify_neuron_count = neuron_count - removed_connection_neuron_i - 1;
-		if (to_modify_neuron_count)
-			add_to_array kernel(to_modify_neuron_count / 32 + (to_modify_neuron_count % 32 > 0), 32) (
-				neuron_gradients_starts + removed_connection_neuron_i + 1, to_modify_neuron_count, -1
-			);
-	}
-}
-
 #endif

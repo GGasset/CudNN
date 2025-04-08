@@ -113,6 +113,29 @@ void ILayer::mutate_fields(evolution_metadata evolution_values)
 {
 }
 
+void ILayer::adjust_to_removed_neuron(size_t neuron_i)
+{
+	auto removed_connections_neuron_i = std::vector<size_t>();
+	connections->adjust_to_removed_neuron(neuron_i, &removed_connections_neuron_i);
+	for (size_t i = 0; i < removed_connections_neuron_i.size(); i++)
+	{
+		layer_gradient_count--;
+		size_t removed_connection_neuron_i = removed_connections_neuron_i[i];
+		size_t remaining_neuron_count = neuron_count - removed_connection_neuron_i - 1;
+		if (remaining_neuron_count)
+		{
+			if (connection_associated_gradient_counts)
+				add_to_array kernel(1, 1) (
+					connection_associated_gradient_counts + removed_connection_neuron_i, 1, -1
+				);
+			if (neuron_gradients_starts)
+				add_to_array kernel(remaining_neuron_count / 32 + (remaining_neuron_count % 32 > 0), 32) (
+					neuron_gradients_starts + removed_connection_neuron_i + 1, remaining_neuron_count, -1
+				);
+		}
+	}
+}
+
 void ILayer::delete_memory()
 {
 }

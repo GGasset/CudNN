@@ -52,7 +52,7 @@
     - Add python script for plotting it
 
 - Paralelize layer derivative calculation calls withing CPU
-
+- ~~Modularized generate random values for different data types~~
 
 # Bugs
  - ~~device array being used as host array in NeuronLayer and LSTMLayer remove neuron~~

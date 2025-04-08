@@ -37,6 +37,15 @@ __global__ void add_to_array(T* arr, size_t arr_value_count, t to_add)
 	arr[tid] += to_add;
 }
 
+template <typename T, typename t>
+__global__ void logical_copy(T* dst, size_t dst_len, t* src, size_t src_len)
+{
+	size_t tid = get_tid();
+	if (tid >= device_min(dst_len, src_len)) return;
+
+	dst[tid] = src[tid];
+}
+
 //template<typename T>
 __global__ void count_value(size_t value, size_t* array, size_t array_length, unsigned int* output);
 
@@ -53,6 +62,7 @@ __host__ T* cuda_realloc(T* old, size_t old_len, size_t new_len, bool free_old)
 {
 	T* out = 0;
 	cudaMalloc(&out, sizeof(T) * new_len);
+	cudaMemset(out, 0, sizeof(T) * new_len);
 	cudaMemcpy(out, old, sizeof(T) * min(old_len, new_len), cudaMemcpyDeviceToDevice);
 	if (free_old)
 		cudaFree(old);

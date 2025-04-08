@@ -54,9 +54,12 @@ public:
 			arr, value_count, 1.0 / value_divider
 			);
 		cudaDeviceSynchronize();
-		cudaMemcpy(*pointer + start_i, arr, value_count, cudaMemcpyDeviceToDevice);
+
+		logical_copy kernel(value_count / 32 + (value_count % 32 > 0), 32) ((*pointer) + start_i, value_count, arr, value_count);
+
 		curandDestroyGenerator(generator);
 		cudaDeviceSynchronize();
+		cudaFree(arr);
 	}
 
 	virtual void linear_function(

@@ -227,6 +227,8 @@ void LSTMLayer::layer_specific_add_neuron()
 	
 	state = cuda_realloc(state, (neuron_count - 1) * 2, neuron_count * 2, true);
 	cudaMemset(state + (neuron_count - 1) * 4, 0, sizeof(data_t) * 4);
+
+	prev_state_derivatives = cuda_realloc(prev_state_derivatives, (neuron_count - 1) * 3, neuron_count * 3, true);
 }
 
 void LSTMLayer::remove_neuron(size_t layer_neuron_i)

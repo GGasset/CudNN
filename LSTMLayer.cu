@@ -222,25 +222,11 @@ void LSTMLayer::mutate_fields(evolution_metadata evolution_values)
 
 void LSTMLayer::layer_specific_add_neuron()
 {
-	field_t* tmp_neuron_weights = 0;
-	data_t* tmp_state = 0;
+	neuron_weights = cuda_realloc(neuron_weights, (neuron_count - 1) * 4, neuron_count * 4, true);
+	IConnections::generate_random_values(&neuron_weights, 4, (neuron_count - 1) * 4, 1);
 	
-	cudaMalloc(&tmp_neuron_weights, sizeof(field_t) * neuron_count * 4);
-	cudaMalloc(&tmp_state, sizeof(data_t) * neuron_count * 2);
-	cudaDeviceSynchronize();
-
-	cudaMemcpy(tmp_neuron_weights, neuron_weights, sizeof(field_t) * (neuron_count - 1) * 4, cudaMemcpyDeviceToDevice);
-	IConnections::generate_random_values(&tmp_neuron_weights, 4, (neuron_count - 1) * 4, 1);
-	
-	cudaMemcpy(tmp_state, state, sizeof(data_t) * (neuron_count - 1) * 2, cudaMemcpyDeviceToDevice);
-	cudaMemset(tmp_state + (neuron_count - 1) * 4, 0, sizeof(data_t) * 4);
-
-	cudaFree(state);
-	cudaFree(neuron_weights);
-	cudaDeviceSynchronize();
-
-	state = tmp_state;
-	neuron_weights = tmp_neuron_weights;
+	state = cuda_realloc(state, (neuron_count - 1) * 2, neuron_count * 2, true);
+	cudaMemset(state + (neuron_count - 1) * 4, 0, sizeof(data_t) * 4);
 }
 
 void LSTMLayer::remove_neuron(size_t layer_neuron_i)

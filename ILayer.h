@@ -82,7 +82,8 @@ public:
 	void add_neuron(size_t previous_layer_length, size_t previous_layer_activations_start, float previous_layer_connection_probability, size_t min_connections);
 	virtual void layer_specific_add_neuron();
 	void adjust_to_added_neuron(size_t added_neuron_i, float connection_probability);
-	virtual void remove_neuron(size_t layer_neuron_i) = 0;
+	void remove_neuron(size_t layer_neuron_i);
+	virtual void layer_specific_remove_neuron(size_t layer_neuron_i);
 	void adjust_to_removed_neuron(size_t neuron_i);
 
 	virtual void delete_memory();

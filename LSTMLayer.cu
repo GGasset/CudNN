@@ -231,30 +231,11 @@ void LSTMLayer::layer_specific_add_neuron()
 	prev_state_derivatives = cuda_realloc(prev_state_derivatives, (neuron_count - 1) * 3, neuron_count * 3, true);
 }
 
-void LSTMLayer::remove_neuron(size_t layer_neuron_i)
+void LSTMLayer::layer_specific_remove_neuron(size_t layer_neuron_i)
 {
-	size_t removed_connection_count = connections->connection_count;
-	connections->remove_neuron(layer_neuron_i);
-	removed_connection_count -= connections->connection_count;
-
-	set_neuron_count(neuron_count - 1);
-	layer_gradient_count -= removed_connection_count + 7 + 1;
-	layer_derivative_count -= derivatives_per_neuron;
-
-	size_t *tmp_neuron_gradients_starts = neuron_gradients_starts;
-	size_t *tmp_connection_associated_gradient_counts = connection_associated_gradient_counts;
-
-	cudaMalloc(&neuron_gradients_starts, sizeof(size_t) * neuron_count);
-	cudaMalloc(&connection_associated_gradient_counts, sizeof(size_t) * neuron_count);
-	cudaDeviceSynchronize();
-
-	cudaMemcpy(neuron_gradients_starts, tmp_neuron_gradients_starts, sizeof(size_t) * neuron_count, cudaMemcpyDeviceToDevice);
-	cudaMemcpy(connection_associated_gradient_counts, tmp_connection_associated_gradient_counts, sizeof(size_t) * neuron_count, cudaMemcpyDeviceToDevice);
-	cudaDeviceSynchronize();
-
-	cudaFree(tmp_connection_associated_gradient_counts);
-	cudaFree(tmp_neuron_gradients_starts);
-	cudaDeviceSynchronize();
+	neuron_weights = cuda_remove_elements(neuron_weights, neuron_count * 4, layer_neuron_i * 4, 4, true);
+	state = cuda_remove_elements(state, neuron_count * 2, layer_neuron_i * 2, 2, true);
+	prev_state_derivatives = cuda_remove_elements(prev_state_derivatives, neuron_count * 3, layer_neuron_i * 3, 3, true);
 }
 
 void LSTMLayer::delete_memory()

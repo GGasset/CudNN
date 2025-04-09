@@ -43,7 +43,7 @@ public:
 
 	void mutate_fields(evolution_metadata evolution_values) override;
 	void layer_specific_add_neuron() override;
-	void remove_neuron(size_t layer_neuron_i) override;
+	void layer_specific_remove_neuron(size_t layer_neuron_i) override;
 
 	void delete_memory() override;
 };

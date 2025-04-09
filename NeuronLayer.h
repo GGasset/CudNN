@@ -42,7 +42,5 @@ public:
 	{
 
 	}
-
-	void remove_neuron(size_t layer_neuron_i) override;
 };
 

@@ -77,6 +77,9 @@ if(target STREQUAL "static")
 		   "Built Static Lib")
 elseif(target STREQUAL "socket")
 	message("-- Socket config added")
+	if (DEBUG)
+		add_compile_definitions(log_positive);
+	endif()
 	add_executable(${PROJECT_NAME} ${COMPILATION_FILES} ${SOCKET_FILES})
 	add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 	   COMMAND ${CMAKE_COMMAND} -E cmake_echo_color --cyan

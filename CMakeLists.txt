@@ -78,7 +78,7 @@ if(target STREQUAL "static")
 elseif(target STREQUAL "socket")
 	message("-- Socket config added")
 	if (DEBUG)
-		add_compile_definitions(log_positive);
+		add_compile_definitions(log_positive)
 	endif()
 	add_executable(${PROJECT_NAME} ${COMPILATION_FILES} ${SOCKET_FILES})
 	add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD

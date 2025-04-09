@@ -6,7 +6,7 @@
       "configurationType": "Debug",
       "buildRoot": "${projectDir}\\out\\build\\${name}",
       "installRoot": "${projectDir}\\out\\install\\${name}",
-      "cmakeCommandArgs": "-DDETERMINISTIC=ON -DDEBUG=ON",
+      "cmakeCommandArgs": "-DDETERMINISTIC=ON -DDEBUG=ON -Dtarget=tests",
       "buildCommandArgs": "",
       "ctestCommandArgs": "",
       "inheritEnvironments": [ "msvc_x64_x64" ]
@@ -17,22 +17,43 @@
       "configurationType": "Release",
       "buildRoot": "${projectDir}\\out\\build\\${name}",
       "installRoot": "${projectDir}\\out\\install\\${name}",
-      "cmakeCommandArgs": "-DDETERMINISTIC=OFF -DDEBUG=OFF",
+      "cmakeCommandArgs": "-DDETERMINISTIC=OFF -DDEBUG=OFF -Dtarget=tests",
       "buildCommandArgs": "",
       "ctestCommandArgs": "",
       "inheritEnvironments": [ "msvc_x64_x64" ]
     },
     {
-      "name": "DeterministicRelease",
+      "name": "ReleaseDeterministic",
       "generator": "Ninja",
       "configurationType": "Release",
       "buildRoot": "${projectDir}\\out\\build\\${name}",
       "installRoot": "${projectDir}\\out\\install\\${name}",
-      "cmakeCommandArgs": "-DDETERMINISTIC=ON -DDEBUG=OFF",
+      "cmakeCommandArgs": "-DDETERMINISTIC=ON -DDEBUG=OFF -Dtarget=tests",
       "buildCommandArgs": "",
       "ctestCommandArgs": "",
-      "inheritEnvironments": [ "msvc_x64_x64" ],
-      "variables": []
+      "inheritEnvironments": [ "msvc_x64_x64" ]
+    },
+    {
+      "name": "Debug-Socket",
+      "generator": "Ninja",
+      "configurationType": "Debug",
+      "buildRoot": "${projectDir}\\out\\build\\${name}",
+      "installRoot": "${projectDir}\\out\\install\\${name}",
+      "cmakeCommandArgs": "-DDETERMINISTIC=ON -DDEBUG=ON -Dtarget=socket",
+      "buildCommandArgs": "",
+      "ctestCommandArgs": "",
+      "inheritEnvironments": [ "msvc_x64_x64" ]
+    },
+    {
+      "name": "Release-Socket",
+      "generator": "Ninja",
+      "configurationType": "Release",
+      "buildRoot": "${projectDir}\\out\\build\\${name}",
+      "installRoot": "${projectDir}\\out\\install\\${name}",
+      "cmakeCommandArgs": "-DDETERMINISTIC=OFF -DDEBUG=OFF -Dtarget=socket",
+      "buildCommandArgs": "",
+      "ctestCommandArgs": "",
+      "inheritEnvironments": [ "msvc_x64_x64" ]
     }
   ]
 }

@@ -28,13 +28,6 @@ private:
 	short contains_recurrent_layers = 0;
 	size_t gradient_count = 0;
 
-	// Now state derivatives are 1 (variable) by default so no need to save derivatives
-	//data_t* activations_since_memory_deletion = 0;
-	//data_t* execution_values_since_memory_deletion = 0;
-	//data_t* derivatives_since_memory_deletion = 0;
-	//size_t since_memory_deletion_t_count = 0;
-
-
 protected:
 	void set_fields();
 

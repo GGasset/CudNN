@@ -126,25 +126,4 @@ void NeuronLayer::subtract_gradients(data_t* gradients, size_t gradients_start, 
 	);
 }
 
-void NeuronLayer::remove_neuron(size_t layer_neuron_i)
-{
-	size_t removed_connection_count = connections->connection_count;
-	size_t* tmp_neuron_gradients_starts = 0;
-	
-	connections->remove_neuron(layer_neuron_i);
-	removed_connection_count -= connections->connection_count;
-	layer_gradient_count -= removed_connection_count;
-
-	set_neuron_count(neuron_count - 1);
-
-	cudaMalloc(&tmp_neuron_gradients_starts, sizeof(size_t) * neuron_count);
-	cudaDeviceSynchronize();
-	cudaMemcpy(tmp_neuron_gradients_starts, neuron_gradients_starts, sizeof(size_t) * layer_neuron_i, cudaMemcpyDeviceToDevice);
-	cudaMemcpy(tmp_neuron_gradients_starts + layer_neuron_i, neuron_gradients_starts + layer_neuron_i + 1, sizeof(size_t) * (neuron_count - layer_neuron_i), cudaMemcpyDeviceToDevice);
-	cudaDeviceSynchronize();
-	cudaFree(neuron_gradients_starts);
-	cudaDeviceSynchronize();
-	neuron_gradients_starts = tmp_neuron_gradients_starts;
-}
-
 #endif

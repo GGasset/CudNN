@@ -1,4 +1,3 @@
-#include <sys/select.h>
 #include <vector>
 
 #include "unix_sock_interop.h"
@@ -58,7 +57,7 @@ int main(int argc, char *argv[])
 		}
 
 		if (FD_ISSET(socket_fd, &read_fds))
-	       	{
+		{
 			size_t new_client_fd = accept(socket_fd, 0, 0);
 			if (new_client_fd < 0)
 			{
@@ -79,9 +78,9 @@ int main(int argc, char *argv[])
 				size_t bytes_to_read = pending_messages_sizes.Get(fd, has_sent_message_size);
 				bytes_to_read += sizeof(size_t) * (!has_sent_message_size);
 				
-				void* message = malloc(bytes_to_read);
+				char* message = (char *)malloc(bytes_to_read);
 				if (!message) throw;
-				size_t bytes_read = read(fd, message, bytes_to_read);
+				size_t bytes_read = recv(fd, message, bytes_to_read, 0);
 				if (bytes_read < 0 || bytes_read != bytes_to_read) throw;
 				if (has_sent_message_size)
 				{
@@ -105,7 +104,7 @@ int main(int argc, char *argv[])
 					}
 
 					// Handle client disconnect
-					close(fd);
+					__close_sock(fd);
 					bool message_exists = false;
 					return_specifier* pending_message = pending_out_messages.Get(fd, message_exists);
 					if (pending_message)
@@ -129,9 +128,9 @@ int main(int argc, char *argv[])
 				return_specifier* out_message = pending_out_messages.Get(fd, avalible_message);
 				if (!avalible_message) continue;
 
-				void* raw_message = out_message;
-				write(fd, raw_message + sizeof(data_t*), sizeof(return_specifier) - sizeof(data_t*));
-				if (out_message->value_count) write(fd, out_message->return_value, sizeof(data_t) * out_message->value_count);
+				char* raw_message = (char *)out_message;
+				send(fd, raw_message + sizeof(data_t*), sizeof(return_specifier) - sizeof(data_t*), 0);
+				if (out_message->value_count) send(fd, (char *)out_message->return_value, sizeof(data_t) * out_message->value_count, 0);
 				
 
 				if (out_message->value_count) delete[] out_message->return_value;
@@ -141,6 +140,7 @@ int main(int argc, char *argv[])
 			}
 		}
 	}
+	unlink(BIND_PATH);
 }
 
 int connect()
@@ -148,19 +148,20 @@ int connect()
 	printf("Setting up socket...\n");
 	int socket_fd = socket(AF_UNIX, SOCK_STREAM, 0);
 
+	fclose(fopen(BIND_PATH, "w"));
+
 	sockaddr_un address;
 	address.sun_family = AF_UNIX;
 
-	address.sun_path[0] = '\0';
-	const char bind_path[] = "NN_socket";
-	strncpy(address.sun_path + 1, bind_path, sizeof(address.sun_path) - 1);
+	const char bind_path[] = BIND_PATH;
+	strncpy(address.sun_path, bind_path, sizeof(address.sun_path));
 	
 	if (bind(socket_fd, (struct sockaddr*)&address, sizeof(address)))
 	{
 		printf("bind error\n");
 		throw;
 	}
-	printf("binding to \"%s\" abstract name succesful\n", bind_path);
+	printf("binding to \"%s\" abstract name succesful\n", BIND_PATH);
 	if (listen(socket_fd, 1024)) throw;
 	return socket_fd;
 }

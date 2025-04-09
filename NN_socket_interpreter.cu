@@ -11,7 +11,7 @@ size_t NN_manager::add_NN(NN *n)
 	size_t network_id = 0;
 	if (ids)
 	{
-		network_id = ids->max() + 1;
+		network_id = ids->get_max() + 1;
 		ids->free();
 	}
 
@@ -29,7 +29,7 @@ size_t NN_manager::add_NN(NN *n)
 	return network_id;
 }
 
-return_specifier* NN_manager::parse_message(void* message, size_t message_length, int log_fd)
+return_specifier* NN_manager::parse_message(char* message, size_t message_length)
 {
 	if (message_length < sizeof(size_t)) throw;
 	return_specifier* output = (return_specifier*)malloc(sizeof(return_specifier));
@@ -78,7 +78,7 @@ return_specifier* NN_manager::parse_message(void* message, size_t message_length
 				output->value_count = 1;
 #ifdef log_positive
 				char log[] = "Network created\n";
-				write(log_fd, log, strlen(log) * (log_fd > 0));
+				std::cout << log << std::endl;
 #endif
 			}
 			break;
@@ -99,8 +99,8 @@ return_specifier* NN_manager::parse_message(void* message, size_t message_length
 					delete network->network;
 					free(network);
 #ifdef log_positive
-					char log[] = "Network destructed\n";
-					write(log_fd, log, strlen(log) * (log_fd > 0));
+					char log[] = "Network destructed";
+					std::cout << log << std::endl;
 #endif
 				}
 				else
@@ -130,15 +130,15 @@ return_specifier* NN_manager::parse_message(void* message, size_t message_length
 				network_container* network = networks->Get(id, is_registered);
 				if (!is_registered)
 				{
-					char error[] = "Error: Network not found while saving\n";
-					write(log_fd, error, strlen(error) * (log_fd > 0));
+					char error[] = "Error: Network not found while saving";
+					std::cerr << error << std::endl;
 					output->error = error_values::NN_not_found;
 					break;
 				}
 				NN *n = network->network;
 #ifdef log_positive
-				char log[] = "Tried saving network\n";
-				write(log_fd, log, strlen(log) * (log_fd > 0));
+				char log[] = "Tried saving network";
+				std::cout << log << std::endl;
 #endif
 				n->save(path_name);
 				delete[] path_name;
@@ -164,8 +164,8 @@ return_specifier* NN_manager::parse_message(void* message, size_t message_length
 				NN *n = NN::load(path, load_state);
 				if (!n)
 				{
-					char error[] = "Error: network not found while loading\n";
-					write(log_fd, error, strlen(error) * (log_fd > 0));
+					char error[] = "Error: network not found while loading";
+					std::cerr << error << std::endl;
 					output->error = error_values::NN_not_found;
 					break;
 				}
@@ -173,14 +173,14 @@ return_specifier* NN_manager::parse_message(void* message, size_t message_length
 				output->value_count = 1;
 				output->return_value[0] = add_NN(n);
 #ifdef log_positive
-				char log[] = "Loaded network\n";
-				write(log_fd, log, strlen(log) * log_fd > 0);
+				char log[] = "Loaded network";
+				std::cout << log << std::endl;
 #endif
 			}
 			break;
 		default:
-			char error[] = "Error: Action not found\n";
-			write(log_fd, error, strlen(error) * (log_fd > 0));
+			char error[] = "Error: Action not found";
+			std::cerr << error << std::endl;
 			throw;
 	}
 	if (offset > message_length) throw;

@@ -7,6 +7,8 @@
 
 #include "data_type.h"
 
+#include "functionality.h"
+
 //__global__ template void apply_to_array<typename t>(t* array, size_t array_length, std::function<bool(t, t)> if_function, t right_if_function_parameter, std::function<t(t)> to_apply);
 __device__ data_t device_min(data_t a, data_t b);
 __device__ data_t device_max(data_t a, data_t b);
@@ -63,7 +65,7 @@ __host__ T* cuda_realloc(T* old, size_t old_len, size_t new_len, bool free_old)
 	T* out = 0;
 	cudaMalloc(&out, sizeof(T) * new_len);
 	cudaMemset(out, 0, sizeof(T) * new_len);
-	cudaMemcpy(out, old, sizeof(T) * min(old_len, new_len), cudaMemcpyDeviceToDevice);
+	cudaMemcpy(out, old, sizeof(T) * h_min(old_len, new_len), cudaMemcpyDeviceToDevice);
 	if (free_old)
 		cudaFree(old);
 	return out;
@@ -72,8 +74,8 @@ __host__ T* cuda_realloc(T* old, size_t old_len, size_t new_len, bool free_old)
 template<typename T>
 __host__ T* cuda_remove_elements(T* old, size_t len, size_t remove_start, size_t remove_count, bool free_old)
 {
-	remove_start = min(len, remove_start);
-	remove_count = min(len - remove_start, remove_count);
+	remove_start = h_min(len, remove_start);
+	remove_count = h_min(len - remove_start, remove_count);
 
 	T* out = 0;
 	cudaMalloc(&out, sizeof(T) * (len - remove_count));

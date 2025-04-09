@@ -141,7 +141,7 @@ data_t NN::adjust_learning_rate(
 				{
 					data_t learning = previous_cost / cost;
 					new_learning_rate -= learning;
-					new_learning_rate = max<data_t>(0, new_learning_rate);
+					new_learning_rate = h_max((data_t)0, new_learning_rate);
 				}
 				break;
 			default:
@@ -154,7 +154,7 @@ data_t NN::adjust_learning_rate(
 		default:
 			break;
 	}
-	return min(new_learning_rate, max_learning_rate);
+	return h_min(new_learning_rate, max_learning_rate);
 
 }
 

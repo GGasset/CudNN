@@ -26,9 +26,12 @@ SET(COMPILATION_FILES
 	)
 SET(SOCKET_FILES
 	
-		NN_socket_interpreter.cpp
+		NN_socket_interpreter.cu
 
-		unix_sock_interop.cpp
+		unix_sock_interop.cu
+
+		SinglyLinkedListNode.h
+		HashTable.h
 	)
 
 # Add linking to stdlib
@@ -80,7 +83,12 @@ elseif(target STREQUAL "socket")
 	if (DEBUG)
 		add_compile_definitions(log_positive)
 	endif()
+
 	add_executable(${PROJECT_NAME} ${COMPILATION_FILES} ${SOCKET_FILES})
+	if(WIN32)
+		target_link_libraries(${PROJECT_NAME} PUBLIC wsock32 ws2_32)
+	endif()
+
 	add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 	   COMMAND ${CMAKE_COMMAND} -E cmake_echo_color --cyan
 	   "Built socket config")

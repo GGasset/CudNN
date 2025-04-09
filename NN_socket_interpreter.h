@@ -1,6 +1,6 @@
-#include <unistd.h>
 #include <vector>
 #include <stdio.h>
+#include <iostream>
 #include <cstring>
 
 #include "NN_enums.h"
@@ -27,7 +27,7 @@ private:
 public:
 	NN_manager(size_t bucket_count);
 
-	return_specifier* parse_message(void* message, size_t message_length, int log_fd = 0);
+	return_specifier* parse_message(char* message, size_t message_length);
 
 	size_t add_NN(NN *n);
 };

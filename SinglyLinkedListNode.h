@@ -34,11 +34,11 @@ public:
 		return next->GetIndex(i - 1);
 	}
 
-	T max()
+	T get_max()
 	{
 		if (!next) return value;
 		
-		T foward_max = next->max();
+		T foward_max = next->get_max();
 		return value * (value > foward_max) + foward_max * (foward_max >= value);
 	}
 

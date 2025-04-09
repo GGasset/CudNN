@@ -456,7 +456,7 @@ void NN::calculate_gradients(
 	return nullptr;
 }*/
 
-data_t *calculate_GAE_advantage(
+data_t *NN::calculate_GAE_advantage(
 	size_t t_count,
 	data_t gamma, data_t lambda,
 	NN *value_function_estimator, data_t *value_function_state, data_t estimator_learning_rate, data_t estimator_gradient_clip, data_t estimator_dropout_rate, bool is_state_on_host, bool free_state,

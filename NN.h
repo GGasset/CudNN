@@ -131,11 +131,11 @@ public:
 		data_t* derivatives, size_t derivatives_start, size_t previous_derivatives_start
 	);
 
-	data_t *calculate_GAE_advantage(
+	data_t* calculate_GAE_advantage(
 		size_t t_count,
 		data_t gamma, data_t lambda,
-		NN *value_function_estimator, data_t *value_function_state,
-		data_t *rewards
+		NN* value_function_estimator, data_t* value_function_state, data_t estimator_learning_rate, data_t estimator_gradient_clip, data_t estimator_dropout_rate, bool is_state_on_host, bool free_state,
+		data_t* rewards, bool is_reward_on_host, bool free_rewards
 	);
 
 	void subtract_gradients(

@@ -2,7 +2,8 @@
 
 ## High priority
 
-- Improve scalability for evolution methods, modularize it, current state is not modularized at all.
+- ~~Improve scalability for evolution methods, modularize it, current state is not modularized at all.~~
+    - Needs testing (Medium priority)
 
 ## Normal cycle
 

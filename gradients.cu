@@ -26,10 +26,6 @@ __global__ void LSTM_gradient_calculation(
 		next_cell_state_gradient  = gradients[next_neuron_gradients_start + 4];
 	}
 
-	data_t sigmoid_lh_derivative = derivatives[neuron_derivatives_start + 3];
-	data_t tanh_lh_derivative = derivatives[neuron_derivatives_start + 4];
-
-
 	// Output Losses
 	data_t output_gradient = costs[costs_start + layer_costs_start + tid];
 	data_t output_hidden_gradient_to_tanh = (output_gradient 

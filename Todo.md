@@ -22,7 +22,8 @@
             - Add execution with output to GPU to optimize this
     - Proximal Policy optimization cost function
 - ~~server socket~~
-    - Add windows compatibility (Just easy change in header)
+    - ~~Add windows compatibility (Just easy change in header)~~
+        - Needs testing
     - ~~Create log file~~
     - Create destructor for socket interpreter -> NN manager
     - Use poll instead of select
@@ -38,6 +39,7 @@
 
 - ~~client_socket~~
 - socket functions
+    - Add message to close server to stop loop
     - ~~construct -- destruct~~
     - Get ID of pointer to a NN
         you pass a id and returns another id that is a reference to a existing NN

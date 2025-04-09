@@ -13,7 +13,7 @@
  - [PPO](https://arxiv.org/abs/1707.06347) Reinforcement Learning Policy Gradient Method used in ChatGPT (Planned)
  - [MinLSTM](https://arxiv.org/abs/2410.01201) Simpler versions of LSTM (Planned)
 
-### Working
+### Done
  - [GAE](https://arxiv.org/abs/1506.02438) Generalized Advantage Estimator
  - LSTM architecture
 	![LSTM architecture](https://i.sstatic.net/RHNrZ.jpg) 

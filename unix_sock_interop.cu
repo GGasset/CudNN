@@ -161,7 +161,7 @@ int connect()
 		printf("bind error\n");
 		throw;
 	}
-	printf("binding to \"%s\" abstract name succesful\n", BIND_PATH);
+	printf("binding to \"%s\" was succesful\n", BIND_PATH);
 	if (listen(socket_fd, 1024)) throw;
 	return socket_fd;
 }

@@ -5,7 +5,7 @@
 int main(int argc, char *argv[])
 {
 	int socket_fd = connect();
-	if (!socket_fd)
+	if (socket_fd == -1)
 		return 1;
 
 	NN_manager networks = NN_manager(1000);
@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
 		int max_fd = socket_fd;
 		for (auto it = clients.begin(); it != clients.end(); it++)
 		{
-			size_t client_fd = *it;
+			int client_fd = *it;
 			FD_SET(client_fd, &read_fds);
 			max_fd = max_fd * (max_fd >= client_fd) + client_fd * (client_fd > max_fd);
 		}
@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
 
 		if (FD_ISSET(socket_fd, &read_fds))
 		{
-			size_t new_client_fd = accept(socket_fd, 0, 0);
+			int new_client_fd = accept(socket_fd, 0, 0);
 			if (new_client_fd < 0)
 			{
 				printf("Accept error\n");
@@ -71,7 +71,7 @@ int main(int argc, char *argv[])
 		
 		for (size_t i = 0; i < clients.size(); i++)
 		{
-			size_t fd = clients[i];
+			int fd = clients[i];
 			if (FD_ISSET(fd, &read_fds))
 			{
 				bool has_sent_message_size = false;
@@ -141,24 +141,59 @@ int main(int argc, char *argv[])
 		}
 	}
 	unlink(BIND_PATH);
+#ifdef _WIN32
+	WSACleanup();
+#endif
 }
 
 int connect()
 {
 	printf("Setting up socket...\n");
+
+#ifdef _WIN32
+	WSADATA details{};
+	if (WSAStartup(MAKEWORD(2, 2), &details)) throw;
+#endif
+
 	int socket_fd = socket(AF_UNIX, SOCK_STREAM, 0);
+	if (socket_fd == -1)
+	{
+		//int err = WSAGetLastError();
+		CLEANUP
+		throw;
+	}
+	/*int enabled = 1;
+	if (setsockopt(socket_fd, SOL_SOCKET, SO_REUSEADDR, (char *)&enabled, sizeof(int)) == -1)
+	{
+		__close_sock(socket_fd);
+		CLEANUP
+		throw;
+	}
 
-	fclose(fopen(BIND_PATH, "w"));
+	FILE* tmp = fopen(BIND_PATH, "w");
+	if (!tmp)
+	{
+		int err = errno;
+		__close_sock(socket_fd);
+		CLEANUP
+		throw;
+	}
+	else fclose(tmp);*/
 
-	sockaddr_un address;
+	sockaddr_un address{};
 	address.sun_family = AF_UNIX;
 
 	const char bind_path[] = BIND_PATH;
-	strncpy(address.sun_path, bind_path, sizeof(address.sun_path));
+	address.sun_path[0] = 0;
+	strncpy(address.sun_path + 1, bind_path, sizeof(address.sun_path) - 1);
 	
 	if (bind(socket_fd, (struct sockaddr*)&address, sizeof(address)))
 	{
 		printf("bind error\n");
+		int err = WSAGetLastError();
+		__close_sock(socket_fd);
+		unlink(BIND_PATH);
+		CLEANUP
 		throw;
 	}
 	printf("binding to \"%s\" was succesful\n", BIND_PATH);

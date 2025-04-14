@@ -31,6 +31,15 @@ __global__ void multiply_array(T* arr, size_t arr_value_count, t multiply_by_val
 }
 
 template<typename T, typename t>
+__global__ void element_wise_multiply(T* to_multiply, t* multiplier_arr, size_t min_arr_value_count)
+{
+	size_t tid = get_tid();
+	if (tid >= min_arr_value_count) return;
+
+	to_multiply[tid] *= multiplier_arr[tid];
+}
+
+template<typename T, typename t>
 __global__ void add_to_array(T* arr, size_t arr_value_count, t to_add)
 {
 	size_t tid = get_tid();

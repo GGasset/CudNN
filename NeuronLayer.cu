@@ -14,21 +14,7 @@ NeuronLayer::NeuronLayer(IConnections* connections, size_t neuron_count, Activat
 	execution_values_per_neuron = 1;
 	layer_gradient_count = connections->connection_count + neuron_count;
 
-	size_t neuron_gradient_i = 0;
-	size_t* host_neuron_gradients_starts = new size_t[neuron_count];
-	for (size_t i = 0; i < neuron_count; i++)
-	{
-		host_neuron_gradients_starts[i] = neuron_gradient_i;
-
-		size_t neuron_connection_count = connections->get_connection_count_at(i);
-		neuron_gradient_i += neuron_connection_count + 1;
-	}
-
-	cudaMalloc(&neuron_gradients_starts, sizeof(size_t) * neuron_count);
-	cudaDeviceSynchronize();
-	
-	cudaMemcpy(neuron_gradients_starts, host_neuron_gradients_starts, sizeof(size_t) * neuron_count, cudaMemcpyHostToDevice);
-	cudaDeviceSynchronize();
+	initialize_fields(connections->connection_count, neuron_count, false);
 }
 
 NeuronLayer::NeuronLayer()

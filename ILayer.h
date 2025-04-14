@@ -39,7 +39,7 @@ public:
 	size_t get_neuron_count();
 	void set_neuron_count(size_t neuron_count);
 
-	void initialize_fields(size_t connection_count, size_t neuron_count);
+	void initialize_fields(size_t connection_count, size_t neuron_count, bool initialize_connection_associated_gradient_count);
 	virtual void layer_specific_initialize_fields(size_t connection_count, size_t neuron_count);
 		
 	virtual ILayer* layer_specific_clone() = 0;

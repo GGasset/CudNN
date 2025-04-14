@@ -107,7 +107,8 @@ public:
 		data_t* costs,
 		data_t* activations,
 		data_t* execution_values,
-		data_t** gradients
+		data_t** gradients,
+		float	dropout_rate
 	);
 
 	void calculate_derivatives(
@@ -121,7 +122,8 @@ public:
 		data_t* execution_values, size_t execution_values_start,
 		data_t* costs, size_t costs_start,
 		data_t* gradients, size_t gradients_start, size_t next_gradients_start,
-		data_t* derivatives, size_t derivatives_start, size_t previous_derivatives_start
+		data_t* derivatives, size_t derivatives_start, size_t previous_derivatives_start,
+		float dropout_rate
 	);
 
 	data_t* calculate_GAE_advantage(
@@ -132,7 +134,7 @@ public:
 	);
 
 	void subtract_gradients(
-		data_t* gradients, size_t gradients_start, data_t learning_rate, float dropout_rate, data_t gradient_clip
+		data_t* gradients, size_t gradients_start, data_t learning_rate, data_t gradient_clip
 	);
 
 	void evolve();

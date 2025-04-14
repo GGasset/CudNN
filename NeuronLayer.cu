@@ -104,11 +104,11 @@ void NeuronLayer::calculate_gradients(
 	cudaDeviceSynchronize();
 }
 
-void NeuronLayer::subtract_gradients(data_t* gradients, size_t gradients_start, data_t learning_rate, short* dropout, data_t gradient_clip)
+void NeuronLayer::subtract_gradients(data_t* gradients, size_t gradients_start, data_t learning_rate, data_t gradient_clip)
 {
 	connections->subtract_gradients(
 		gradients, gradients_start, layer_gradients_start, neuron_gradients_starts,
-		learning_rate, dropout, gradient_clip
+		learning_rate, gradient_clip
 	);
 }
 

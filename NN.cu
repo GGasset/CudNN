@@ -297,12 +297,12 @@ data_t NN::train(
 
 	data_t* gradients = 0;
 	backpropagate(
-		t_count, costs, activations, execution_values, &gradients
+		t_count, costs, activations, execution_values, &gradients, dropout_rate
 	);
 
 	for (size_t t = 0; t < t_count; t++)
 	{
-		subtract_gradients(gradients, gradient_count * t, learning_rate, dropout_rate, gradient_clip);
+		subtract_gradients(gradients, gradient_count * t, learning_rate, gradient_clip);
 	}
 
 	if (is_Y_hat_on_host_memory) cudaFree(Y_hat);
@@ -358,7 +358,8 @@ void NN::backpropagate(
 	data_t* costs,
 	data_t* activations, 
 	data_t* execution_values,
-	data_t** gradients
+	data_t** gradients,
+	float	dropout_rate
 )
 {
 	data_t* derivatives = 0;
@@ -403,7 +404,8 @@ void NN::backpropagate(
 			execution_values, execution_values_start,
 			costs, activations_start,
 			*gradients, gradients_start, next_gradient_start,
-			derivatives, derivatives_start, derivatives_start - derivative_count
+			derivatives, derivatives_start, derivatives_start - derivative_count,
+			dropout_rate
 		);
 	}
 
@@ -435,11 +437,13 @@ void NN::calculate_gradients(
 	data_t* execution_values, size_t execution_values_start,
 	data_t* costs, size_t costs_start, 
 	data_t* gradients, size_t gradients_start, size_t next_gradients_start, 
-	data_t* derivatives, size_t derivatives_start, size_t previous_derivatives_start
+	data_t* derivatives, size_t derivatives_start, size_t previous_derivatives_start,
+	float dropout_rate
 )
 {
 	for (int i = layer_count - 1; i >= 0; i--)
 	{
+		
 		layers[i]->calculate_gradients(
 			activations, activations_start,
 			execution_values, execution_values_start,
@@ -535,7 +539,7 @@ data_t *NN::calculate_GAE_advantage(
 	return 0;
 }
 
-void NN::subtract_gradients(data_t* gradients, size_t gradients_start, data_t learning_rate, float dropout_rate, data_t gradient_clip)
+void NN::subtract_gradients(data_t* gradients, size_t gradients_start, data_t learning_rate, data_t gradient_clip)
 {
 	reset_NaNs kernel(gradient_count / 32 + (gradient_count % 32 > 0), 32) (
 		gradients + gradients_start, 0, gradient_count
@@ -547,23 +551,7 @@ void NN::subtract_gradients(data_t* gradients, size_t gradients_start, data_t le
 		ILayer* current_layer = layers[i];
 		size_t layer_length = current_layer->get_neuron_count();
 
-		short* dropout = 0;
-		float* normalized_random_samples = 0;
-		cudaMalloc(&dropout, sizeof(short) * layer_length);
-		cudaMalloc(&normalized_random_samples, sizeof(float) * layer_length);
-		cudaDeviceSynchronize();
-		
-		cudaMemset(dropout, 0, sizeof(short) * layer_length);
-		IConnections::generate_random_values(&normalized_random_samples, layer_length, 0, 1);
-		cudaDeviceSynchronize();
-		cud_set_dropout kernel(layer_length / 32 +  (layer_length % 32 > 0), 32) (dropout_rate, normalized_random_samples, dropout, layer_length);
-		cudaDeviceSynchronize();
-
-		current_layer->subtract_gradients(gradients, gradients_start, learning_rate, dropout, gradient_clip);
-
-		cudaFree(dropout);
-		cudaFree(normalized_random_samples);
-		cudaDeviceSynchronize();
+		current_layer->subtract_gradients(gradients, gradients_start, learning_rate, gradient_clip);
 	}
 	cudaDeviceSynchronize();
 }

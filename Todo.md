@@ -57,8 +57,9 @@
 
 - Paralelize layer derivative calculation calls withing CPU
 - ~~Modularized generate random values for different data types~~
-- Make droput set cost of neuron to 0 before its gradient calculation and remove previous dropout
-    - It just nullifies the gradient to substract to dropped out weights
+- ~~Make droput set cost of neuron to 0 before its gradient calculation and remove previous dropout~~
+    - ~~It just nullifies the gradient to substract to dropped out weights~~
+	- Needs testing, it has not even been compiled
 
 # Bugs
  - ~~device array being used as host array in NeuronLayer and LSTMLayer remove neuron~~

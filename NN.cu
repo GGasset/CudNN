@@ -443,7 +443,27 @@ void NN::calculate_gradients(
 {
 	for (int i = layer_count - 1; i >= 0; i--)
 	{
+		size_t layer_len = layers[i]->get_neuron_count();
+
+		float *random_sample = 0;
+		cudaMalloc(&random_sample, sizeof(float));
+		IConnections::generate_random_values(&random_sample, layer_len, 0, 1);
+
+		short *dropout = 0;
+		cudaMalloc(&dropout, sizeof(short) * layer_len);
+
+		cud_set_dropout kernel(layer_len / 32 + (layer_len % 32 > 0), 32) (
+			dropout_rate, random_sample, dropout, layer_len
+		);
+		cudaDeviceSynchronize();
 		
+		element_wise_multiply kernel(layer_len / 32 + (layer_len % 32 > 0), 32) (
+			costs + costs_start + layers[i]->layer_activations_start, dropout, layer_len
+		);
+		cudaDeviceSynchronize();
+		cudaFree(random_sample);
+		cudaFree(dropout);
+
 		layers[i]->calculate_gradients(
 			activations, activations_start,
 			execution_values, execution_values_start,

@@ -9,7 +9,6 @@ SET(GCC_COVERAGE_LINK_FLAGS    "-lstdc++")
 project (NN_client)
 
 file(GLOB sourcefiles
-	*.h
 	*.cpp
 	test_main/*.cpp
 )
@@ -19,3 +18,7 @@ message("Executable for testing only")
 add_executable(${PROJECT_NAME}
 	${sourcefiles}
 )
+
+if(WIN32)
+	target_link_libraries(${PROJECT_NAME} PUBLIC wsock32 ws2_32)
+endif()

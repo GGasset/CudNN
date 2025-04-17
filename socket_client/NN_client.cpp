@@ -17,7 +17,7 @@ void NN_client::link_NN(NN_constructor_client constructor)
 	if (network_id >= 0) return;
 
    	size_t message_length = sizeof(size_t) * 3 + sizeof(bool) + constructor.layer_count * sizeof(size_t) * 4;
-	void* message = new char[message_length];
+	char* message = new char[message_length];
 
 	size_t offset = 0;
 	*(size_t*)(message + offset) = action_enum::construct;
@@ -59,7 +59,7 @@ void NN_client::load(str path, bool load_state)
 
 	size_t path_len = path.get_length();
 	size_t message_length = sizeof(size_t) * 2 + sizeof(bool) + path_len;
-	void *message = new char[message_length];
+	char *message = new char[message_length];
 
 	size_t offset = 0;
 	*(size_t *)(message + offset) = action_enum::load;
@@ -97,7 +97,7 @@ void NN_client::save(str path)
 	size_t path_len = path.get_length();
 
 	size_t message_len = sizeof(size_t) * 3 + path_len;
-	void *message = new char[message_len];
+	char *message = new char[message_len];
 
 	size_t offset = 0;
 	*(size_t *)(message + offset) = action;

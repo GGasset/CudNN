@@ -1,8 +1,23 @@
-#include <unistd.h>
-#include <cstdio>
 
-#include <sys/socket.h>
-#include <sys/un.h>
+#include <cstdio>
+#include <sys/types.h>
+
+#ifdef _WIN32
+	#include <WinSock2.h>
+	#include <afunix.h>
+
+	#define BIND_PATH "C:\\sock"
+	#define __close_sock(__fd) closesocket(__fd)
+
+#else
+	#include <unistd.h>
+	#include <sys/socket.h>
+	#include <sys/un.h>
+
+	#define BIND_PATH "tmp/NN_socket"
+	#define __close_sock(__fd) close(__fd)
+
+#endif
 
 #include "NN_enums.h"
 

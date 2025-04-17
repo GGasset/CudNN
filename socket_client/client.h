@@ -6,7 +6,7 @@
 	#include <WinSock2.h>
 	#include <afunix.h>
 
-	#define BIND_PATH "C:\\sock"
+	#define BIND_PATH "abstract_local_NN"
 	#define __close_sock(__fd) closesocket(__fd)
 
 #else

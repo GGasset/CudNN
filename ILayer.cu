@@ -14,8 +14,9 @@ void ILayer::set_neuron_count(size_t neuron_count)
 void ILayer::initialize_fields(size_t connection_count, size_t neuron_count, bool initialize_connection_associated_gradient_count)
 {
 	size_t* neuron_gradients_starts = new size_t[neuron_count];
+	size_t* connection_associated_gradient_counts = 0;
 	if (initialize_connection_associated_gradient_count)
-		size_t* connection_associated_gradient_counts = new size_t[neuron_count];
+		connection_associated_gradient_counts = new size_t[neuron_count];
 	size_t gradient_count = 0;
 	for (size_t i = 0; i < neuron_count; i++)
 	{

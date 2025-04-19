@@ -5,17 +5,23 @@
 #ifdef _WIN32
 	#include <WinSock2.h>
 	#include <afunix.h>
-
-	#define BIND_PATH "abstract_local_NN"
+	
+	#ifndef BIND_PATH
+		#define BIND_PATH "C:\\Users\\Public\\socket.sock"
+	#endif
 	#define __close_sock(__fd) closesocket(__fd)
+	#define CLEANUP WSACleanup();
 
 #else
 	#include <unistd.h>
 	#include <sys/socket.h>
 	#include <sys/un.h>
 
-	#define BIND_PATH "tmp/NN_socket"
+	#ifndef BIND_PATH
+		#define BIND_PATH "/tmp/NN_socket"
+	#endif
 	#define __close_sock(__fd) close(__fd)
+	#define CLEANUP
 
 #endif
 

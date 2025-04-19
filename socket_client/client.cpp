@@ -9,13 +9,15 @@ socket_client::socket_client()
 
 	sockaddr_un server_address;
 	server_address.sun_family = AF_UNIX;
-	server_address.sun_path[0] = 0;
-	strncpy(server_address.sun_path + 1, BIND_PATH, sizeof(server_address.sun_path) - 1);
+	//server_address.sun_path[0] = 0;
+	strncpy(server_address.sun_path, BIND_PATH, sizeof(server_address.sun_path));
 
 	int connect_result = 0;
 	if (connect_result = connect(socket_fd, (struct sockaddr*)&server_address, sizeof(server_address)))
 	{
 		int a = WSAGetLastError();
+		__close_sock(fd);
+		CLEANUP
 		throw;
 	}
 

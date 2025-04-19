@@ -184,9 +184,10 @@ int connect()
 	address.sun_family = AF_UNIX;
 
 	const char bind_path[] = BIND_PATH;
-	address.sun_path[0] = 0;
-	strncpy(address.sun_path + 1, bind_path, sizeof(address.sun_path) - 1);
+	//address.sun_path[0] = 0;
+	strncpy(address.sun_path, bind_path, sizeof(address.sun_path));
 	
+	unlink(BIND_PATH);
 	if (bind(socket_fd, (struct sockaddr*)&address, sizeof(address)))
 	{
 		printf("bind error\n");

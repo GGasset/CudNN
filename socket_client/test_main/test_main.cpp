@@ -14,7 +14,6 @@ int main()
 	constructor.create_minimal_recurrent_NN(1, true, 1);
 
 	test_client.link_NN(constructor);
-#ifdef _WIN32
-	WSACleanup();
-#endif
+	test_client.~NN_client();
+	CLEANUP
 }

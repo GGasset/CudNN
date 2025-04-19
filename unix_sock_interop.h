@@ -6,8 +6,10 @@
 	
 	#define __close_sock(__fd) closesocket(__fd)
 	//#define BIND_PATH "C:\\Users\\Public\\sock"
-	#define BIND_PATH "abstract_local_NN"
-	#define CLEANUP WSACleanup();
+	#ifndef BIND_PATH
+		#define BIND_PATH "C:\\Users\\Public\\socket.sock"
+	#endif
+#define CLEANUP WSACleanup();
 
 #else
 	#include <unistd.h>
@@ -16,7 +18,9 @@
 	#include <sys/select.h>
 
 	#define __close_sock(__fd) close(__fd)
-	#define bind_PATH "/tmp/NN_socket"
+	#ifndef BIND_PATH
+		#define BIND_PATH "tmp/NN_socket"
+	#endif
 	#define CLEANUP
 #endif
 
